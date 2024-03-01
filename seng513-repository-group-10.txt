@@ -1,0 +1,9 @@
+Group-10 members:
+    Michael Card (30089891)
+    Parth Patel  (30096473)
+    Osama Bamatraf ( 30106569)
+    Darpal Patel (30088795)
+    Brooklyn Christopher (30063638)
+
+Repo name:
+    seng513-202401-group-10  (https://csgit.ucalgary.ca/parth.patel1/seng513-202401-group-10)
