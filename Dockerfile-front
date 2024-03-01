@@ -1,0 +1,12 @@
+#For the react section of this dockerfile the below was used as a resource
+# https://stackoverflow.com/questions/63691203/how-do-i-make-a-react-app-in-docker-compose-container-is-exiting-after-build-st
+
+From node:20.9
+WorkDir ./
+COPY Client/front-end/package*.json ./
+RUN npm install
+COPY Client/front-end .
+ 
+EXPOSE 3000
+ 
+CMD [ "npm", "start" ]
