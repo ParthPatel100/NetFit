@@ -31,8 +31,8 @@ services:
       - "27017:27017"
     environment:
 #      !!!! Add the environment values for Username and Password for MongoDB HERE !!!!
-        MONGO_INITDB_ROOT_USERNAME: #Username goes here
-        MONGO_INITDB_ROOT_PASSWORD: #Password goes here
+        MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongodb_data:/data/db
 
@@ -43,10 +43,10 @@ services:
     ports:
       - "8081:8081"
     environment:
-      ME_CONFIG_BASICAUTH_USERNAME: #username
-      ME_CONFIG_BASICAUTH_PASSWORD: #password goes here
-      ME_CONFIG_MONGODB_ADMINUSERNAME: #admin uername goes here
-      ME_CONFIG_MONGODB_ADMINPASSWORD: #admin password goes here
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${ME_CONFIG_MONGODB_ADMINUSERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${ME_CONFIG_MONGODB_ADMINPASSWORD}
       ME_CONFIG_MONGODB_SERVER: mongodb
       ME_CONFIG_OPTIONS_EDITORTHEME: default
     depends_on:
