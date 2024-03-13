@@ -39,7 +39,7 @@ const foodSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('user', foodSchema);
+module.exports = mongoose.model('food', foodSchema);
 
 
 
