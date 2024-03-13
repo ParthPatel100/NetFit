@@ -9,4 +9,4 @@ const workoutSchema = new mongoose.Schema({
     rest: { type: Number, default: 0 }
 });
 
-module.exports = mongoose.model('Workout', workoutSchema);
+module.exports = mongoose.model('workout', workoutSchema);
