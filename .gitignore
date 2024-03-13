@@ -2,7 +2,5 @@
 
 node_modules
 Server/node_modules/*
-package-lock.json
 Server/node_modules/.package-lock.json
-Server/package-lock.json
 .idea
