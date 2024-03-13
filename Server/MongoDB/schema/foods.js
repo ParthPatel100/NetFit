@@ -34,7 +34,7 @@ const foodSchema = new mongoose.Schema({
     calcium: {type: Number, min: 0},
     vit_d: {type: Number, min: 0},
     vit_k: {type: Number, min: 0},
-    vit_b6: {type: Number, required: true, min: 0},
+    vit_b6: {type: Number, min: 0},
     vit_b12: {type: Number, min: 0}
 
 });
