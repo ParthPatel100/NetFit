@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-    _id: { type: String},
     trainerUsername: {type: mongoose.Schema.Types.ObjectId, ref: 'user'}, //check trainer role
     title: {type: String, required: true},
     description: { type: String},
