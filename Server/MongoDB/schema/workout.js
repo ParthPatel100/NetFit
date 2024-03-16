@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const workoutSchema = new mongoose.Schema({
-    _id: {type: String},
     exercise: { type: String, required: true },
     reps: { type: Number, default: 0 },
     sets: { type: Number, default: 0 },
