@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const trackingSchema = new mongoose.Schema({
-    _id: {type: String},
     username: {type: mongoose.Schema.Types.ObjectId, ref: 'user'}, // we need references
     date: {type: Date, unique: true, required: true}, // I think it should be required even if there is nothing in it so that if nothign is returned then we know
     food_id: {type: mongoose.Schema.Types.ObjectId, ref: 'food'}, // we need references
