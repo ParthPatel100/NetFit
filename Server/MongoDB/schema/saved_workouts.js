@@ -1,4 +1,4 @@
 const savedWorkoutSchema = new mongoose.Schema({ 
-    workouts: [{type: mongoose.Schema.Types.ObjectId, ref: 'workouts'}],
+    post_id: {type: mongoose.Schema.Types.ObjectId, ref: 'post'},
 });
 module.exports = mongoose.model('SavedWorkout', savedWorkoutSchema);
