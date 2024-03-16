@@ -12,13 +12,20 @@ async function main() {
     console.log("Connected to MongoDB");
 
     const newUser = new User({
-        username: 'john_doe1',
-        email: 'john@example1.com',
+        username: 'john_doe',
+        email: 'john@example.com',
         password: 'password123',
         following_list: [], // Empty following list for now
         user_role: 'user' // Assign user role
     });
 
+    const admin = new User({
+        username: 'leader_admin',
+        email: 'admin@example.com',
+        password: '123',
+        following_list: [],
+        user_role: 'admin'
+    });
     // Save the user to the database
     const savedUser = await newUser.save();
 

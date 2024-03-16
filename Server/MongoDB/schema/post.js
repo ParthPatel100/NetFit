@@ -7,7 +7,6 @@ const postSchema = new mongoose.Schema({
     creationDate: { type: Date, required: true},
     post_type: { type: String, enum: ['workout', 'recipe']}, //are we doing meal plans?
     images: [{ data: Buffer, contentType: String}],
-    video: {type: String}, ///would this be a url? I am confused how we incorporate the video if someone could help
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment'}],
     likes: {type: Number },
     workout_id: {type: mongoose.Schema.Types.ObjectId, ref: 'workout'}
