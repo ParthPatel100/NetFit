@@ -6,6 +6,7 @@ main().catch(err => console.log(err));
 
 async function main() {
     const User = require('./schema/user');
+    const Tracking = require('./schema/tracking');
     // Connect to MongoDB
     await mongoose.connect("mongodb://admin:password@localhost:27017/app_db?authSource=admin");
     console.log("Connected to MongoDB");
@@ -18,9 +19,21 @@ async function main() {
         user_role: 'user' // Assign user role
     });
 
+    const admin = new User({
+        username: 'leader_admin',
+        email: 'admin@example.com',
+        password: '123',
+        following_list: [],
+        user_role: 'admin'
+    });
     // Save the user to the database
     const savedUser = await newUser.save();
 
+    const newTracking = new Tracking({
+        username: savedUser,
+        date: new Date()
+    });
+    const savedTracking = await newTracking.save();
     console.log('User created:', savedUser);
 
     // Optionally, you can close the connection when done
