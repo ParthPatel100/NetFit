@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const weightSchema = new mongoose.Schema({
-    _id: {type: String},
     date: { type: Date, required: true },
     measurement: {
         type: String, 
