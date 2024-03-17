@@ -5,10 +5,6 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile-front
-    volumes:
-    - /Client/front-end/src
-    - /Client/front-end/node_modules
-    - /Client/front-end/public
     ports: 
     - 3000:3000
 

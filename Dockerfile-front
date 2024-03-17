@@ -2,11 +2,11 @@
 # https://stackoverflow.com/questions/63691203/how-do-i-make-a-react-app-in-docker-compose-container-is-exiting-after-build-st
 
 FROM node:20.9
-WORKDIR ./
-COPY Client/front-end/package*.json ./
+WORKDIR /usr/app
+
+COPY Client/frontend /usr/app
 RUN npm install
-COPY Client/front-end .
  
 EXPOSE 3000
  
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev" ]
