@@ -2,7 +2,7 @@ import Navbar from "./components/Navbar.jsx";
 import {Route, Routes} from "react-router-dom";
 import Account from "./pages/account.jsx";
 import Progress from "./pages/progress.jsx";
-import LandingPage from "./pages/LandingPage.jsx";
+import LandingPage from "./pages/landingPage.jsx";
 import Track from "./pages/track.jsx";
 
 export default function App() {
