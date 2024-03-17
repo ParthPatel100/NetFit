@@ -4,9 +4,6 @@ variables:
 stages:
   - build
 
-before_script:
-  - docker info
-
 build_image:
   stage: build
   image: docker:20.10.16
