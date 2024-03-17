@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const waterSchema = new mongoose.Schema({
-    date: { type: Date, required: true },
+    //removed data key from here as it is already stored on tracking
     measurement: {
         type: String, 
         required: true,

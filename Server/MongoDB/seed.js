@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 main().catch(err => console.log(err));
 
+
 async function main() {
     const User = require('./schema/user');
     const Tracking = require('./schema/tracking');
@@ -33,6 +34,7 @@ async function main() {
         username: savedUser,
         date: new Date()
     });
+
     const savedTracking = await newTracking.save();
     console.log('User created:', savedUser);
 
