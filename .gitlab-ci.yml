@@ -2,13 +2,13 @@ variables:
   IMAGE_NAME: NetFit
 
 stages:
-  - build_image
+  - build
 
 before_script:
   - docker info
 
 build_image:
-  stage: build
+  stage: build_image
   image: docker:20.10.16
   services:
     - docker:20.10.16-dind
