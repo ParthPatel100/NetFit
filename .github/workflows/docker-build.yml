@@ -13,6 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - uses: actions/checkout@v3
+
+      - name: Set up Docker Compose
+        run: |
+          echo "MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }}" >> .env
+          echo "MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}" >> .env
+          echo "ME_CONFIG_BASICAUTH_USERNAME=${{ secrets.ME_CONFIG_BASICAUTH_USERNAME }}" >> .env
+          echo "ME_CONFIG_BASICAUTH_PASSWORD=${{ secrets.ME_CONFIG_BASICAUTH_PASSWORD }}" >> .env
+          echo "ME_CONFIG_MONGODB_ADMINUSERNAME=${{ secrets.ME_CONFIG_MONGODB_ADMINUSERNAME }}" >> .env
+          echo "ME_CONFIG_MONGODB_ADMINPASSWORD=${{ secrets.ME_CONFIG_MONGODB_ADMINPASSWORD }}" >> .env
+
       - name: Build the Docker image
         run: docker-compose build
