@@ -8,7 +8,7 @@ before_script:
   - docker info
 
 build_image:
-  stage: build_image
+  stage: build
   image: docker:20.10.16
   services:
     - docker:20.10.16-dind
