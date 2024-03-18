@@ -8,16 +8,15 @@ async function main() {
 
     Sleep.insertMany([
         {
-            date: new Date('2024-03-18'),  // Today's date 
+            date: new Date('2024-03-18'), 
             startTime: '11:15 PM',
             duration: 7.5  // Hours
         },
         {
-            date: new Date('2024-03-17'),  // Yesterday
+            date: new Date('2024-03-17'),  
             startTime: '10:45 PM',
             duration: 8
         },
-        // Add more sample sleep data as needed
     ]).then(function () {
         console.log("Data inserted") // Success
     }).catch(function (error) {
