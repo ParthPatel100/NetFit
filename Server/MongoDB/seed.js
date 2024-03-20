@@ -205,6 +205,88 @@ async function main() {
         console.log(error)     // Failure
     });
 
+    const Food = require('./schema/foods');
+
+    Food.insertMany([
+        {
+            name: 'Broccoli',
+            date: new Date('2024-03-18'),
+            calories: 50,
+            meal_type: 'lunch',
+            measurement: 'g',
+            amount: 100,
+            protein: 3,
+            carb: 6,
+            fat: 0
+        },
+        {
+            name: 'Salmon',
+            date: new Date('2024-03-17'),
+            calories: 200,
+            meal_type: 'dinner',
+            measurement: 'g',
+            amount: 150,
+            protein: 20,
+            carb: 0,
+            fat: 12
+        },
+        {
+            name: 'Apple',
+            date: new Date('2024-03-19'),
+            calories: 80,
+            meal_type: 'snack',
+            measurement: 'each',
+            amount: 1,
+            protein: 0,
+            carb: 22,
+            fat: 0
+        },
+        {
+            name: 'Pasta',
+            date: new Date('2024-03-20'),
+            calories: 250,
+            meal_type: 'dinner',
+            measurement: 'cup',
+            amount: 1,
+            protein: 7,
+            carb: 42,
+            fat: 2
+        }
+    ]).then(function () {
+        console.log("Data inserted"); // Success
+    }).catch(function (error) {
+        console.log(error); // Failure
+    });
+
+    const Water = require('./schema/water');
+
+    Water.insertMany([
+        {
+            date: new Date('2024-03-18'),
+            measurement: 'L',
+            amount: 1
+        },
+        {
+            date: new Date('2024-03-17'),
+            measurement: 'ml',
+            amount: 500
+        },
+        {
+            date: new Date('2024-03-19'),
+            measurement: 'cup',
+            amount: 2
+        },
+        {
+            date: new Date('2024-03-20'),
+            measurement: 'oz',
+            amount: 16
+        }
+    ]).then(function () {
+        console.log("Data inserted"); // Success
+    }).catch(function (error) {
+        console.log(error); // Failure
+    });
+
 
     // Add post data
     const post1 = new Post({
