@@ -160,6 +160,51 @@ async function main() {
     const saveComment5 = await comment5.save();
 
 
+
+    const Weight = require('./schema/weight');
+    Weight.insertMany([
+        {
+            date: new Date('2024-03-18'),  
+            measurement: 'lb',
+            amount: 175,
+
+        },
+        {
+            date: new Date('2024-03-15'),  
+            measurement: 'kg',
+            amount: 78
+        }
+
+    ]).then(function () {
+        console.log("Data inserted") // Success
+    }).catch(function (error) {
+        console.log(error)     // Failure
+    });
+    
+
+    const Sleep = require('./schema/sleep'); 
+    
+    Sleep.insertMany([
+        {
+            date: new Date('2024-03-18'),  // Today's date 
+            startTime: '11:15 PM',
+            duration: 7.5  // Hours
+        },
+        {
+            date: new Date('2024-03-17'),  // Yesterday
+            startTime: '10:45 PM',
+            duration: 8
+        },
+        // Add more sample sleep data as needed
+    ]).then(function () {
+        console.log("Data inserted") // Success
+    }).catch(function (error) {
+        console.log(error)     // Failure
+    });
+
+
+
+
     // Optionally, you can close the connection when done
     await mongoose.connection.close();
     console.log('Connection closed');
