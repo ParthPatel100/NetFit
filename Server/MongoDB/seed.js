@@ -7,6 +7,9 @@ main().catch(err => console.log(err));
 async function main() {
     const User = require('./schema/user');
     const Tracking = require('./schema/tracking');
+    const Workout = require('./schema/workout');
+    const Comment = require('./schema/comment');
+    const Post = require('./schema/post');
     // Connect to MongoDB
     await mongoose.connect("mongodb://admin:password@localhost:27017/app_db?authSource=admin");
     console.log("Connected to MongoDB");
@@ -205,60 +208,64 @@ async function main() {
 
     // Add post data
     const post1 = new Post({
-        trainerUsername: savedTrainer._id,
+        trainerUsername: savedTrainer,
         title: 'Intense Cardio Workout',
         description: 'A high-intensity cardio workout for advanced users.',
         creationDate: new Date(),
         post_type: 'workout',
-        comments: [savedComment1._id],
+        comments: [saveComment1],
         likes: 10,
         workout_id: workout3
     });
 
     const Post2 = new Post({
-        trainerUsername: savedTrainer2._id,
+        trainerUsername: savedTrainer2,
         title: 'Beginner Strength Training',
         description: 'A basic strength training routine for beginners.',
         creationDate: new Date(),
         post_type: 'workout',
-        comments: [savedComment3._id],
+        comments: [saveComment2],
         likes: 15,
         workout_id: workout2
     });
 
     const Post3 = new Post({
-        trainerUsername: savedTrainer._id,
+        trainerUsername: savedTrainer,
         title: 'Core Strengthening Exercises',
         description: 'Exercises to strengthen your core muscles.',
         creationDate: new Date(),
         post_type: 'workout',
-        comments: [savedComment4._id],
+        comments: [saveComment3],
         likes: 5,
         workout_id: workout1
     });
 
     const Post4 = new Post({
-        trainerUsername: savedTrainer2._id,
+        trainerUsername: savedTrainer2,
         title: 'Upper Body',
         description: 'Best arm workout!',
         creationDate: new Date(),
         post_type: 'workout',
-        comments: [savedComment4._id],
+        comments: [saveComment4],
         likes: 20,
         workout_id: workout4
     });
 
     const Post5 = new Post({
-        trainerUsername: savedTrainer2._id,
+        trainerUsername: savedTrainer2,
         title: 'Abs of Steel',
         description: 'Beginner friendly core workout',
         creationDate: new Date(),
         post_type: 'workout',
-        comments: [savedComment3._id],
+        comments: [saveComment5],
         likes: 20,
         workout_id: workout5
     });
-
+    const savePost1 = await post1.save();
+    const savepost2 = await Post2.save();
+    const savepost3 = await Post3.save();
+    const savepost4 = await Post4.save();
+    const savepost5 = await Post5.save();
 
 
 
