@@ -118,6 +118,48 @@ async function main() {
     });
     const savedw5 = await workout5.save();
 
+    //create new comment
+    const comment1 = new Comment({
+        username: savedUser._id,
+        description: 'Loved this work out!',
+        likes: 2
+    });
+
+    //create new comment
+    const comment2 = new Comment({
+        username: savedUser._id,
+        description: 'I made this twice, and the second time I added feta... game changer',
+        likes: 45
+    });
+
+    //create new comment
+    const comment3 = new Comment({
+        username: savedTrainer._id,
+        description: 'Why is this labeled as beginnger friendly? It definitely is not.',
+        likes: 98
+    });
+
+    //create new comment
+    const comment4 = new Comment({
+        username: savedTrainer2._id,
+        description: 'Boring af.',
+        likes: 0
+    });
+
+    //create new comment
+    const comment5 = new Comment({
+        username: saveduser2._id,
+        description: 'Do you have a vegetarian version?',
+        likes: 22
+    });
+
+    const saveComment1 = await comment1.save();
+    const saveComment2 = await comment2.save();
+    const saveComment3 = await comment3.save();
+    const saveComment4 = await comment4.save();
+    const saveComment5 = await comment5.save();
+
+
     // Optionally, you can close the connection when done
     await mongoose.connection.close();
     console.log('Connection closed');
