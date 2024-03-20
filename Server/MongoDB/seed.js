@@ -203,6 +203,63 @@ async function main() {
     });
 
 
+    // Add post data
+    const post1 = new Post({
+        trainerUsername: savedTrainer._id,
+        title: 'Intense Cardio Workout',
+        description: 'A high-intensity cardio workout for advanced users.',
+        creationDate: new Date(),
+        post_type: 'workout',
+        comments: [savedComment1._id],
+        likes: 10,
+        workout_id: workout3
+    });
+
+    const Post2 = new Post({
+        trainerUsername: savedTrainer2._id,
+        title: 'Beginner Strength Training',
+        description: 'A basic strength training routine for beginners.',
+        creationDate: new Date(),
+        post_type: 'workout',
+        comments: [savedComment3._id],
+        likes: 15,
+        workout_id: workout2
+    });
+
+    const Post3 = new Post({
+        trainerUsername: savedTrainer._id,
+        title: 'Core Strengthening Exercises',
+        description: 'Exercises to strengthen your core muscles.',
+        creationDate: new Date(),
+        post_type: 'workout',
+        comments: [savedComment4._id],
+        likes: 5,
+        workout_id: workout1
+    });
+
+    const Post4 = new Post({
+        trainerUsername: savedTrainer2._id,
+        title: 'Upper Body',
+        description: 'Best arm workout!',
+        creationDate: new Date(),
+        post_type: 'workout',
+        comments: [savedComment4._id],
+        likes: 20,
+        workout_id: workout4
+    });
+
+    const Post5 = new Post({
+        trainerUsername: savedTrainer2._id,
+        title: 'Abs of Steel',
+        description: 'Beginner friendly core workout',
+        creationDate: new Date(),
+        post_type: 'workout',
+        comments: [savedComment3._id],
+        likes: 20,
+        workout_id: workout5
+    });
+
+
 
 
     // Optionally, you can close the connection when done
