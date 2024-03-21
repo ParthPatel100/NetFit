@@ -422,6 +422,37 @@ async function main() {
     await tracking1.save()
     await tracking2.save()
 
+    const savedWorkout1 = new savedWorkout({
+        user: savedUser._id,
+        post_id: [post1._id, post2._id]
+    });
+
+    const savedWorkout2 = new savedWorkout({
+        user: savedUser._id,
+        post_id: [post2._id, post3._id, post4._id, post5._id]
+    });
+
+    const savedWorkout3 = new savedWorkout({
+        user: savedTrainer._id,
+        post_id: [post3._id, post5._id]
+    });
+
+    const savedWorkout4 = new savedWorkout({
+        user: saveduser2._id,
+        post_id: [post4._id]
+    });
+
+    const savedWorkout5 = new savedWorkout({
+        user: saveduser2._id,
+        post_id: [post5._id, post2._id, post1._id]
+    });
+
+    const savedSW1 = await savedWorkout1.save();
+    const savedSW2 = await savedWorkout2.save();
+    const savedSW3 = await savedWorkout3.save();
+    const savedSW4 = await savedWorkout4.save();
+    const savedSW5 = await savedWorkout5.save();
+
 
     // Optionally, you can close the connection when done
     await mongoose.connection.close();
