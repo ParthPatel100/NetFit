@@ -16,8 +16,8 @@ async function main() {
     const Weight = require('./schema/weight');
     const Sleep = require('./schema/sleep');
     const Food = require('./schema/foods');
-    const Water = require('./schema/water')
-    const SavedWorkout = require('./schema/saved_workouts')
+    const Water = require('./schema/water');
+    const SavedWorkout = require('./schema/saved_workouts');
 
 
 
