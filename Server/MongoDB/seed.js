@@ -17,6 +17,7 @@ async function main() {
     const Sleep = require('./schema/sleep');
     const Food = require('./schema/foods');
     const Water = require('./schema/water')
+    const SavedWorkout = require('./schema/saved_workouts')
 
 
 
@@ -422,27 +423,27 @@ async function main() {
     await tracking1.save()
     await tracking2.save()
 
-    const savedWorkout1 = new savedWorkout({
+    const savedWorkout1 = new SavedWorkout({
         user: savedUser._id,
         post_id: [post1._id, post2._id]
     });
 
-    const savedWorkout2 = new savedWorkout({
+    const savedWorkout2 = new SavedWorkout({
         user: savedUser._id,
         post_id: [post2._id, post3._id, post4._id, post5._id]
     });
 
-    const savedWorkout3 = new savedWorkout({
+    const savedWorkout3 = new SavedWorkout({
         user: savedTrainer._id,
         post_id: [post3._id, post5._id]
     });
 
-    const savedWorkout4 = new savedWorkout({
+    const savedWorkout4 = new SavedWorkout({
         user: saveduser2._id,
         post_id: [post4._id]
     });
 
-    const savedWorkout5 = new savedWorkout({
+    const savedWorkout5 = new SavedWorkout({
         user: saveduser2._id,
         post_id: [post5._id, post2._id, post1._id]
     });
