@@ -21,8 +21,6 @@ async function main() {
 
 
 
-
-
     // Connect to MongoDB
     await mongoose.connect("mongodb://admin:password@localhost:27017/app_db?authSource=admin");
     console.log("Connected to MongoDB");
@@ -425,27 +423,27 @@ async function main() {
 
     const savedWorkout1 = new SavedWorkout({
         user: savedUser._id,
-        post_id: [post1._id, post2._id]
+        post_id: [savePost1._id, savepost2._id]
     });
 
     const savedWorkout2 = new SavedWorkout({
         user: savedUser._id,
-        post_id: [post2._id, post3._id, post4._id, post5._id]
+        post_id: [savepost2._id, savepost3._id, savepost4._id, savepost5._id]
     });
 
     const savedWorkout3 = new SavedWorkout({
         user: savedTrainer._id,
-        post_id: [post3._id, post5._id]
+        post_id: [savepost3._id, savepost5._id]
     });
 
     const savedWorkout4 = new SavedWorkout({
         user: saveduser2._id,
-        post_id: [post4._id]
+        post_id: [savepost4._id]
     });
 
     const savedWorkout5 = new SavedWorkout({
         user: saveduser2._id,
-        post_id: [post5._id, post2._id, post1._id]
+        post_id: [savepost5._id, savepost2._id, savePost1._id]
     });
 
     const savedSW1 = await savedWorkout1.save();

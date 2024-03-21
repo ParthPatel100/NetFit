@@ -1,4 +1,5 @@
-const savedWorkoutSchema = new mongoose.Schema({ 
+const mongoose = require('mongoose');
+const savedWorkoutSchema = new mongoose.Schema({
     post_id: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
 });
