@@ -45,7 +45,7 @@ export default function LoginPage(){
         }
     };
     return(
-        <div class = "background h-[10000px]">
+        <div class = "background">
             <img src={Logo} alt="Logo-image" className="h-12 w-auto"/>
             <div class = "loginbox">
                 <h1 class = "logTitle">
