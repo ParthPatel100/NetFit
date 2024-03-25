@@ -27,7 +27,7 @@ async function main() {
     const newUser = new User({
         username: 'john_doe',
         email: 'john@example.com',
-        password: '$2y$10$DlX2dnKjWIsJyZWbb5PiQ.VbJCqdaKCppF7vdVdc2JZjw6qXHRAzK',
+        password: '$2a$10$DlX2dnKjWIsJyZWbb5PiQ.VbJCqdaKCppF7vdVdc2JZjw6qXHRAzK',
         following_list: [], // Empty following list for now
         user_role: 'user', // Assign user role
         gender: 'male',
@@ -38,7 +38,7 @@ async function main() {
     const admin = new User({
         username: 'leader_admin',
         email: 'admin@example.com',
-        password: '$2y$10$nRlH4g7j6SPQkCF6M6DbieTKkdG/oZuC91hlg3Tw8Wxd9KHBdlcdC',
+        password: '$2a$10$nRlH4g7j6SPQkCF6M6DbieTKkdG/oZuC91hlg3Tw8Wxd9KHBdlcdC',
         following_list: [],
         user_role: 'admin',
         gender: 'male',
@@ -51,7 +51,7 @@ async function main() {
     const trainer = new User({
         username: 'trainer_ethan',
         email: 'trainer@example.com',
-        password: '$2y$10$C6XG9MLRsUPYdAle7GK4zubqEYdxsHrC7jgQo1ckOPMySp560AWXK',
+        password: '$2a$10$C6XG9MLRsUPYdAle7GK4zubqEYdxsHrC7jgQo1ckOPMySp560AWXK',
         following_list: [],
         user_role: 'trainer',
         gender: 'male',
@@ -62,7 +62,7 @@ async function main() {
     const trainer2 = new User({
         username: 'trainerG',
         email: 'trainerG@example.com',
-        password: '$2y$10$X18rqlVb0KGP92DThhEN0ONA3JmrwyKPWjdsYXFaZb26zcPc8m086',
+        password: '$2a$10$X18rqlVb0KGP92DThhEN0ONA3JmrwyKPWjdsYXFaZb26zcPc8m086',
         following_list: [],
         user_role: 'trainer',
         gender: 'female',
@@ -73,7 +73,7 @@ async function main() {
     const user2 = new User({
         username: 'cool_guy',
         email: 'guy@example.com',
-        password: '$2y$10$PXPjtoc3Q8QcELvll0heyeXVV2o/Eb26VfKckP0j72kSKQYJRxVRq',
+        password: '$2a$10$PXPjtoc3Q8QcELvll0heyeXVV2o/Eb26VfKckP0j72kSKQYJRxVRq',
         following_list: [savedTrainer,savedTrainer2],
         user_role: 'user',
         gender: 'male',
