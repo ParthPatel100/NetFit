@@ -9,7 +9,8 @@ import LoginPage from "./pages/loginPage.jsx";
 
 export default function App() {
     return (
-        <h1 >
+        <h1>
+                <Navbar/>
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>
                     <Route path="/landing" element={<LandingPage/>}/>
