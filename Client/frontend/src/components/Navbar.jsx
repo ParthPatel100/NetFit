@@ -41,7 +41,7 @@ const NavLinks = ({ className, childClass, onClick}) => {
                 to="/account"
                 onClick={onClick}
                 className={({isActive}) => {
-                    return `${isActive ? "text-purple-500 border-purple-500 border-2 rounded-2xl" : "text-neutral-200"} ${childClass} flex flex-col justify-center content-center items-center self-end `;
+                    return `${isActive ? "text-purple-500 border-purple-500 border-2 rounded-full" : "text-neutral-200"} ${childClass} flex flex-col justify-center content-center items-center self-end `;
                 }}
             >
                 <div className="flex gap-1 align-middle items-center content-center">
