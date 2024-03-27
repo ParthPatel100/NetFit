@@ -1,71 +1,70 @@
 import '../cssfiles/login.css'
 import Logo from '../assets/logo.png';
-import React, { useEffect, useState } from "react";
-import {Link } from "react-router-dom";
+import React, {useContext, useEffect, useState} from "react";
+import {Link, Navigate} from "react-router-dom";
 import bcrypt from 'bcryptjs'
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios'
+import {UserContext} from "../../context/userContext.jsx";
+
+axios.defaults.baseURL = 'http://localhost:8080'
+axios.defaults.withCredentials = true;
+
+
 export default function LoginPage(){
+    const { user } = useContext(UserContext)
     const navigate = useNavigate();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
+    const { loginUser } = useContext(UserContext);
+
+    const[data, setData] = useState({
+        email: '',
+        password: ''
+    })
     const updateUsername = (event) => {
         setUsername(event.target.value)
     };
     const updatePassword = (event) => {
         setPassword(event.target.value)
     };
-    const checkValidLogin = async () => {
-        if(password==undefined){
-            alert("Please enter a password");
-            return
-        }
+
+    if(user){
+        return <Navigate to={"/landing"}/>;
+    }
+
+
+    const handleLogin = async () => {
         try {
-            const response = await fetch(
-                `http://localhost:8000/verifyLogin?username=${username}`
-            );
-            const result = await response.json()
-            if(result==""){
-                alert("Please enter a valid username");
-                return
-            }
-            const valid = await bcrypt.compare(password, result[0].password)
-            if(valid==true){
-                sessionStorage.setItem('UserName', username);
-                navigate(`/landing`,
-                {
-                    state: username
-                })
-            }
-            else{
-                alert("Invalid Password")
-            }
-        }
-        catch (error){
-            console.error(error);
+            await loginUser(username, password);
+        } catch (error) {
+            console.error('Error logging in:', error);
+            // Handle error (e.g., show error message to user)
         }
     };
+
     return(
         <div class = "background">
             <img src={Logo} alt="Logo-image" className="h-12 w-auto"/>
-            <div class = "loginbox">
-                <h1 class = "logTitle">
+            <div class="loginbox">
+                <h1 class="logTitle">
                     Login
                 </h1>
-                <div class = "prompts">
-                    <label class = "field"> Username</label>
-                    <input type="text" class="input" onChange ={updateUsername}></input>
+                <div class="prompts">
+                    <label class="field"> Username</label>
+                    <input type="text" class="input" onChange={updateUsername}></input>
                 </div>
-                <div class = "prompts">
-                    <label class = "field"> Password</label>
+                <div class="prompts">
+                    <label class="field"> Password</label>
                     <input type="password" class="input" onChange={updatePassword}></input>
                 </div>
-                <button class ="Button" onClick={checkValidLogin}>
+                <button class="Button" onClick={handleLogin}>
                     Login
                 </button>
                 <Link to="/register">
-                <button class ="Button" >
-                    Need Account?
-                </button>
+                    <button class="Button">
+                        Need Account?
+                    </button>
                 </Link>
             </div>
         </div>

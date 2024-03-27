@@ -6,10 +6,15 @@ import LandingPage from "./pages/landingPage.jsx";
 import Track from "./pages/track.jsx";
 import Register from"./pages/register.jsx"
 import LoginPage from "./pages/loginPage.jsx";
+import axios from 'axios';
+import {UserContextProvider} from "../context/userContext.jsx";
+
+axios.defaults.baseURL = 'http://localhost:8080'
+axios.defaults.withCredentials = true
 
 export default function App() {
     return (
-        <h1>
+        <UserContextProvider>
                 <Navbar/>
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>
@@ -19,6 +24,6 @@ export default function App() {
                     <Route path="/account" element={<Account/>}/>
                     <Route path="/register" element={<Register/>}/>
                 </Routes>
-        </h1>
+        </UserContextProvider>
     )
 }
