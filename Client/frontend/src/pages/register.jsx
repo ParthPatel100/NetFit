@@ -1,5 +1,5 @@
 import '../cssfiles/register.css'
-import Logo from '../assets/logo.png';
+import Logo from '../assets/fullLogo.png';
 import React, { useEffect, useState } from "react";
 export default function Register(){
     const [username, setUsername] = useState();
