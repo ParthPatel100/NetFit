@@ -21,7 +21,6 @@ export function UserContextProvider({children}){
             }
         } catch (error) {
             console.error('Error logging in:', error);
-            // Handle error (e.g., show error message to user)
         }
     }
 

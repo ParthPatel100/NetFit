@@ -1,8 +1,9 @@
 import {Link, NavLink} from 'react-router-dom'
-import Logo from '../assets/logo.png';
+import Logo from '../assets/fullLogo.png';
 import ProfilePic from "../assets/profilePic.png"
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Menu, X, Home, Dumbbell, LineChart} from "lucide-react";
+import {UserContext} from "../../context/userContext.jsx";
 
 const NavLinks = ({ className, childClass, onClick}) => {
     return(
@@ -55,7 +56,11 @@ const NavLinks = ({ className, childClass, onClick}) => {
 }
 
 export default function Navbar() {
+    const { user } = useContext(UserContext)
 
+    if(!user){
+        return (<></>)
+    }
     return (
         <>
             <div
