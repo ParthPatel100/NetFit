@@ -7,8 +7,8 @@ export default function LandingPage(){
     console.log(user)
     return(
         <div>
-            LandingPage
-            <div className={"h-screen w-screen flex justify-center align-middle items-center"} >{user ? `Hello ${user.username}` : 'Loading...'} </div>
+
+            <div className={"h-screen w-screen flex justify-center align-middle items-center"} >{user ? `` : 'Loading...'} </div>
         </div>
     )
 }
