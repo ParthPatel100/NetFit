@@ -123,12 +123,12 @@ export default function RegisterPage(){
                            className={"w-10/12 border-[1px] bg-neutral-100 border-gray-500 rounded-[5px] p-2 mt-1.5 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"}
                                onChange={updatePassword} placeholder={"Password"}></input>
                     <input type="password"
-                        className={"w-10/12 border-[1px] bg-neutral-100 border-gray-500 rounded-[5px] p-2 mt-1.5 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"}
+                        className={"btn w-10/12 border-[1px] bg-neutral-100 border-gray-500 rounded-[5px] p-2 mt-1.5 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"}
                                onChange={updateConfirmPassword} placeholder={"Confirm Password"}></input>
-                    <button className={"w-10/12 bg-gradient-to-br from-purple-500 to-pink-500 w-full text-white border-gray-500 rounded-[10px] p-2 mt-1.5"} onClick={moveForward}>
+                    <button className={"w-10/12 bg-gradient-to-br from-purple-500 to-pink-500 text-white border-gray-500 rounded-[10px] p-2 mt-1.5"} onClick={moveForward}>
                         Next
                     </button>
-                    <Link className={"w-10/12 text-center bg-gradient-to-br from-purple-500 to-pink-500 w-full text-white border-gray-500 rounded-[10px] p-2 mt-1.5"} to="/">
+                    <Link className={"btn w-10/12 text-center bg-gradient-to-br from-purple-500 to-pink-500 text-white border-gray-500 rounded-[10px] p-2 mt-1.5"} to="/">
                         <button className={""}>
                             Back
                         </button>
@@ -164,11 +164,11 @@ export default function RegisterPage(){
                                 <option value ="user">User</option>
                                 <option value ="trainer">Trainer</option>
                                </select>
-                    <button className={"w-10/12 bg-gradient-to-br from-purple-500 to-pink-500 w-full text-white border-gray-500 rounded-[10px] p-2 mt-1.5"} 
+                    <button className={"btn w-10/12 bg-gradient-to-br from-purple-500 to-pink-500 text-white border-gray-500 rounded-[10px] p-2 mt-1.5"} 
                     onClick={register}>
                         Finish
                     </button>
-                    <button className={"text-center w-10/12 bg-gradient-to-br from-purple-500 to-pink-500 w-full text-white border-gray-500 rounded-[10px] p-2 mt-1.5"}
+                    <button className={"btn text-center w-10/12 bg-gradient-to-br from-purple-500 to-pink-500 text-white border-gray-500 rounded-[10px] p-2 mt-1.5"}
                     onClick={moveBackwards}>
                         Back
                     </button>
