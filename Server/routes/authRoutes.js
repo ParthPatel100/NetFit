@@ -69,4 +69,33 @@ router.get('/logout', (req, res) => {
     return res.json("Logout Successful")
 });
 
+router.post('/Register',  async (req, res) => {
+    try {
+        const {username, password,email,experienceLevel,gender,age,user_role} = req.body
+        await mongoose.connect("mongodb://admin:password@localhost:27017/app_db?authSource=admin");
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(password, salt);
+        const user = new User({
+            username: username,
+            email: email,
+            password: hash,
+            user_role: user_role,
+            gender: gender,
+            age: age,
+            experienceLevel: experienceLevel
+        });
+        const savedUser = await user.save();
+        await mongoose.connection.close();
+        res.json("wokring")
+    } catch (error) {
+        if(error.toString().includes("username")){
+            res.json("Please choose a unique username")
+        }
+        if(error.toString().includes("email")){
+            res.json("Please choose a unique email")
+        }
+        console.log(error)
+    }
+});
+
 module.exports = router
