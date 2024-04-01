@@ -5,7 +5,7 @@ import {GlassWater, Weight, UtensilsCrossed, Dumbbell, BedDouble, MoveRight} fro
 
 import dayjs from 'dayjs';
 
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Link} from "react-router-dom";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -94,6 +94,7 @@ const MyResponsiveLine = ({data, xLabel, yLabel}) => {
 }
 
 export default function Progress(){
+
     const [fromDate, setFromDate] = useState(dayjs('2022-04-17'));
     const [toDate, setToDate] = useState(dayjs('2022-04-17'));
     const duration = 1;
@@ -117,6 +118,13 @@ export default function Progress(){
         duration: duration,
         start: 0,
         end: proteinConsumed,
+    });
+    const caloriesBurntToday = 44
+    const { value: caloriesBurntToday_value } = useCountUp({
+        isCounting: true,
+        duration: duration,
+        start: 0,
+        end: caloriesBurntToday,
     });
     const caloriesBurnt = -9.3
     const { value: caloriesBurnt_value } = useCountUp({
@@ -163,6 +171,10 @@ export default function Progress(){
         end: sugarConsumed,
     });
 
+
+    const memoizedWorkoutMinutesValue = useMemo(() => workoutMinutes_value, [workoutMinutes_value]);
+
+
     return(
 
         <div className={"flex md:mt-14 md:ml-[12rem] mb-16 md:mb-0 flex-col"}>
@@ -195,7 +207,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-neutral-200 '}>
-                            45/75 Min
+                            65/75 Min
                         </span>
                     </div>
 
@@ -218,7 +230,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-neutral-200'}>
-                            1400/4000 Cal
+                            1960/4000 Cal
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -235,8 +247,8 @@ export default function Progress(){
                                 }
                             }}
                             determinate={true}
-                            value={parseInt(caloriesBurnt_value)}>
-                            <Typography textColor={"#e5e5e5"}>{caloriesBurnt_value}%</Typography>
+                            value={parseInt(caloriesBurntToday_value)}>
+                            <Typography textColor={"#e5e5e5"}>{caloriesBurntToday_value}%</Typography>
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-neutral-200'}>
@@ -262,7 +274,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-neutral-200'}>
-                            7.5/8 Hrs
+                            7.2/8 Hrs
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -284,7 +296,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-neutral-200'}>
-                            640/2000 mL
+                            1740/2000 mL
                         </span>
                     </div>
                 </div>
@@ -433,7 +445,7 @@ export default function Progress(){
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(fatGained)}>
+                            value={parseInt(fatGained_value)}>
                             <Typography textColor={"#494645"}>{fatGained_value}%</Typography>
                         </CircularProgress>
 
@@ -452,7 +464,7 @@ export default function Progress(){
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(carbsConsumed)}>
+                            value={parseInt(carbsConsumed_value)}>
                             <Typography textColor={"#494645"}>{carbsConsumed_value}%</Typography>
                         </CircularProgress>
 
@@ -471,7 +483,7 @@ export default function Progress(){
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(sugarConsumed)}>
+                            value={parseInt(sugarConsumed_value)}>
                             <Typography textColor={"#494645"}>{sugarConsumed_value}%</Typography>
                         </CircularProgress>
 
@@ -500,12 +512,12 @@ export default function Progress(){
                         <CircularProgress
                             sx={{
                                 '.MuiCircularProgress-progress': {
-                                    stroke: workoutMinutes > 0 ? '#e67fff' : '#67037a',
+                                    stroke: workoutMinutes > 0 ? '#72be73' : '#be3636',
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(workoutMinutes)}>
-                            <Typography textColor={"#494645"}>{workoutMinutes_value}%</Typography>
+                            value={memoizedWorkoutMinutesValue}>
+                            <Typography textColor={"#494645"}>{memoizedWorkoutMinutesValue}%</Typography>
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>
@@ -521,11 +533,11 @@ export default function Progress(){
                         <CircularProgress
                             sx={{
                                 '.MuiCircularProgress-progress': {
-                                    stroke: caloriesBurnt > 0 ? '#e67fff' : '#67037a',
+                                    stroke: caloriesBurnt > 0 ? '#72be73' : '#be3636',
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(caloriesBurnt)}>
+                            value={parseInt(caloriesBurnt_value)}>
                             <Typography textColor={"#494645"}>{caloriesBurnt_value}%</Typography>
                         </CircularProgress>
 
