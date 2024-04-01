@@ -8,7 +8,7 @@ const workoutSchema = new mongoose.Schema({
     resistance: [{type: Number}],
     resMeasure: [{type: String, enum: ['lb', 'kg']}],
     duration: [{type: Number, min: 0}],
-    calories: {type: Number},
+    calories: {type: Number}
 });
 
 module.exports = mongoose.model('workout', workoutSchema);

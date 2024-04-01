@@ -98,43 +98,70 @@ export default function Progress(){
     const [toDate, setToDate] = useState(dayjs('2022-04-17'));
     const duration = 1;
     const workoutMinutes = 87
-
-    const { value: workoutMinutes_value, workoutMinutes_reset } = useCountUp({
+    const { value: workoutMinutes_value } = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
         end: workoutMinutes,
     });
-    const caloriesGained = -49
-    const { value: caloriesGained_value, caloriesGained_reset } = useCountUp({
+    const caloriesGained = 49
+    const { value: caloriesGained_value } = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
         end: caloriesGained,
     });
-    const caloriesBurnt = 94
-    const { value: caloriesBurnt_value, caloriesBurnt_reset } = useCountUp({
+    const proteinConsumed = 49
+    const { value: proteinConsumed_value } = useCountUp({
+        isCounting: true,
+        duration: duration,
+        start: 0,
+        end: proteinConsumed,
+    });
+    const caloriesBurnt = -9.3
+    const { value: caloriesBurnt_value } = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
         end: caloriesBurnt,
     });
+    const fatGained = 10
+    const { value: fatGained_value } = useCountUp({
+        isCounting: true,
+        duration: duration,
+        start: 0,
+        end: fatGained,
+    });
     const sleep = 90
-    const { value: sleep_value, sleep_reset } = useCountUp({
+    const { value: sleep_value} = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
         end: sleep,
     });
     const water = 87
-    const { value: water_value, water_reset } = useCountUp({
+    const { value: water_value} = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
         end: water,
     });
 
+    const carbsConsumed = 75
+    const { value: carbsConsumed_value} = useCountUp({
+        isCounting: true,
+        duration: duration,
+        start: 0,
+        end: carbsConsumed,
+    });
 
+    const sugarConsumed = 20
+    const { value: sugarConsumed_value} = useCountUp({
+        isCounting: true,
+        duration: duration,
+        start: 0,
+        end: sugarConsumed,
+    });
 
     return(
 
@@ -367,12 +394,12 @@ export default function Progress(){
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(workoutMinutes_value)}>
-                            <Typography textColor={"#494645"}>{workoutMinutes_value}%</Typography>
+                            value={parseInt(caloriesGained_value)}>
+                            <Typography textColor={"#494645"}>{caloriesGained_value}%</Typography>
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
-                            1500/2000 Cal
+                            980/2000 Cal
                         </span>
                     </div>
 
@@ -387,12 +414,12 @@ export default function Progress(){
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(caloriesGained_value)}>
-                            <Typography textColor={"#494645"}>{caloriesGained_value}%</Typography>
+                            value={parseInt(proteinConsumed_value)}>
+                            <Typography textColor={"#494645"}>{proteinConsumed_value}%</Typography>
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
-                            35/50 g
+                            24.5/50 g
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -406,12 +433,12 @@ export default function Progress(){
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(caloriesBurnt_value)}>
-                            <Typography textColor={"#494645"}>{caloriesBurnt_value}%</Typography>
+                            value={parseInt(fatGained)}>
+                            <Typography textColor={"#494645"}>{fatGained_value}%</Typography>
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
-                            10/25 g
+                            2.5/25 g
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -425,8 +452,8 @@ export default function Progress(){
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(sleep_value)}>
-                            <Typography textColor={"#494645"}>{sleep_value}%</Typography>
+                            value={parseInt(carbsConsumed)}>
+                            <Typography textColor={"#494645"}>{carbsConsumed_value}%</Typography>
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
@@ -444,12 +471,12 @@ export default function Progress(){
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(water_value)}>
-                            <Typography textColor={"#494645"}>{water_value}%</Typography>
+                            value={parseInt(sugarConsumed)}>
+                            <Typography textColor={"#494645"}>{sugarConsumed_value}%</Typography>
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
-                            25/40 g
+                            8/40 g
                         </span>
                     </div>
                 </div>
@@ -464,25 +491,7 @@ export default function Progress(){
                 </div>
 
                 <div className={"self-center gap-8 flex flex-row flex-wrap justify-center items-center content-center"}>
-                    <div className={"flex flex-col items-center text-center"}>
-                        <span className={'text-[0.8rem] mb-1.5 text-gray-7000'}>
-                            Calories Consumed
-                        </span>
-                        <CircularProgress
-                            sx={{
-                                '.MuiCircularProgress-progress': {
-                                    stroke: '#08d958',
-                                },
-                            }}
-                            determinate={true}
-                            value={parseInt(workoutMinutes_value)}>
-                            <Typography textColor={"#494645"}>{workoutMinutes_value}%</Typography>
-                        </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
-                            1500/2000 Cal
-                        </span>
-                    </div>
 
                     <div className={"flex flex-col items-center text-center"}>
                         <span className={'text-[0.8rem] mb-1.5 text-gray-700'}>
@@ -491,37 +500,20 @@ export default function Progress(){
                         <CircularProgress
                             sx={{
                                 '.MuiCircularProgress-progress': {
-                                    stroke: caloriesGained_value > 0 ? '#59ad48' : '#bb1313',
+                                    stroke: workoutMinutes > 0 ? '#e67fff' : '#67037a',
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(caloriesGained_value)}>
-                            <Typography textColor={"#494645"}>{caloriesGained_value}%</Typography>
+                            value={parseInt(workoutMinutes)}>
+                            <Typography textColor={"#494645"}>{workoutMinutes_value}%</Typography>
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>
-                            24 min <MoveRight size={"15"}/> 50 min
+                            24 min <MoveRight size={"15"}/> 45 min
                         </span>
                     </div>
-                    <div className={"flex flex-col items-center text-center"}>
-                        <span className={'text-[0.8rem] mb-1.5 text-gray-700'}>
-                            Fats (g)
-                        </span>
-                        <CircularProgress
-                            sx={{
-                                '.MuiCircularProgress-progress': {
-                                    stroke: '#089d43',
-                                },
-                            }}
-                            determinate={true}
-                            value={parseInt(caloriesBurnt_value)}>
-                            <Typography textColor={"#494645"}>{caloriesBurnt_value}%</Typography>
-                        </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
-                            10/25 g
-                        </span>
-                    </div>
+
                     <div className={"flex flex-col items-center text-center"}>
                         <span className={'text-[0.8rem] mb-1.5 text-gray-700'}>
                             Calories Burnt
@@ -529,12 +521,12 @@ export default function Progress(){
                         <CircularProgress
                             sx={{
                                 '.MuiCircularProgress-progress': {
-                                    stroke: '#206c3e',
+                                    stroke: caloriesBurnt > 0 ? '#e67fff' : '#67037a',
                                 },
                             }}
                             determinate={true}
-                            value={parseInt(caloriesBurnt_value)}>
-                            <Typography textColor={"#494645"}>{sleep_value}%</Typography>
+                            value={parseInt(caloriesBurnt)}>
+                            <Typography textColor={"#494645"}>{caloriesBurnt_value}%</Typography>
                         </CircularProgress>
 
                         <span className={'text-[0.6rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>
