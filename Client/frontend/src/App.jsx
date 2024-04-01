@@ -8,6 +8,7 @@ import Register from"./pages/register.jsx"
 import LoginPage from "./pages/loginPage.jsx";
 import axios from 'axios';
 import {UserContextProvider} from "../context/userContext.jsx";
+import GoalPage from "./pages/goal.jsx";
 
 axios.defaults.baseURL = 'http://localhost:8080'
 axios.defaults.withCredentials = true
@@ -19,6 +20,7 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>
                     <Route path="/landing" element={<LandingPage/>}/>
+                    <Route path="/goals" element={<GoalPage/>}/>
                     <Route path="/track" element={<Track/>}/>
                     <Route path="/progress" element={<Progress/>}/>
                     <Route path="/account" element={<Account/>}/>

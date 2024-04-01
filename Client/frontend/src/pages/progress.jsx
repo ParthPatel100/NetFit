@@ -366,7 +366,7 @@ export default function Progress(){
             <div
                 className={"flex flex-col md:grid md:grid-cols-2 justify-center content-center items-center text-center mt-4 mx-4 gap-4"}>
                 <div className={"bg-slate-300 rounded-lg flex justify-center content-center flex-col h-[25rem] w-full"}>
-                    <div className={"ml-4 self-start flex flex-row gap-1 mt-3 text-gray-700"}>
+                    <div className={"ml-4 self-start flex flex-row gap-1 mt-3 text-gray-700 text-xl justify-center content-center items-center"}>
                         <Weight/>
                         Weight
                     </div>
@@ -377,7 +377,7 @@ export default function Progress(){
 
 
                 <div className={"bg-slate-300 rounded-lg flex justify-center content-center flex-col h-[25rem] w-full"}>
-                    <div className={"ml-4 self-start flex flex-row gap-1 mt-3 text-gray-700"}>
+                    <div className={"ml-4 self-start flex flex-row gap-1 mt-3 text-gray-700 text-xl justify-center content-center items-center"}>
                         <GlassWater/>
                         Water
                     </div>
@@ -389,7 +389,7 @@ export default function Progress(){
 
             <div className={"mx-4 my-4 rounded-2xl p-2 flex justify-center flex-col bg-slate-300 text-black"}>
 
-                <div className={"ml-4 self-start flex flex-row gap-1 mt-3 text-gray-700 mb-4"}>
+                <div className={"ml-4 self-start flex flex-row gap-1 mt-3 text-gray-700 mb-4 text-xl justify-center content-center items-center"}>
                     <UtensilsCrossed/>
                     Food
                 </div>
@@ -497,7 +497,7 @@ export default function Progress(){
 
             <div className={"mx-4 my-4 mt-0 rounded-2xl p-2 flex justify-center flex-col bg-slate-300 text-black"}>
 
-                <div className={"ml-4 self-start flex flex-row gap-1 mt-3 text-gray-700 mb-4"}>
+                <div className={"ml-4 self-start flex flex-row gap-1 mt-3 text-gray-700 mb-4 text-xl justify-center content-center items-center"}>
                     <Dumbbell/>
                     Workouts
                 </div>
@@ -552,7 +552,7 @@ export default function Progress(){
             <div
                 className={"flex flex-col md:grid md:grid-cols-2 justify-center content-center items-center text-center mx-4 gap-4 mb-4"}>
                 <div className={"bg-slate-300 rounded-lg flex justify-center content-center flex-col h-[25rem] w-full"}>
-                    <div className={"ml-4 self-start flex flex-row gap-1 mt-3 text-gray-700"}>
+                    <div className={"ml-4 self-start flex flex-row gap-1 mt-3 text-gray-700 text-xl justify-center content-center items-center"}>
                         <BedDouble/>
                         Sleep
                     </div>
