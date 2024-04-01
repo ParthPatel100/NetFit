@@ -10,7 +10,6 @@ const postSchema = new mongoose.Schema({
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment'}],
     likes: {type: Number },
     workout_id: {type: mongoose.Schema.Types.ObjectId, ref: 'workout'}
-
 });
 
 module.exports = mongoose.model('post', postSchema);

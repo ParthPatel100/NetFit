@@ -3,11 +3,10 @@
 @tailwind utilities;
 
 :root {
-    --CircularProgress-size: 100px;
+    --CircularProgress-size: min(22vw, 100px);
+    --CircularProgress-thickness: min(1.9vw, 12px);
 }
 
 
-.MuiCircularProgress-progress {
-    --CircularProgress-progressColor: #c93ae5;
-}
+
 
