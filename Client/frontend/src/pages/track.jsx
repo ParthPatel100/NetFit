@@ -1,7 +1,790 @@
+import {useLocation } from "react-router-dom";
+import {UserContext} from "../../context/userContext.jsx";
+import React, {useState} from "react";
+import {useContext} from "react";
+import {Trash2, CirclePlus, Plus, CookingPot, Apple, Pencil} from "lucide-react";
+import axios from 'axios';
+
+
+
+
+
 export default function Track(){
+
+    
+
+    const [showInputs, setShowInputs] = useState(false);
+    const [showSavedRecipes, setShowSavedRecipes] = useState(false);
+    const [name, setName] = useState("");
+    const [meal, setMeal] = useState("");
+    const [amount, setAmount] = useState("");
+    const [measurement, setMeasurement] = useState("");
+    const [protein, setProtein] = useState("");
+    const [carbs, setCarbs] = useState("");
+    const [calories, setCalories] = useState("");
+    const [fat, setFat] = useState("");
+    const [submittedData, setSubmittedData] = useState([
+        { name: "Chicken Breast", amount: "100", measurement: "g", protein: "31", carbs: "0", fat: "3.6", calories: "165" },
+        { name: "Broccoli", amount: "100", measurement: "cup", protein: "2.8", carbs: "6", fat: "0.4", calories: "34" },
+        { name: "Brown Rice", amount: "100", measurement: "g", protein: "2.6", carbs: "23", fat: "0.9", calories: "112" }
+    ]);
+    const [savedRecipes] = useState([
+        { name: "Dairy-Free Protein Pancakes", description: "The Best Dairy-Free Protein Pancakes You've Ever Had.", trainerUsername: "trainerJD", protein: "2.6", carbs: "23", fat: "0.9", calories: "112"},
+        { name: "STupid Stupid recipe", description: "ugh description", trainerUsername: "im a trainer", protein: "2.6", carbs: "23", fat: "0.9", calories: "112"},
+        { name: "help me name", description: "crying description", trainerUsername: "i cant do a push up", protein: "2.6", carbs: "23", fat: "0.9", calories: "112"},
+    ]);
+
+    const handleButtonClick = () => {
+        setShowInputs(!showInputs);
+        if (showSavedRecipes) {
+            setShowSavedRecipes(false);
+            setShowInputs(false);
+        }
+    };
+
+    const toggleFoodButtonClick = () => {
+        setShowInputs(true);
+        setShowSavedRecipes(false);
+    };
+
+    const toggleSavedRecipesClick = () => {
+        setShowInputs(false);
+        setShowSavedRecipes(true);
+    };
+
+
+    const handleSubmit = () => {
+        const newData = {
+            
+            name,
+            meal,
+            amount,
+            measurement,
+            protein,
+            carbs,
+            calories,
+            fat,
+        };
+
+        setSubmittedData([...submittedData, newData]);
+
+        // Clear input fields
+        setName("");
+        setMeal("");
+        setAmount("");
+        setMeasurement("");
+        setProtein("");
+        setCarbs("");
+        setFat("");
+        setCalories("");
+
+        // Close the input fields
+        setShowInputs(false);
+    };
+
+    
+
+    const handleRecipeClick = (recipe) => {
+        const newEntry = {
+            name: recipe.name,
+            protein: recipe.protein,
+            carbs: recipe.carbs,
+            fat: recipe.fat,
+            calories: recipe.calories,
+        };
+
+        setSubmittedData([...submittedData, newEntry]);
+    };
+
+    const handleEdit = (index) => {
+        // Create a copy of the submittedData array without the item to delete
+        const updatedData = submittedData.filter((_, idx) => idx !== index);
+    
+        // Set the state with the values of the selected food item
+        setName(submittedData[index].name);
+        setMeal(submittedData[index].meal);
+        setAmount(submittedData[index].amount);
+        setMeasurement(submittedData[index].measurement);
+        setProtein(submittedData[index].protein);
+        setCarbs(submittedData[index].carbs);
+        setCalories(submittedData[index].calories);
+        setFat(submittedData[index].fat);
+    
+        // Set the showInputs state to true to display the input fields for editing
+        setShowInputs(true);
+    
+        // Update the submittedData array without the deleted item
+        setSubmittedData(updatedData);
+    };
+
+    const handleDelete = (index) => {
+        const updatedData = submittedData.filter((_, idx) => idx !== index);
+        setSubmittedData(updatedData);
+    };
+
+    const [showWorkoutInputs, setShowWorkoutInputs] = useState(false);
+    const [showSavedWorkouts, setShowSavedWorkouts] = useState(false);
+    const [wname, setWName] = useState("");
+    const [reps, setReps] = useState("");
+    const [sets, setSets] = useState("");
+    const [resistance, setResistance] = useState("");
+    const [resMeasure, setResMeasure] = useState("");
+    const [duration, setDuration] = useState("");
+    const [submittedWorkoutData, setSubmittedWorkoutData] = useState([
+        { wname: "Push-ups", reps: "10", sets: "3", resistance: "", resMeasure: "", duration: "" },
+        { wname: "Squats", reps: "15", sets: "3", resistance: "", resMeasure: "", duration: "" },
+        { wname: "Plank", reps: "", sets: "", resistance: "", resMeasure: "", duration: "1" },
+    ]);
+    const [savedWorkouts] = useState([
+        { wname: "Leg Day", description: "A collection of leg workouts", trainerUsername: "trainerJD", reps: "10", sets: "3", resistance: "", resMeasure: "", duration: "" },
+        { wname: "Core Workout", description: "Strengthen your core muscles", trainerUsername: "im a trainer", reps: "15", sets: "3", resistance: "", resMeasure: "", duration: "" },
+        { wname: "Upper Body Blast", description: "Build upper body strength", trainerUsername: "i cant do a push up", reps: "", sets: "", resistance: "", resMeasure: "", duration: "1" },
+    ]);
+
+    const handleWorkoutButtonClick = () => {
+        setShowWorkoutInputs(!showWorkoutInputs);
+        if (showSavedWorkouts) {
+            setShowSavedRecipes(false);
+            setShowWorkoutInputs(false);
+        }
+    };
+
+    const toggleWorkoutsClick = () => {
+        setShowWorkoutInputs(true);
+        setShowSavedWorkouts(false);
+    };
+
+    const toggleSavedWorkoutsClick = () => {
+        setShowWorkoutInputs(false);
+        setShowSavedWorkouts(true);
+    };
+
+    const handleWorkoutSubmit = () => {
+        const newWorkoutData = {
+            wname,
+            reps,
+            sets,
+            resistance,
+            resMeasure,
+            duration,
+        };
+
+        setSubmittedWorkoutData([...submittedWorkoutData, newWorkoutData]);
+
+        // Clear input fields
+        setWName("");
+        setReps("");
+        setSets("");
+        setResistance("");
+        setResMeasure("");
+        setDuration("");
+
+        // Close the input fields
+        setShowWorkoutInputs(false);
+    };
+
+    const handleWorkoutClick = (workout) => {
+        const newEntry = {
+            wname: workout.wname,
+            reps: workout.reps,
+            sets: workout.sets,
+            resistance: workout.resistance,
+            resMeasure: workout.resMeasure,
+            duration: workout.duration,
+        };
+
+        setSubmittedWorkoutData([...submittedWorkoutData, newEntry]);
+    };
+
+    const handleWorkoutEdit = (index) => {
+        // Create a copy of the submittedWorkoutData array without the item to edit
+        const updatedWorkoutData = submittedWorkoutData.filter((_, idx) => idx !== index);
+
+        // Set the state with the values of the selected workout item
+        setWName(submittedWorkoutData[index].wname);
+        setReps(submittedWorkoutData[index].reps);
+        setSets(submittedWorkoutData[index].sets);
+        setResistance(submittedWorkoutData[index].resistance);
+        setResMeasure(submittedWorkoutData[index].resMeasure);
+        setDuration(submittedWorkoutData[index].duration);
+
+        // Set the showInputs state to true to display the input fields for editing
+        setShowWorkoutInputs(true);
+
+        // Update the submittedWorkoutData array without the deleted item
+        setSubmittedWorkoutData(updatedWorkoutData);
+    };
+
+    const handleWorkoutDelete = (index) => {
+        const updatedWorkoutData = submittedWorkoutData.filter((_, idx) => idx !== index);
+        setSubmittedWorkoutData(updatedWorkoutData);
+    };
+    
+    
     return(
-        <div>
-            Track page
+        <div className="bg-gray-100 md:ml-[12rem] md:mt-14 p-4 h-screen">
+            <div className="flex flex-col lg:flex-col gap-4">
+                {/* Food  */}
+                <div className="bg-white p-4 rounded-md">
+                    
+                    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
+                        <div className="text-l font-bold">
+                            Food
+                        </div>
+
+                        <button
+                            className="focus:outline-none"
+                            onClick={handleButtonClick}
+                        >
+                            <CirclePlus
+                                style={{ color: '#a855f7', cursor: 'pointer' }}
+                            />
+                        </button>
+
+                        
+                        {/* Add your food tracking components here */}
+                        
+                    </div>
+                    {showInputs && (
+                        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
+                            <div className="flex flex-wrap">
+
+                                <div className="flex flex-row justify-center w-full gap-3">
+                                    <button
+                                        className={`focus:outline-none ${
+                                            !showSavedRecipes ? "border-b-2 border-purple-500" : ""
+                                        }`}
+                                        onClick={toggleFoodButtonClick}
+                                    >Add Food</button>
+                                    <button
+                                        className={`focus:outline-none ${
+                                            showSavedRecipes ? "border-b-2 border-purple-500" : ""
+                                        }`}
+                                        onClick={toggleSavedRecipesClick}
+                                    >Saved Recipes</button>
+                                </div>
+
+                                <p className="text-xs md:text-sm mt-3">Enter Nutritional Data</p>
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    
+                                    <input
+                                        type="text"
+                                        placeholder="Name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Meal Type"
+                                        value={meal}
+                                        onChange={(e) => setMeal(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Measurement"
+                                        value={measurement}
+                                        onChange={(e) => setMeasurement(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Amount"
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <p className="text-sm mt-3">Calories and Macronutrients</p>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Calories"
+                                        value={calories}
+                                        onChange={(e) => setCalories(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Protein"
+                                        value={protein}
+                                        onChange={(e) => setProtein(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Total Carbohydrates"
+                                        value={carbs}
+                                        onChange={(e) => setCarbs(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Fat"
+                                        value={fat}
+                                        onChange={(e) => setFat(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <p className="text-sm mt-3">Micronutrients</p>
+
+                                
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full m-1 md:m-2">
+                                    <input
+                                        type="text"
+                                        placeholder="Sugar"
+                                        
+                                        className="border-b-2 border-gray-300 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Fibre"
+                                        
+                                        className="border-b-2 border-gray-300 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Saturated Fat"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Trans Fat"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Sodium"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Cholesterol"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Iron"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Potassium"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Vitamin A"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Vitamin C"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Calcium"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Vitamin D"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Vitamin B6"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Vitamin B12"
+                                        
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"                                    
+                                        />
+                                </div>
+                                
+                                <div className="flex lg:flex-row justify-center w-full gap-4">
+                                    <button
+                                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
+                                        onClick={handleSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Display Saved Recipes Section */}
+                    {showSavedRecipes && (
+                        <div className="flex flex-col border-2 rounded-lg border-gray-300">
+                            <div className="flex flex-wrap">
+                                <div className="flex flex-row justify-center w-full text-xs md:text-sm mb-2 gap-4">
+                                    <button
+                                        className={`focus:outline-none ${
+                                            !showSavedRecipes ? "border-b-2 border-purple-500" : ""
+                                        }`}
+                                        onClick={toggleFoodButtonClick}
+                                    >
+                                        Add Food
+                                    </button>
+                                    <button
+                                        className={`focus:outline-none ${
+                                            showSavedRecipes ? "border-b-2 border-purple-500" : ""
+                                        }`}
+                                        onClick={toggleSavedRecipesClick}
+                                    >
+                                        Saved Recipes
+                                    </button>
+                                </div>
+                                {savedRecipes.map((recipe, index) => (
+                                    <div
+                                        key={index}
+                                        className="w-full flex justify-center rounded-md mb-2 cursor-pointer"
+                                        onClick={() => handleRecipeClick(recipe)}
+                                        style={{ transition: "background-color 0.3s ease" }}
+                                        onMouseEnter={(e) => {
+                                            e.target.style.backgroundColor = "purple";
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.backgroundColor = "white";
+                                        }}
+                                    >
+                                        <div className="flex mt-2 items-center gap-2 text-xs md:text-sm mb-2 font-semibold">
+                                            {recipe.trainerUsername}- {recipe.name}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Display Submitted Data */}
+                    {submittedData.length > 0 && (
+                        <div className=" ml-1 mr-1 mt-5">
+                            <div className="flex flex-wrap border-t border-gray-300">
+                                {submittedData.map((data, index) => (
+                                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                                        <div className="flex mt-2 items-center">
+                                            {/* Edit Button */}
+                                            <button
+                                                className="focus:outline-none mr-2"
+                                                onClick={() => handleEdit(index)}
+                                                style={{ color: '#000', transition: 'color 0.3s' }}
+                                            >
+                                                <Pencil
+                                                    style={{ color: '#000', cursor: 'pointer' }}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.color = '#a855f7';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.color = '#000';
+                                                    }}
+                                                />
+                                            </button>
+                                            <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{data.name}</p>
+                                            <p className="text-xs mb-2">- {data.amount}</p>
+                                            <p className="text-xs mb-2">{data.measurement}</p>
+                                        </div>
+                                        <div className="flex text-xs md:text-sm mt-2 mb-2 items-center">
+                                            <p className="ml-1">
+                                                <span className="font-semibold">{data.protein}g</span> Protein
+                                            </p>
+                                            <p className="ml-1">
+                                                <span className="font-semibold">{data.carbs}g</span> Carbs
+                                            </p>
+                                            <p className="ml-1">
+                                                <span className="font-semibold">{data.fat}g</span> Fat
+                                            </p>
+                                            <p className="ml-1">
+                                                <span className="font-semibold">{data.calories}</span> Cals
+                                            </p>
+                                            {/* Delete Button */}
+                                            <button
+                                                className="focus:outline-none ml-2"
+                                                onClick={() => handleDelete(index)}
+                                                style={{ color: '#000', transition: 'color 0.3s' }}
+                                            >
+                                                <Trash2
+                                                    style={{ color: '#000', cursor: 'pointer' }}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.color = '#a855f7';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.color = '#000';
+                                                    }}
+                                                />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Workout  */}
+                <div className="bg-white p-4 rounded-md">
+                    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
+                        <div className="text-l font-bold">Workouts</div>
+                        <button className="focus:outline-none" onClick={handleWorkoutButtonClick}>
+                            <CirclePlus style={{ color: '#a855f7', cursor: 'pointer' }} />
+                        </button>
+                    </div>
+                    {showWorkoutInputs && (
+                        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
+                            <div className="flex flex-wrap">
+
+                                <div className="flex flex-row justify-center w-full gap-3">
+                                    <button
+                                        className={`focus:outline-none ${
+                                            !showSavedWorkouts ? "border-b-2 border-purple-500" : ""
+                                        }`}
+                                        onClick={toggleWorkoutsClick}
+                                    >Add Workout</button>
+                                    <button
+                                        className={`focus:outline-none ${
+                                            showSavedWorkouts ? "border-b-2 border-purple-500" : ""
+                                        }`}
+                                        onClick={toggleSavedWorkoutsClick}
+                                    >Saved Workouts</button>
+                                </div>
+
+
+                                <p className="text-xs md:text-sm mt-3">Enter Workout Data</p>
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Workout Name"
+                                        value={wname}
+                                        onChange={(e) => setWName(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Reps"
+                                        value={reps}
+                                        onChange={(e) => setReps(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Sets"
+                                        value={sets}
+                                        onChange={(e) => setSets(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Resistance"
+                                        value={resistance}
+                                        onChange={(e) => setResistance(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Resistance Measure (lb/kg)"
+                                        value={resMeasure}
+                                        onChange={(e) => setResMeasure(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Duration (min)"
+                                        value={duration}
+                                        onChange={(e) => setDuration(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+                                <div className="flex lg:flex-row justify-center w-full gap-4">
+                                    <button
+                                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
+                                        onClick={handleWorkoutSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Display Saved Workouts Section */}
+                    {showSavedWorkouts && (
+                        <div className="flex flex-col border-2 rounded-lg border-gray-300">
+                            <div className="flex flex-wrap">
+                                <div className="flex flex-row justify-center w-full text-xs md:text-sm mb-2 gap-4">
+                                    <button
+                                        className={`focus:outline-none ${
+                                            !showSavedWorkouts ? "border-b-2 border-purple-500" : ""
+                                        }`}
+                                        onClick={toggleWorkoutsClick}
+                                    >
+                                        Add Workout
+                                    </button>
+                                    <button
+                                        className={`focus:outline-none ${
+                                            showSavedWorkouts ? "border-b-2 border-purple-500" : ""
+                                        }`}
+                                        onClick={toggleSavedWorkoutsClick}
+                                    >
+                                        Saved Workouts
+                                    </button>
+                                </div>
+                                {savedWorkouts.map((workout, index) => (
+                                    <div
+                                        key={index}
+                                        className="w-full flex justify-center rounded-md mb-2 cursor-pointer"
+                                        onClick={() => handleWorkoutClick(workout)}
+                                        style={{ transition: "background-color 0.3s ease" }}
+                                        onMouseEnter={(e) => {
+                                            e.target.style.backgroundColor = "purple";
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.backgroundColor = "white";
+                                        }}
+                                    >
+                                        <div className="flex mt-2 items-center gap-2 text-xs md:text-sm mb-2 font-semibold">
+                                            {workout.trainerUsername}- {workout.wname}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Display Submitted Workouts */}
+                    {submittedWorkoutData.length > 0 && (
+                        <div className="ml-1 mr-1 mt-5">
+                            <div className="flex flex-wrap border-t border-gray-300">
+                                {submittedWorkoutData.map((workout, index) => (
+                                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                                        <div className="flex mt-2 items-center">
+                                            {/* Edit Button */}
+                                            <button
+                                                className="focus:outline-none mr-2"
+                                                onClick={() => handleWorkoutEdit(index)}
+                                                style={{ color: '#000', transition: 'color 0.3s' }}
+                                            >
+                                                <Pencil
+                                                    style={{ color: '#000', cursor: 'pointer' }}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.color = '#a855f7';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.color = '#000';
+                                                    }}
+                                                />
+                                            </button>
+                                            <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{workout.wname}</p>
+                                        </div>
+                                        <div className="flex text-xs md:text-sm mt-2 mb-2 items-center">
+                                            {workout.reps && (
+                                                <p className="ml-1">
+                                                    <span className="font-semibold">{workout.reps}</span> Reps
+                                                </p>
+                                            )}
+                                            {workout.sets && (
+                                                <p className="ml-1">
+                                                    <span className="font-semibold">{workout.sets}</span> Sets
+                                                </p>
+                                            )}
+                                            {workout.resistance && workout.resMeasure && (
+                                                <p className="ml-1">
+                                                    <span className="font-semibold">{workout.resistance}{workout.resMeasure}</span> Resistance
+                                                </p>
+                                            )}
+                                            {workout.duration && (
+                                                <p className="ml-1">  
+                                                    <span className="font-semibold"> {workout.duration}</span> min Duration
+                                                </p>
+                                            )}
+                                            {/* Delete Button */}
+                                            <button
+                                                className="focus:outline-none ml-2"
+                                                onClick={() => handleWorkoutDelete(index)}
+                                                style={{ color: '#000', transition: 'color 0.3s' }}
+                                            >
+                                                <Trash2
+                                                    style={{ color: '#000', cursor: 'pointer' }}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.color = '#a855f7';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.color = '#000';
+                                                    }}
+                                                />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Weight Section */}
+                <div className="bg-white p-4 rounded-md">
+                <h2 className="text-l font-semibold">Weight</h2>
+                {/* Add your weight tracking components here */}
+                </div>
+
+                {/* Sleep Section */}
+                <div className="bg-white p-4 rounded-md">
+                <h2 className="text-l font-semibold">Sleep</h2>
+                {/* Add your sleep tracking components here */}
+                </div>
+
+                {/* Water Section */}
+                <div className="bg-white p-4 rounded-md">
+                <h2 className="text-l font-semibold">Water</h2>
+                {/* Add your water tracking components here */}
+                </div>
+            </div>
         </div>
     )
 }
