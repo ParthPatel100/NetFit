@@ -19,9 +19,9 @@ export default function GoalPage(){
     const [workoutDuration, setWorkoutDuration] = useState(75)
 
 
-    const [editNutritionState, setNutritionState] = useState(true)
-    const [editFitnessState, setEditFitnessState] = useState(true)
-    const [editHealthState, setEditHealthState] = useState(true)
+    const [editNutritionState, setNutritionState] = useState(false)
+    const [editFitnessState, setEditFitnessState] = useState(false)
+    const [editHealthState, setEditHealthState] = useState(false)
 
     return(
         <div className={"flex md:mt-14 md:ml-[12rem] mb-24 md:mb-16 p-2 gap-4 flex-col mx-4" }>
