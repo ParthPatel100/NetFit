@@ -50,7 +50,7 @@ export default function LandingPage() {
           date: 'April 5, 2024',
           comments: 15,
           likes: 30,
-          type: ['Following'],
+          type: ['Following', 'Saved'],
           content: 'Started my journey to a healthier lifestyle today with a nutritious breakfast and a morning yoga session! 🧘‍♂️ Feeling refreshed and ready to conquer the day! #healthyliving #yoga'
         },
         {
@@ -58,7 +58,7 @@ export default function LandingPage() {
           date: 'April 6, 2024',
           comments: 20,
           likes: 40,
-          type: ['Trending', 'Following'],
+          type: ['Trending', 'Following', 'Saved'],
           content: 'Embarked on a hiking adventure with friends and explored breathtaking trails and scenic vistas! 🏞️ Nature truly is the best therapy! #hiking #adventure'
         }
       ];
