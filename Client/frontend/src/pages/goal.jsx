@@ -24,7 +24,7 @@ export default function GoalPage(){
     const [editHealthState, setEditHealthState] = useState(false)
 
     return(
-        <div className={"flex md:mt-14 md:ml-[12rem] mb-24 md:mb-16 p-2 gap-4 flex-col mx-4" }>
+        <div className={"bg-gray-100 flex md:mt-14 md:ml-[12rem] pb-24 md:pb-16 p-2 gap-4 flex-col mx-4" }>
 
             <span className={"text-3xl text-neutral-600 font-bold"}>
                 Your Fitness <span className={"text-purple-600"}>Goals</span>
@@ -43,9 +43,9 @@ export default function GoalPage(){
                         </button>
                     </div>
 
-                    <div className={"text-sm bg-neutral-200 mt-2"}>
+                    <div className={"text-sm mt-2 text-black shadow-2xl rounded-xl bg-white "}>
                         <div
-                            className={"flex bg-inherit border-b border-black rounded-t-2xl p-3"}>
+                            className={"flex border-b border-gray-600 rounded-t-2xl p-3"}>
                             <span>
                                 Calories
                             </span>
@@ -65,7 +65,7 @@ export default function GoalPage(){
                                 <span className={"ml-1"}> Cal</span>
                             </div>
                         </div>
-                        <div className={"flex justify-between bg-inherit p-3 border-b border-black"}>
+                        <div className={"flex justify-between border-b border-gray-600 p-3 "}>
                             <span>
                                 Carbohydrates
                             </span>
@@ -85,7 +85,7 @@ export default function GoalPage(){
                                 <span className={"ml-1"}> %</span>
                             </div>
                         </div>
-                        <div className={"flex justify-between bg-inherit p-3 border-b border-black"}>
+                        <div className={"flex justify-between border-b border-gray-600 p-3 "}>
                             <span>
                                 Fat
                             </span>
@@ -105,7 +105,7 @@ export default function GoalPage(){
                                 <span className={"ml-1"}> %</span>
                             </div>
                         </div>
-                        <div className={"flex justify-between bg-inherit p-3 border-b border-black"}>
+                        <div className={"flex justify-between border-b border-gray-600 p-3 "}>
                             <span>
                                 Protein
                             </span>
@@ -125,7 +125,7 @@ export default function GoalPage(){
                                 <span className={"ml-1"}> %</span>
                             </div>
                         </div>
-                        <div className={"flex justify-between bg-inherit p-3 "}>
+                        <div className={"flex justify-between p-3 "}>
                             <span>
                                 Sugar
                             </span>
@@ -160,9 +160,9 @@ export default function GoalPage(){
                         </button>
                     </div>
 
-                    <div className={"text-sm bg-neutral-200 mt-2"}>
+                    <div className={"text-sm mt-2 text-black shadow-2xl rounded-xl bg-white "}>
                         <div
-                            className={"flex bg-inherit border-b border-black rounded-t-2xl p-3 text-neutral-600"}>
+                            className={"flex border-b border-black p-3 "}>
                             <span>
                                 Calories Burn
                             </span>
@@ -184,7 +184,7 @@ export default function GoalPage(){
                         </div>
 
                         <div
-                            className={"flex bg-inherit border-b border-black rounded-t-2xl p-3 text-neutral-600"}>
+                            className={"flex border-b border-black p-3"}>
                             <span>
                                 Workouts
                             </span>
@@ -205,7 +205,7 @@ export default function GoalPage(){
                         </div>
 
                         <div
-                            className={"flex bg-inherit rounded-t-2xl p-3 text-neutral-600"}>
+                            className={"flex p-3"}>
                             <span>
                                 Workout Duration
                             </span>
@@ -240,9 +240,9 @@ export default function GoalPage(){
                         </button>
                     </div>
 
-                    <div className={"text-sm bg-neutral-200 mt-2"}>
+                    <div className={"text-sm mt-2 text-black shadow-2xl rounded-xl bg-white"}>
                         <div
-                            className={"flex bg-inherit border-b border-black rounded-t-2xl p-3 text-neutral-600"}>
+                            className={"flex border-b border-black p-3"}>
                             <span>
                                 Sleep
                             </span>
@@ -264,7 +264,7 @@ export default function GoalPage(){
                         </div>
 
                         <div
-                            className={"flex bg-inherit border-b border-black rounded-t-2xl p-3 text-neutral-600"}>
+                            className={"flex border-b border-black p-3 "}>
                             <span>
                                 Weight
                             </span>
@@ -286,7 +286,7 @@ export default function GoalPage(){
                         </div>
 
                         <div
-                            className={"flex bg-inherit rounded-t-2xl p-3 text-neutral-600"}>
+                            className={"flex p-3"}>
                             <span>
                                 Water
                             </span>

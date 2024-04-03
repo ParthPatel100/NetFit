@@ -86,7 +86,7 @@ export default function Navbar() {
             {/*Desktop view*/}
             <div
                 className="hidden md:flex">
-                <div className="fixed z-10 flex w-full border-b-[1px] border-gray-400 bg-white justify-center items-center">
+                <div className="fixed z-20 flex w-full border-b-[1px] border-gray-400 bg-white justify-center items-center">
                     <Link to="/">
                         <img src={Logo} alt="Logo-image" className="h-10 my-2"/>
                     </Link>
@@ -116,7 +116,7 @@ export default function Navbar() {
 
                             <div
                                 className={`${isFoodHovered ? 'flex flex-col transition-all ease-in-out text-[10px]' : 'hidden'}`}>
-                                <div>
+                                <div className={"font-bold"}>
                                     Calories Consumed
                                 </div>
                                 <div>
@@ -149,7 +149,7 @@ export default function Navbar() {
 
                             <div
                                 className={`${isCaloriesHovered ? 'flex flex-col transition-all ease-in-out text-[10px]' : 'hidden'}`}>
-                                <div>
+                                <div className={"font-bold"}>
                                     Calories Burnt
                                 </div>
                                 <div>
@@ -183,11 +183,11 @@ export default function Navbar() {
 
                             <div
                                 className={`${isWaterHovered ? 'flex flex-col transition-all ease-in-out text-[10px]' : 'hidden'}`}>
-                                <div>
-                                    Calories Burnt
+                                <div className={"font-bold"}>
+                                    Water Consumed
                                 </div>
                                 <div>
-                                    300Cal
+                                    1450 mL
                                 </div>
                             </div>
                         </div>
@@ -211,17 +211,17 @@ export default function Navbar() {
                                 }}
                                 className={"nav-bar-var"}
                                 determinate={true}
-                                value={parseInt(64)}>
+                                value={parseInt(90)}>
                                 <Typography textColor={"#414040"}><BedDouble/></Typography>
                             </CircularProgress>
 
                             <div
                                 className={`${isSleepHovered ? 'flex flex-col transition-all ease-in-out text-[10px]' : 'hidden'}`}>
-                                <div>
-                                    Calories Burnt
+                                <div className={"font-bold"}>
+                                    Sleep
                                 </div>
                                 <div>
-                                    300Cal
+                                    7.5 Hrs
                                 </div>
                             </div>
                         </div>

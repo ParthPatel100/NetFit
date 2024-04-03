@@ -177,7 +177,7 @@ export default function Progress(){
 
     return(
 
-        <div className={"flex md:mt-14 md:ml-[12rem] mb-16 md:mb-0 flex-col"}>
+        <div className={"bg-gray-100 flex md:mt-14 md:ml-[12rem] mb-16 md:mb-0 flex-col"}>
             <div
                 className={"border-black border mx-4 mb-10 my-2 rounded-2xl p-2 flex justify-center flex-col bg-gray-800 text-white"}>
 
