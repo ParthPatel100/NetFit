@@ -139,7 +139,7 @@ export default function RegisterPage(){
                 <div className={"flex flex-col justify-center align-middle items-center content-center"}>
                     <img src={Logo} alt="Logo-image" className="w-[10rem]"/>
                     <input type="text"
-                           className={"w-10/12 border-[1px] bg-neutral-100 border-gray-500 rounded-[5px] p-2 mt-1.5 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"}
+                           className={"w-10/12 border-[1px]  bg-neutral-100 border-gray-500 rounded-[5px] p-2 mt-1.5 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"}
                            onChange={updateAge} placeholder={"Age"}></input>
                     <select
                            className={"w-10/12 border-[1px] bg-neutral-100 border-gray-500 rounded-[5px] p-2 mt-1.5 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"}

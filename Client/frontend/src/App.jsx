@@ -8,6 +8,8 @@ import Register from"./pages/register.jsx"
 import LoginPage from "./pages/loginPage.jsx";
 import axios from 'axios';
 import {UserContextProvider} from "../context/userContext.jsx";
+import GoalPage from "./pages/goal.jsx";
+import {RequireAuth} from "../context/requireAuth.jsx";
 import PostPage from "./pages/post.jsx";
 
 axios.defaults.baseURL = 'http://localhost:8080'
@@ -19,12 +21,13 @@ export default function App() {
                 <Navbar/>
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>
-                    <Route path="/landing" element={<LandingPage/>}/>
-                    <Route path="/track" element={<Track/>}/>
-                    <Route path="/progress" element={<Progress/>}/>
-                    <Route path="/account" element={<Account/>}/>
-                    <Route path="/register" element={<Register/>}/>
-                    <Route path="/post" element={<PostPage/>}/>
+                    <Route path="/landing" element={<RequireAuth><LandingPage/></RequireAuth>}/>
+                    <Route path="/goals" element={<RequireAuth><GoalPage/></RequireAuth>}/>
+                    <Route path="/track" element={<RequireAuth><Track/></RequireAuth>}/>
+                    <Route path="/progress" element={<RequireAuth><Progress/></RequireAuth>}/>
+                    <Route path="/account" element={<RequireAuth><Account/></RequireAuth>}/>
+                    <Route path="/register" element={<RequireAuth><Register/></RequireAuth>}/>
+                    <Route path="/post" element={<RequireAuth><PostPage/></RequireAuth>}/>
                 </Routes>
         </UserContextProvider>
     )
