@@ -14,6 +14,7 @@ export default function Track(){
     
 
     const [showInputs, setShowInputs] = useState(false);
+
     const [showSavedRecipes, setShowSavedRecipes] = useState(false);
     const [name, setName] = useState("");
     const [meal, setMeal] = useState("");
@@ -127,6 +128,7 @@ export default function Track(){
 
     const [showWorkoutInputs, setShowWorkoutInputs] = useState(false);
     const [showSavedWorkouts, setShowSavedWorkouts] = useState(false);
+    const [showSleepInputs, setShowSleepInputs] = useState(false);
     const [wname, setWName] = useState("");
     const [reps, setReps] = useState("");
     const [sets, setSets] = useState("");
@@ -286,6 +288,7 @@ export default function Track(){
 
     const [showWaterInputs, setShowWaterInputs] = useState(false);
     const [waterAmount, setWaterAmount] = useState("");
+    const [sleepAmount, setSleepAmount] = useState("");
     const [waterMeasurement, setWaterMeasurement] = useState("ml"); // Default to milliliters
     const [submittedWaterData, setSubmittedWaterData] = useState([]);
     const [submittedSleepData, setSubmittedSleepData] = useState([]);
