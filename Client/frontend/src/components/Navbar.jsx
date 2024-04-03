@@ -67,13 +67,13 @@ export default function Navbar() {
         <>
             <div
                 className="hidden md:flex">
-                <div className="fixed z-10 flex w-full py-2 border-b-[1px] border-gray-400 bg-white">
+                <div className="fixed z-20 flex w-full py-2 border-b-[1px] border-gray-400 bg-white">
                     <Link to="/">
                         <img src={Logo} alt="Logo-image" className="h-10"/>
                     </Link>
                 </div>
 
-                <div className={"fixed left-0 w-[12rem] bg-neutral-50 h-screen"}>
+                <div className={"fixed z-10 left-0 w-[12rem] bg-neutral-50 h-screen"}>
                     <NavLinks className={"mt-20 hidden md:grid grid-rows-4 gap-8 mx-1 max-w-full"}
                               childClassName={"flex-row justify-start items-center box-content hover:outline hover:outline-purple-500 rounded-2xl p-2 mx-2 py-2 transition-all ease-in-out duration-200git  hover:shadow-2xl hover:scale-110"}/>
                     <div className={"mt-12 font text-gray-500 text-[0.5rem] ml-4"}>
