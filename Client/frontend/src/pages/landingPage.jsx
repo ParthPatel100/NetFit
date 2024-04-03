@@ -3,11 +3,8 @@ import {UserContext} from "../../context/userContext.jsx";
 import {useContext} from "react";
 import FeedCard from '../components/FeedCard';
 import React, { useState } from 'react'; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import {Link, NavLink} from 'react-router-dom'
-
-
+import '../Landing.css';
 
 
 
@@ -37,7 +34,7 @@ export default function LandingPage() {
           date: 'April 3, 2024',
           comments: 12,
           likes: 25,
-          type: ['Saved Posts'],
+          type: ['Saved'],
           content: 'Great day at the gym today! Hit new PRs on bench press and squats! 🏋️‍♂️ Feeling strong and motivated! #gym #strengthtraining'
         },
         {
@@ -68,7 +65,7 @@ export default function LandingPage() {
   
     return (
       <div style={{ backgroundColor: 'whitesmoke' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', marginTop: '50px' }}>
+        <div className="page" style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
           <button
             onClick={() => setPostType('Following')}
             style={{
@@ -146,11 +143,11 @@ export default function LandingPage() {
             </div>
           </button>
           <button
-            onClick={() => setPostType('Saved Posts')}
+            onClick={() => setPostType('Saved')}
             style={{
               padding: '10px 20px',
-              backgroundColor: postType === 'Saved Posts' ? '#ededed' : 'transparent',
-              color: postType === 'Saved Posts' ? '#8b5cf6' : 'gray',
+              backgroundColor: postType === 'Saved' ? '#ededed' : 'transparent',
+              color: postType === 'Saved' ? '#8b5cf6' : 'gray',
               border: 'none',
               outline: 'none',
               borderRadius: '5px',
@@ -178,7 +175,7 @@ export default function LandingPage() {
                 fill="currentColor"
                 d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
                 />
-             </svg><div>Saved Posts</div>
+             </svg><div>Saved</div>
 
             </div>
           </button>

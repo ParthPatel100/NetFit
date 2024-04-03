@@ -7,24 +7,32 @@
 
 .header{
     display: flex;
-    align-items: center;
-    
-}
-.top{
+    justify-content: space-between;
    
+}
+.top{ 
     padding-left: 0px;
     padding-right: 5px;
     border-radius: 10px 10px 0 0;
 }
 .card {
-    border: 1px solid #b3b3b3;
-    border-color: rgba(209, 213, 219, 0.7);
-    background-color: #ffffff;
-    padding: 8px;
-    border-radius: 10px;
+  border: 1px solid #b3b3b3;
+  border-color: rgba(209, 213, 219, 0.7);
+  background-color: #ffffff;
+  padding: 8px;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 0 0 0.75rem rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 768px) {
+  .card {
     width: 45%;
-    box-shadow: 0 0 0.75rem rgba(0, 0, 0, 0.2);
   }
+  .page{
+    margin-top: 50px;
+  }
+}
 
 .image{
   width: 100%;
