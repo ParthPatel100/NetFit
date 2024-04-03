@@ -283,6 +283,10 @@ export default function Progress(){
                         </span>
                         <CircularProgress
                             sx={{
+                                '.root' : {
+                                    '--CircularProgress-size': 'min(22vw, 100px)',
+                                    '--CircularProgress-thickness': 'min(1.9vw, 12px)'
+                                },
                                 '.MuiCircularProgress-progress': {
                                     stroke: '#c135ee',
                                 },

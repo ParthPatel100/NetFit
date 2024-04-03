@@ -1,9 +1,11 @@
 import {Link, NavLink} from 'react-router-dom'
 import Logo from '../assets/fullLogo.png';
 import ProfilePic from "../assets/profilePic.png"
-import {useContext, useEffect, useState} from "react";
-import { Home, Dumbbell, LineChart, Goal} from "lucide-react";
+import React, {useContext, useEffect, useState} from "react";
+import {Home, Dumbbell, LineChart, Goal, UtensilsCrossed, Flame, GlassWater, BedDouble} from "lucide-react";
 import {UserContext} from "../../context/userContext.jsx";
+import Typography from "@mui/joy/Typography";
+import CircularProgress from "@mui/joy/CircularProgress";
 
 const NavLinks = ({ className, childClassName, onClick}) => {
     const [activeImg, setActiveImg] = useState(true)
@@ -70,17 +72,160 @@ const NavLinks = ({ className, childClassName, onClick}) => {
 export default function Navbar() {
     const { user } = useContext(UserContext)
 
+    const [isFoodHovered, setIsFoodHovered] = useState(false);
+    const [isCaloriesHovered, setIsCaloriesHovered] = useState(false);
+    const [isWaterHovered, setIsWaterHovered] = useState(false);
+    const [isSleepHovered, setIsSleepHovered] = useState(false);
+
+
     if(!user){
         return (<></>)
     }
     return (
         <>
+            {/*Desktop view*/}
             <div
                 className="hidden md:flex">
-                <div className="fixed z-10 flex w-full py-2 border-b-[1px] border-gray-400 bg-white">
+                <div className="fixed z-10 flex w-full border-b-[1px] border-gray-400 bg-white justify-center items-center">
                     <Link to="/">
-                        <img src={Logo} alt="Logo-image" className="h-10"/>
+                        <img src={Logo} alt="Logo-image" className="h-10 my-2"/>
                     </Link>
+
+                    <div className={"ml-auto h-full flex mr-4 gap-3"}>
+                        <div
+                            className={`flex flex-row items-center transition-all duration-200 ease-in-out ${isFoodHovered ? 'outline outline-purple-500 rounded-lg pr-2 pl-1' : ''}`}
+                            onMouseLeave={() => setIsFoodHovered(false)}
+                            onMouseEnter={() => setIsFoodHovered(true)}>
+                            <CircularProgress
+                                sx={{
+                                    '.MuiCircularProgress-progress': {
+                                        stroke: '#c135ee',
+                                        strokeWidth: 5,
+
+                                    },
+                                    '.MuiCircularProgress-track': {
+                                        stroke: '#a1a0a0',
+                                        strokeWidth: 5
+                                    }
+                                }}
+                                className={"nav-bar-var mainElem"}
+                                determinate={true}
+                                value={parseInt(20)}>
+                                <Typography textColor={"#414040"}><UtensilsCrossed/></Typography>
+                            </CircularProgress>
+
+                            <div
+                                className={`${isFoodHovered ? 'flex flex-col transition-all ease-in-out text-[10px]' : 'hidden'}`}>
+                                <div>
+                                    Calories Consumed
+                                </div>
+                                <div>
+                                    600Cal
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            className={`flex flex-row items-center transition-all duration-200 ease-in-out ${isCaloriesHovered ? 'outline outline-purple-500 rounded-lg pr-2 pl-1' : ''}`}
+                            onMouseLeave={() => setIsCaloriesHovered(false)}
+                            onMouseEnter={() => setIsCaloriesHovered(true)}>
+                            <CircularProgress
+                                sx={{
+                                    '.MuiCircularProgress-progress': {
+                                        stroke: '#c135ee',
+                                        strokeWidth: 5,
+
+                                    },
+                                    '.MuiCircularProgress-track': {
+                                        stroke: '#a1a0a0',
+                                        strokeWidth: 5
+                                    }
+                                }}
+                                className={"nav-bar-var mainElem"}
+                                determinate={true}
+                                value={parseInt(76)}>
+                                <Typography textColor={"#414040"}><Flame/></Typography>
+                            </CircularProgress>
+
+                            <div
+                                className={`${isCaloriesHovered ? 'flex flex-col transition-all ease-in-out text-[10px]' : 'hidden'}`}>
+                                <div>
+                                    Calories Burnt
+                                </div>
+                                <div>
+                                    300Cal
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div
+                            className={`flex flex-row items-center transition-all duration-200 ease-in-out ${isWaterHovered ? 'outline outline-purple-500 rounded-lg pr-2 pl-1' : ''}`}
+                            onMouseLeave={() => setIsWaterHovered(false)}
+                            onMouseEnter={() => setIsWaterHovered(true)}>
+                            <CircularProgress
+                                sx={{
+                                    '.MuiCircularProgress-progress': {
+                                        stroke: '#c135ee',
+                                        strokeWidth: 5,
+
+                                    },
+                                    '.MuiCircularProgress-track': {
+                                        stroke: '#a1a0a0',
+                                        strokeWidth: 5
+                                    }
+                                }}
+                                className={"nav-bar-var"}
+                                determinate={true}
+                                value={parseInt(78)}>
+                                <Typography textColor={"#414040"}><GlassWater/></Typography>
+                            </CircularProgress>
+
+                            <div
+                                className={`${isWaterHovered ? 'flex flex-col transition-all ease-in-out text-[10px]' : 'hidden'}`}>
+                                <div>
+                                    Calories Burnt
+                                </div>
+                                <div>
+                                    300Cal
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div
+                            className={`flex flex-row items-center transition-all duration-200 ease-in-out ${isSleepHovered ? 'outline outline-purple-500 rounded-lg pr-2 pl-1' : ''}`}
+                            onMouseLeave={() => setIsSleepHovered(false)}
+                            onMouseEnter={() => setIsSleepHovered(true)}>
+                            <CircularProgress
+                                sx={{
+                                    '.MuiCircularProgress-progress': {
+                                        stroke: '#c135ee',
+                                        strokeWidth: 5,
+
+                                    },
+                                    '.MuiCircularProgress-track': {
+                                        stroke: '#a1a0a0',
+                                        strokeWidth: 5
+                                    }
+                                }}
+                                className={"nav-bar-var"}
+                                determinate={true}
+                                value={parseInt(64)}>
+                                <Typography textColor={"#414040"}><BedDouble/></Typography>
+                            </CircularProgress>
+
+                            <div
+                                className={`${isSleepHovered ? 'flex flex-col transition-all ease-in-out text-[10px]' : 'hidden'}`}>
+                                <div>
+                                    Calories Burnt
+                                </div>
+                                <div>
+                                    300Cal
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div className={"fixed left-0 w-[12rem] bg-neutral-50 h-screen"}>
@@ -94,8 +239,11 @@ export default function Navbar() {
 
             </div>
 
+            {/*Mobile view*/}
             <div className={"bg-gray-800 fixed bottom-0 w-full max-w-full z-10 flex flex-col text-black pt-0.5"}>
-                <NavLinks className={"flex md:hidden align-middle items-center justify-around content-center flex-row gap-10 h-16"} childClassName={"flex-row justify-center items-center"}/>
+                <NavLinks
+                    className={"flex md:hidden align-middle items-center justify-around content-center flex-row gap-10 h-16"}
+                    childClassName={"flex-row justify-center items-center"}/>
             </div>
 
         </>

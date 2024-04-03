@@ -7,6 +7,11 @@
     --CircularProgress-thickness: min(1.9vw, 12px);
 }
 
+.nav-bar-var{
+    --CircularProgress-size: 50px;
+    --CircularProgress-thickness: 10px;
+}
+
 
 
 
