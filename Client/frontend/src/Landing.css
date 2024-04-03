@@ -1,0 +1,62 @@
+.profile_pic{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 0.7px solid #000;
+  }
+
+.header{
+    display: flex;
+    justify-content: space-between;
+   
+}
+.top{ 
+    padding-left: 0px;
+    padding-right: 5px;
+    border-radius: 10px 10px 0 0;
+}
+.card {
+  border: 1px solid #b3b3b3;
+  border-color: rgba(209, 213, 219, 0.7);
+  background-color: #ffffff;
+  padding: 8px;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 0 0 0.75rem rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 768px) {
+  .card {
+    width: 45%;
+  }
+  .page{
+    margin-top: 50px;
+  }
+}
+
+.image{
+  width: 100%;
+  border: 1px solid #cacaca;
+  padding: 10px;
+  height: 300px;
+  
+}
+
+.reaction{
+  font-size: 13px;
+  color:#878686; ;
+}
+
+.my_pic{
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 0.7px solid #262626;
+}
+
+.write_comment {
+  border-radius: 20px;
+  padding-left: 5px;
+  flex: 1;
+  padding-right: 5px;
+}

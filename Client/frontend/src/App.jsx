@@ -10,6 +10,7 @@ import axios from 'axios';
 import {UserContextProvider} from "../context/userContext.jsx";
 import GoalPage from "./pages/goal.jsx";
 import {RequireAuth} from "../context/requireAuth.jsx";
+import PostPage from "./pages/post.jsx";
 
 axios.defaults.baseURL = 'http://localhost:8080'
 axios.defaults.withCredentials = true
@@ -26,6 +27,7 @@ export default function App() {
                     <Route path="/progress" element={<RequireAuth><Progress/></RequireAuth>}/>
                     <Route path="/account" element={<RequireAuth><Account/></RequireAuth>}/>
                     <Route path="/register" element={<RequireAuth><Register/></RequireAuth>}/>
+                    <Route path="/post" element={<RequireAuth><PostPage/></RequireAuth>}/>
                 </Routes>
         </UserContextProvider>
     )
