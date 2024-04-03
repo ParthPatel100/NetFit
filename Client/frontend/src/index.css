@@ -2,12 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-
-.MuiCircularProgress-progress {
-    --CircularProgress-progressColor: #c93ae5;
+:root {
+    --CircularProgress-size: min(22vw, 100px);
+    --CircularProgress-thickness: min(1.9vw, 12px);
 }
 
-.css-bq0q2v-JoyCircularProgress-root {
-    --CircularProgress-progressColor: #c93ae5;
-    transition: all ease-in-out 1s;
+.nav-bar-var{
+    --CircularProgress-size: 50px;
+    --CircularProgress-thickness: 10px;
 }
+
+
+
+
