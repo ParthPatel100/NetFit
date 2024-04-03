@@ -281,6 +281,54 @@ export default function Track(){
         };
         reader.readAsDataURL(selectedImage);
     };
+
+
+    const [showWaterInputs, setShowWaterInputs] = useState(false);
+    const [waterAmount, setWaterAmount] = useState("");
+    const [waterMeasurement, setWaterMeasurement] = useState("ml"); // Default to milliliters
+    const [submittedWaterData, setSubmittedWaterData] = useState([]);
+
+    // Function to toggle water input form visibility
+    const handleWaterButtonClick = () => {
+        setShowWaterInputs(!showWaterInputs);
+    };
+
+    // Function to handle submission of new water intake entry
+    const handleWaterSubmit = () => {
+        const newWaterData = {
+            amount: waterAmount,
+            measurement: waterMeasurement,
+        };
+
+        setSubmittedWaterData([...submittedWaterData, newWaterData]);
+
+        // Clear input fields
+        setWaterAmount("");
+        setWaterMeasurement("ml"); // Reset to default measurement
+
+        // Optionally close the input fields
+        setShowWaterInputs(false);
+    };
+
+    // Function to handle editing of an existing water intake entry
+    const handleWaterEdit = (index) => {
+        const waterEntryToEdit = submittedWaterData[index];
+        setWaterAmount(waterEntryToEdit.amount);
+        setWaterMeasurement(waterEntryToEdit.measurement);
+
+        // Remove the entry from the list
+        const newWaterData = submittedWaterData.filter((_, idx) => idx !== index);
+        setSubmittedWaterData(newWaterData);
+
+        // Show the input fields for editing
+        setShowWaterInputs(true);
+    };
+
+    // Function to handle deletion of a water intake entry
+    const handleWaterDelete = (index) => {
+        const newWaterData = submittedWaterData.filter((_, idx) => idx !== index);
+        setSubmittedWaterData(newWaterData);
+    };
     return(
         <div className="bg-gray-100 md:ml-[12rem] md:mt-14 p-4 h-screen">
             <div className="flex flex-col lg:flex-col gap-4">
@@ -970,11 +1018,116 @@ export default function Track(){
                 {/* Add your sleep tracking components here */}
                 </div>
 
-                {/* Water Section */}
+{/* Water Section */}
                 <div className="bg-white p-4 rounded-md">
-                <h2 className="text-l font-semibold">Water</h2>
-                {/* Add your water tracking components here */}
+                    
+                    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
+                        <div className="text-l font-bold">
+                            Water
+                        </div>
+
+                        <button
+                            className="focus:outline-none"
+                            onClick={handleWaterButtonClick}
+                        >
+                            <CirclePlus
+                                style={{ color: '#a855f7', cursor: 'pointer' }}
+                            />
+                        </button>
+
+                    </div>
+                        {/* Water Inputs */}
+                        {showWaterInputs && (
+                            <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
+                                <div className="flex flex-wrap">
+
+                                    <p className="text-xs md:text-sm mt-3">Enter Water Data</p>
+                                    <div className="flex flex-col text-md justify-around w-full ">
+                                        
+                                        <input
+                                            type="text"
+                                            placeholder="Amount"
+                                            value={waterAmount}
+                                            onChange={(e) => setWaterAmount(e.target.value)}
+                                            className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                        />
+                                        <input
+                                            type="text"
+                                            placeholder="Measurement"
+                                            value={waterMeasurement}
+                                            onChange={(e) => setWaterMeasurement(e.target.value)}
+                                            className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                        />
+                                    </div>
+                                    
+                                    <div className="flex lg:flex-row justify-center w-full gap-4">
+                                        <button
+                                            className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
+                                            onClick={handleWaterSubmit}
+                                        >
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Display Submitted Data */}
+                        {submittedWaterData.length > 0 && (
+                            <div className=" ml-1 mr-1 mt-5">
+                                <div className="flex flex-wrap border-t border-gray-300">
+                                    {submittedWaterData.map((water, index) => (
+                                        <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                                            <div className="flex mt-2 items-center">
+                                                {/* Edit Button */}
+                                                <button
+                                                    className="focus:outline-none mr-2"
+                                                    onClick={() => handleWaterEdit(index)}
+                                                    style={{ color: '#000', transition: 'color 0.3s' }}
+                                                >
+                                                    <Pencil
+                                                        style={{ color: '#000', cursor: 'pointer' }}
+                                                        onMouseEnter={(e) => {
+                                                            e.target.style.color = '#a855f7';
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            e.target.style.color = '#000';
+                                                        }}
+                                                    />
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <p className="mr-1 mb-2 text-s md:text-m font-semibold">{water.amount} {water.measurement}</p>
+                                                
+                                            
+                                            </div>
+                                            <div>  
+                                            
+                                                {/* Delete Button */}
+                                                <button
+                                                    className="focus:outline-none ml-2"
+                                                    onClick={() => handleWaterDelete(index)}
+                                                    style={{ color: '#000', transition: 'color 0.3s' }}
+                                                >
+                                                    <Trash2
+                                                        style={{ color: '#000', cursor: 'pointer' }}
+                                                        onMouseEnter={(e) => {
+                                                            e.target.style.color = '#a855f7';
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            e.target.style.color = '#000';
+                                                        }}
+                                                    />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    
                 </div>
+                
             </div>
         </div>
     )
