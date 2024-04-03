@@ -23,6 +23,7 @@ export default function Track(){
     const [carbs, setCarbs] = useState("");
     const [calories, setCalories] = useState("");
     const [fat, setFat] = useState("");
+    const [sleep, setSleep] = useState("")
     const [submittedData, setSubmittedData] = useState([
         { name: "Chicken Breast", amount: "100", measurement: "g", protein: "31", carbs: "0", fat: "3.6", calories: "165" },
         { name: "Broccoli", amount: "100", measurement: "cup", protein: "2.8", carbs: "6", fat: "0.4", calories: "34" },
@@ -287,6 +288,7 @@ export default function Track(){
     const [waterAmount, setWaterAmount] = useState("");
     const [waterMeasurement, setWaterMeasurement] = useState("ml"); // Default to milliliters
     const [submittedWaterData, setSubmittedWaterData] = useState([]);
+    const [submittedSleepData, setSubmittedSleepData] = useState([]);
 
     // Function to toggle water input form visibility
     const handleWaterButtonClick = () => {
@@ -310,6 +312,23 @@ export default function Track(){
         setShowWaterInputs(false);
     };
 
+    const handleSleepSubmit = () => {
+        const newSleepData = {
+            amount: sleepAmount,
+        };
+
+        setSubmittedSleepData([...submittedSleepData, newSleepData]);
+
+        setSleepAmount("");
+
+        setShowSleepInputs(false);
+    };
+
+
+    const handleSleepButtonClick = () => {
+        setShowSleepInputs(!showSleepInputs);
+    };
+
     // Function to handle editing of an existing water intake entry
     const handleWaterEdit = (index) => {
         const waterEntryToEdit = submittedWaterData[index];
@@ -324,10 +343,26 @@ export default function Track(){
         setShowWaterInputs(true);
     };
 
+    const handleSleepEdit = (index) => {
+        const sleepEntryToEdit = submittedSleepData[index];
+        setSleepAmount(sleepEntryToEdit.amount);
+
+        // Remove the entry from the list
+        const newSleepData = submittedSleepData.filter((_, idx) => idx !== index);
+        setSubmittedSleepData(newSleepData);
+
+        // Show the input fields for editing
+        setShowSleepInputs(true);
+    };
+
     // Function to handle deletion of a water intake entry
     const handleWaterDelete = (index) => {
         const newWaterData = submittedWaterData.filter((_, idx) => idx !== index);
         setSubmittedWaterData(newWaterData);
+    };
+    const handleSleepDelete = (index) => {
+        const newSleepData = submittedSleepData.filter((_, idx) => idx !== index);
+        setSubmittedSleepData(newSleepData);
     };
     return(
         <div className="bg-gray-100 md:ml-[12rem] md:mt-14 p-4 h-screen">
@@ -337,14 +372,14 @@ export default function Track(){
                                         value={date}
                                         onChange={(e) => setDate(e.target.value)}
                                         className=" bg-gray-100 border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                                        
+
 
                 />
             </div>
             <div className="flex flex-col lg:flex-col gap-4">
                 {/* Food  */}
                 <div className="bg-white p-4 rounded-md">
-                    
+
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
                         <div className="text-l font-bold">
                             Food
@@ -355,13 +390,13 @@ export default function Track(){
                             onClick={handleButtonClick}
                         >
                             <CirclePlus
-                                style={{ color: '#a855f7', cursor: 'pointer' }}
+                                style={{color: '#a855f7', cursor: 'pointer'}}
                             />
                         </button>
 
-                        
+
                         {/* Add your food tracking components here */}
-                        
+
                     </div>
                     {showInputs && (
                         <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
@@ -373,18 +408,20 @@ export default function Track(){
                                             !showSavedRecipes ? "border-b-2 border-purple-500" : ""
                                         }`}
                                         onClick={toggleFoodButtonClick}
-                                    >Add Food</button>
+                                    >Add Food
+                                    </button>
                                     <button
                                         className={`focus:outline-none ${
                                             showSavedRecipes ? "border-b-2 border-purple-500" : ""
                                         }`}
                                         onClick={toggleSavedRecipesClick}
-                                    >Saved Recipes</button>
+                                    >Saved Recipes
+                                    </button>
                                 </div>
 
                                 <p className="text-xs md:text-sm mt-3">Enter Nutritional Data</p>
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
-                                    
+
                                     <input
                                         type="text"
                                         placeholder="Name"
@@ -456,18 +493,18 @@ export default function Track(){
 
                                 <p className="text-sm mt-3">Micronutrients</p>
 
-                                
+
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full m-1 md:m-2">
                                     <input
                                         type="text"
                                         placeholder="Sugar"
-                                        
+
                                         className="border-b-2 border-gray-300 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Fibre"
-                                        
+
                                         className="border-b-2 border-gray-300 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                 </div>
@@ -551,17 +588,17 @@ export default function Track(){
                                     <input
                                         type="text"
                                         placeholder="Vitamin B6"
-                                        
+
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Vitamin B12"
-                                        
-                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"                                    
-                                        />
+
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
                                 </div>
-                                
+
                                 <div className="flex lg:flex-row justify-center w-full gap-4">
                                     <button
                                         className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
@@ -885,50 +922,95 @@ export default function Track(){
                     )}
                 </div>
 
-                {/* Weight Section */}
-                <div className="bg-white p-4 rounded-md">
-                    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
-                        <div className="text-l font-bold">Weight</div>
-                        <button className="focus:outline-none" onClick={() => setShowWeightInputs(!showWeightInputs)}>
-                            <CirclePlus style={{ color: '#a855f7', cursor: 'pointer' }} />
-                        </button>
-                    </div>
-                    {showWeightInputs && (
-                        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between mt-4">
-                            <div className="flex flex-wrap justify-around">
-                                <input
-                                    type="text"
-                                    placeholder="Weight"
-                                    value={weight}
-                                    onChange={(e) => setWeight(e.target.value)}
-                                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                                />
-                                <select
-                                    value={unit}
-                                    onChange={(e) => setUnit(e.target.value)}
-                                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                                >
-                                    <option value="kg">kg</option>
-                                    <option value="lb">lb</option>
-                                </select>
-                                <div className="flex lg:flex-row justify-center w-full gap-4">
-                                    <button
-                                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
-                                        onClick={handleWeightSubmit}
-                                    >
-                                        Submit
-                                    </button>
-                                </div>
-                                
-                            </div>
+{/* Weight Section */}
+<div className="bg-white p-4 rounded-md">
+    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
+        <div className="text-l font-bold">Weight</div>
+        <button className="focus:outline-none" onClick={() => setShowWeightInputs(!showWeightInputs)}>
+            <CirclePlus style={{ color: '#a855f7', cursor: 'pointer' }} />
+        </button>
+    </div>
+    {showWeightInputs && (
+        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between mt-4">
+            <div className="flex flex-wrap justify-around">
+                <input
+                    type="text"
+                    placeholder="Weight"
+                    value={weight}
+                    onChange={(e) => setWeight(e.target.value)}
+                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                />
+                <select
+                    value={unit}
+                    onChange={(e) => setUnit(e.target.value)}
+                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                >
+                    <option value="kg">kg</option>
+                    <option value="lb">lb</option>
+                </select>
+                <input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                />
+                <div className="flex lg:flex-row justify-center w-full gap-4">
+                    <button
+                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
+                        onClick={handleWeightSubmit}
+                    >
+                        Submit
+                    </button>
+                </div>
+           <div className="border-2 border-gray-300 rounded-xl p-2 text-left mt-4">
+                <label className="ml-1 text-sm">Add Progress Photo</label>
+                <div className="flex flex-wrap justify-start items-center h-auto">
+                    {weightImages.map((imageUrl, index) => (
+                        <div
+                            key={index}
+                            className="relative m-1.5 border rounded-xl text-center bg-cover bg-center"
+                            style={{
+                                backgroundImage: `url(${imageUrl})`,
+                                width: 'calc(33% - 12px)',
+                                paddingBottom: 'calc(33% - 12px)',
+                            }}
+                        >
+                            <button
+                                className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
+                                onClick={() => handleRemoveWeightImage(index)}
+                                style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+                            >
+                                <Trash2 className="text-white" />
+                            </button>
                         </div>
+                    ))}
+                    {weightImages.length < 4 && (
+                        <button
+                            className="m-1.5 border border-gray-300 rounded-xl text-center flex justify-center items-center"
+                            onClick={() => document.getElementById("weightImageUpload").click()}
+                            style={{ width: 'calc(33% - 12px)', height: 'calc(33% - 12px)', minWidth: '100px', minHeight: '100px' }}
+                        >
+                            +
+                        </button>
                     )}
-                    {/* List of weight entries */}
-                    {weightEntries.length > 0 && (
-                        <div className="ml-1 mr-1 mt-5">
-                            <div className="flex flex-wrap border-t border-gray-300">
-                                {weightEntries.map((entry, index) => (
-                                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                    <input
+                        id="weightImageUpload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleWeightInputChange}
+                    />
+                </div>
+            </div>
+            </div>
+        </div>
+    )}
+    {/* List of weight entries */}
+    {weightEntries.length > 0 && (
+        <div className="ml-1 mr-1 mt-5">
+            <div className="flex flex-wrap border-t border-gray-300">
+                {weightEntries.map((entry, index) => (
+                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
 
                                                     <div className="flex mt-2 items-center">
                                                             {/* Edit Button */}
@@ -948,7 +1030,7 @@ export default function Track(){
                                                                 />
                                                             </button>
 
-                                    
+
                                             <span className="font-bold">{entry.weight}</span>  {entry.unit}, {entry.date}
                                         </div>
                                         <div className="flex">
@@ -979,13 +1061,110 @@ export default function Track(){
 
                 {/* Sleep Section */}
                 <div className="bg-white p-4 rounded-md">
-                <h2 className="text-l font-semibold">Sleep</h2>
-                {/* Add your sleep tracking components here */}
+
+                    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
+                        <div className="text-l font-bold">
+                            Sleep
+                        </div>
+
+                        <button
+                            className="focus:outline-none"
+                            onClick={handleSleepButtonClick}
+                        >
+                            <CirclePlus
+                                style={{color: '#a855f7', cursor: 'pointer'}}
+                            />
+                        </button>
+
+                    </div>
+                    {/* Water Inputs */}
+                    {showSleepInputs && (
+                        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
+                            <div className="flex flex-wrap">
+
+                                <p className="text-xs md:text-sm mt-3">Enter Sleep Data</p>
+                                <div className="flex flex-col text-md justify-around w-full ">
+
+                                    <input
+                                        type="text"
+                                        placeholder="Hours"
+                                        value={sleepAmount}
+                                        onChange={(e) => setSleepAmount(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex lg:flex-row justify-center w-full gap-4">
+                                    <button
+                                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
+                                        onClick={handleSleepSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Display Submitted Data */}
+                    {submittedSleepData.length > 0 && (
+                        <div className=" ml-1 mr-1 mt-5">
+                            <div className="flex flex-wrap border-t border-gray-300">
+                                {submittedSleepData.map((sleep, index) => (
+                                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                                        <div className="flex mt-2 items-center">
+                                            {/* Edit Button */}
+                                            <button
+                                                className="focus:outline-none mr-2"
+                                                onClick={() => handleSleepEdit(index)}
+                                                style={{color: '#000', transition: 'color 0.3s'}}
+                                            >
+                                                <Pencil
+                                                    style={{color: '#000', cursor: 'pointer'}}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.color = '#a855f7';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.color = '#000';
+                                                    }}
+                                                />
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <p className="mr-1 mb-2 text-s md:text-m font-semibold">{sleep.amount} Hrs</p>
+
+
+                                        </div>
+                                        <div>
+
+                                            {/* Delete Button */}
+                                            <button
+                                                className="focus:outline-none ml-2"
+                                                onClick={() => handleSleepDelete(index)}
+                                                style={{color: '#000', transition: 'color 0.3s'}}
+                                            >
+                                                <Trash2
+                                                    style={{color: '#000', cursor: 'pointer'}}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.color = '#a855f7';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.color = '#000';
+                                                    }}
+                                                />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                 </div>
 
-{/* Water Section */}
+                {/* Water Section */}
                 <div className="bg-white p-4 rounded-md">
-                    
+
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
                         <div className="text-l font-bold">
                             Water
@@ -1001,98 +1180,98 @@ export default function Track(){
                         </button>
 
                     </div>
-                        {/* Water Inputs */}
-                        {showWaterInputs && (
-                            <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
-                                <div className="flex flex-wrap">
+                    {/* Water Inputs */}
+                    {showWaterInputs && (
+                        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
+                            <div className="flex flex-wrap">
 
-                                    <p className="text-xs md:text-sm mt-3">Enter Water Data</p>
-                                    <div className="flex flex-col text-md justify-around w-full ">
-                                        
-                                        <input
-                                            type="text"
-                                            placeholder="Amount"
-                                            value={waterAmount}
-                                            onChange={(e) => setWaterAmount(e.target.value)}
-                                            className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                                        />
-                                        <input
-                                            type="text"
-                                            placeholder="Measurement"
-                                            value={waterMeasurement}
-                                            onChange={(e) => setWaterMeasurement(e.target.value)}
-                                            className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                                        />
-                                    </div>
-                                    
-                                    <div className="flex lg:flex-row justify-center w-full gap-4">
-                                        <button
-                                            className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
-                                            onClick={handleWaterSubmit}
-                                        >
-                                            Submit
-                                        </button>
-                                    </div>
+                                <p className="text-xs md:text-sm mt-3">Enter Water Data</p>
+                                <div className="flex flex-col text-md justify-around w-full ">
+
+                                    <input
+                                        type="text"
+                                        placeholder="Amount"
+                                        value={waterAmount}
+                                        onChange={(e) => setWaterAmount(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Measurement"
+                                        value={waterMeasurement}
+                                        onChange={(e) => setWaterMeasurement(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex lg:flex-row justify-center w-full gap-4">
+                                    <button
+                                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
+                                        onClick={handleWaterSubmit}
+                                    >
+                                        Submit
+                                    </button>
                                 </div>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Display Submitted Data */}
-                        {submittedWaterData.length > 0 && (
-                            <div className=" ml-1 mr-1 mt-5">
-                                <div className="flex flex-wrap border-t border-gray-300">
-                                    {submittedWaterData.map((water, index) => (
-                                        <div key={index} className="w-full flex justify-between border-t border-gray-300">
-                                            <div className="flex mt-2 items-center">
-                                                {/* Edit Button */}
-                                                <button
-                                                    className="focus:outline-none mr-2"
-                                                    onClick={() => handleWaterEdit(index)}
-                                                    style={{ color: '#000', transition: 'color 0.3s' }}
-                                                >
-                                                    <Pencil
-                                                        style={{ color: '#000', cursor: 'pointer' }}
-                                                        onMouseEnter={(e) => {
-                                                            e.target.style.color = '#a855f7';
-                                                        }}
-                                                        onMouseLeave={(e) => {
-                                                            e.target.style.color = '#000';
-                                                        }}
-                                                    />
-                                                </button>
-                                            </div>
-                                            <div>
-                                                <p className="mr-1 mb-2 text-s md:text-m font-semibold">{water.amount} {water.measurement}</p>
-                                                
-                                            
-                                            </div>
-                                            <div>  
-                                            
-                                                {/* Delete Button */}
-                                                <button
-                                                    className="focus:outline-none ml-2"
-                                                    onClick={() => handleWaterDelete(index)}
-                                                    style={{ color: '#000', transition: 'color 0.3s' }}
-                                                >
-                                                    <Trash2
-                                                        style={{ color: '#000', cursor: 'pointer' }}
-                                                        onMouseEnter={(e) => {
-                                                            e.target.style.color = '#a855f7';
-                                                        }}
-                                                        onMouseLeave={(e) => {
-                                                            e.target.style.color = '#000';
-                                                        }}
-                                                    />
-                                                </button>
-                                            </div>
+                    {/* Display Submitted Data */}
+                    {submittedWaterData.length > 0 && (
+                        <div className=" ml-1 mr-1 mt-5">
+                            <div className="flex flex-wrap border-t border-gray-300">
+                                {submittedWaterData.map((water, index) => (
+                                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                                        <div className="flex mt-2 items-center">
+                                            {/* Edit Button */}
+                                            <button
+                                                className="focus:outline-none mr-2"
+                                                onClick={() => handleWaterEdit(index)}
+                                                style={{color: '#000', transition: 'color 0.3s'}}
+                                            >
+                                                <Pencil
+                                                    style={{color: '#000', cursor: 'pointer'}}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.color = '#a855f7';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.color = '#000';
+                                                    }}
+                                                />
+                                            </button>
                                         </div>
-                                    ))}
-                                </div>
+                                        <div>
+                                            <p className="mr-1 mb-2 text-s md:text-m font-semibold">{water.amount} {water.measurement}</p>
+
+
+                                        </div>
+                                        <div>
+
+                                            {/* Delete Button */}
+                                            <button
+                                                className="focus:outline-none ml-2"
+                                                onClick={() => handleWaterDelete(index)}
+                                                style={{color: '#000', transition: 'color 0.3s'}}
+                                            >
+                                                <Trash2
+                                                    style={{color: '#000', cursor: 'pointer'}}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.color = '#a855f7';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.color = '#000';
+                                                    }}
+                                                />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        )}
-                    
+                        </div>
+                    )}
+
                 </div>
-                
+
             </div>
         </div>
     )
