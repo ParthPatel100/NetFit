@@ -1,5 +1,7 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {BedDouble, Weight, UtensilsCrossed, Dumbbell, Heart} from "lucide-react";
+import {UserContext} from "../../context/userContext.jsx";
+import axios from "axios";
 
 export default function GoalPage(){
 
@@ -22,6 +24,42 @@ export default function GoalPage(){
     const [editNutritionState, setNutritionState] = useState(false)
     const [editFitnessState, setEditFitnessState] = useState(false)
     const [editHealthState, setEditHealthState] = useState(false)
+
+    const {user} = useContext(UserContext)
+
+    console.log(user.id)
+
+    useEffect(() => {
+        getCurrentGoals().then()
+    }, []);
+
+    function setAllInfo(data){
+        setCaloriesGoal(data.calories)
+        setCarbsGoal(data.carbohydrates)
+        setFats(data.fat)
+        setProtein(data.protein)
+        setSugar(data.sugar)
+        setSleep(data.sleep)
+        setWeight(data.weight)
+        setWater(data.water)
+        setCaloriesBurn(data.calories_burn)
+        setWorkoutSessions(data.workouts)
+        setWorkoutDuration(data.workout_duration)
+    }
+
+    async function getCurrentGoals(){
+        try {
+            const { data } = await axios.get('/goal/getCurrentGoals');
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                console.log("Current goals from mongo DB: " , data)
+                setAllInfo(data)
+            }
+        } catch (error) {
+            console.error('Error Getting Data', error);
+        }
+    }
 
     return(
         <div className={"bg-gray-100 flex md:mt-14 md:ml-[12rem] pb-24 md:pb-16 p-2 gap-4 flex-col mx-4" }>
@@ -219,7 +257,7 @@ export default function GoalPage(){
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{workoutDuration}</span>
+                                    <span>{workoutDuration} Min</span>
                                 )}
 
                             </div>

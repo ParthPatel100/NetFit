@@ -18,27 +18,11 @@ app.use(cors({
 app.use(cookieParser())
 app.use(express.urlencoded({extended: false}))
 
-
-
 const port = 8080
-
-// app.get('/verifyLogin', async(req, res)  => {
-//   var username = req.query.username;
-//   await mongoose.connect("mongodb://admin:password@localhost:27017/app_db?authSource=admin");
-//   User.find({username: username})
-//   .then((result) => {
-//     res.send(JSON.stringify(result));
-//   })
-//   .finally(() =>{
-//     mongoose.connection.close();
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-// })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
 app.use('/', require('./routes/authRoutes'))
+app.use('/goal', require('./routes/goalRoutes'))
