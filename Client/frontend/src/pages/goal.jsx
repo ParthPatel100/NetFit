@@ -1,35 +1,21 @@
 import React, {useContext, useEffect, useState} from "react";
-import {BedDouble, Weight, UtensilsCrossed, Dumbbell, Heart} from "lucide-react";
-import {UserContext} from "../../context/userContext.jsx";
+import {UtensilsCrossed, Dumbbell, Heart} from "lucide-react";
 import axios from "axios";
+import {GoalContext} from "../../context/goalContextProvider.jsx";
 
 export default function GoalPage(){
-
-
-    const [calories, setCaloriesGoal] = useState(-1)
-    const [carbs, setCarbsGoal] = useState(-1)
-    const [fats, setFats] = useState(-1)
-    const [protein, setProtein] = useState(-1)
-    const [sugar, setSugar] = useState(-1)
-
-    const [sleep, setSleep] = useState(-1)
-    const [weight, setWeight] = useState(-1)
-    const [water, setWater] = useState(-1)
-
-    const [caloriesBurn, setCaloriesBurn] = useState(-1)
-    const [workoutSessions, setWorkoutSessions] = useState(-1)
-    const [workoutDuration, setWorkoutDuration] = useState(-1)
-
+    const {calories, setCaloriesGoal, carbs, setCarbsGoal,fats, setFats,protein, setProtein,sugar, setSugar,
+        sleep, setSleep,weight, setWeight,water, setWater,caloriesBurn, setCaloriesBurn,workoutSessions,
+        setWorkoutSessions,workoutDuration, setWorkoutDuration} = useContext(GoalContext)
 
     const [editNutritionState, setNutritionState] = useState(false)
     const [editFitnessState, setEditFitnessState] = useState(false)
     const [editHealthState, setEditHealthState] = useState(false)
 
+
     useEffect(() => {
         getCurrentGoals().then()
     }, []);
-
-
 
 
     function setAllInfo(data){
@@ -47,6 +33,7 @@ export default function GoalPage(){
     }
 
     async function updateCurrentGoals(){
+        console.log("Updating")
         const updatedGoalsData = {
             calories: calories,
             carbohydrates: carbs, // we need references
@@ -60,6 +47,7 @@ export default function GoalPage(){
             weight: weight,
             water: water
         }
+
         try {
             const { data } = await axios.post('/goal/updateCurrentGoals', updatedGoalsData);
             if (data.error) {
@@ -121,6 +109,7 @@ export default function GoalPage(){
                                         type="number"
                                         value={calories > 0 ? calories: null}
                                         onChange={(e) => setCaloriesGoal(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
