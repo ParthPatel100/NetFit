@@ -11,7 +11,7 @@ import {UserContextProvider} from "../context/userContext.jsx";
 import GoalPage from "./pages/goal.jsx";
 import {RequireAuth} from "../context/requireAuth.jsx";
 import PostPage from "./pages/post.jsx";
-import {GoalContextProvider} from "../context/goalContextProvider.jsx";
+import {GoalAndTrackContextProvider} from "../context/goalAndTrackContextProvider.jsx";
 
 axios.defaults.baseURL = 'http://localhost:8080'
 axios.defaults.withCredentials = true
@@ -20,7 +20,7 @@ export default function App() {
     return (
         <UserContextProvider>
             <Navbar/>
-            <GoalContextProvider>
+            <GoalAndTrackContextProvider>
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>
                     <Route path="/landing" element={<RequireAuth><LandingPage/></RequireAuth>}/>
@@ -31,7 +31,7 @@ export default function App() {
                     <Route path="/register" element={<RequireAuth><Register/></RequireAuth>}/>
                     <Route path="/post" element={<RequireAuth><PostPage/></RequireAuth>}/>
                 </Routes>
-            </GoalContextProvider>
+            </GoalAndTrackContextProvider>
         </UserContextProvider>
     )
 }

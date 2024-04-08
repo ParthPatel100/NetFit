@@ -5,17 +5,19 @@ import {GlassWater, Weight, UtensilsCrossed, Dumbbell, BedDouble, MoveRight} fro
 
 import dayjs from 'dayjs';
 
-import React, {useMemo, useState} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import {Link} from "react-router-dom";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {ResponsiveLine} from "@nivo/line";
 import {sleepData, waterData, weightData} from "../utils/ProgressData.js";
+import {GoalAndTrackContext} from "../../context/goalAndTrackContextProvider.jsx";
 
 
 const MyResponsiveLine = ({data, xLabel, yLabel}) => {
     const minYValue = Math.min(...data[0].data.map(item => item.y));
+
     return (<ResponsiveLine
         data={data}
         animate={true}
@@ -95,9 +97,15 @@ const MyResponsiveLine = ({data, xLabel, yLabel}) => {
 
 export default function Progress(){
 
+    const {caloriesGoals, carbsGoals,fatsGoals,proteinGoals,sugarGoals,
+        sleepGoals,weightGoals,waterGoals,caloriesBurnGoals,workoutSessionsGoals,workoutDurationGoals} = useContext(GoalAndTrackContext)
+
+
+
     const [fromDate, setFromDate] = useState(dayjs('2022-04-17'));
     const [toDate, setToDate] = useState(dayjs('2022-04-17'));
     const duration = 1;
+
     const workoutMinutes = 87
     const { value: workoutMinutes_value } = useCountUp({
         isCounting: true,
@@ -172,9 +180,6 @@ export default function Progress(){
     });
 
 
-    const memoizedWorkoutMinutesValue = useMemo(() => workoutMinutes_value, [workoutMinutes_value]);
-
-
     return(
 
         <div className={"bg-gray-100 flex md:mt-14 md:ml-[12rem] mb-16 md:mb-0 flex-col"}>
@@ -206,8 +211,8 @@ export default function Progress(){
                             <Typography textColor={"#e5e5e5"}>{workoutMinutes_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-neutral-200 '}>
-                            65/75 Min
+                        <span className={'text-[0.8rem] mt-1.5 text-neutral-200 '}>
+                            65{workoutSessionsGoals > 0 ? `/${workoutSessionsGoals}` : ""} Min
                         </span>
                     </div>
 
@@ -229,8 +234,8 @@ export default function Progress(){
                             <Typography textColor={"#e5e5e5"}>{caloriesGained_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-neutral-200'}>
-                            1960/4000 Cal
+                        <span className={'text-[0.8rem] mt-1.5 text-neutral-200'}>
+                            1960{caloriesGoals > 0 ? `/${caloriesGoals}` : ""} Cal
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -251,8 +256,8 @@ export default function Progress(){
                             <Typography textColor={"#e5e5e5"}>{caloriesBurntToday_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-neutral-200'}>
-                            400/900 Cal
+                        <span className={'text-[0.8rem] mt-1.5 text-neutral-200'}>
+                            400{caloriesBurnGoals > 0 ? `/${caloriesBurnGoals}` : ""} Cal
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -273,8 +278,8 @@ export default function Progress(){
                             <Typography textColor={"#e5e5e5"}>{sleep_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-neutral-200'}>
-                            7.2/8 Hrs
+                        <span className={'text-[0.8rem] mt-1.5 text-neutral-200'}>
+                            7.2{sleepGoals > 0 ? `/${sleepGoals}` : ""} Hrs
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -299,17 +304,26 @@ export default function Progress(){
                             <Typography textColor={"#e5e5e5"}>{water_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-neutral-200'}>
-                            1740/2000 mL
+                        <span className={'text-[0.8rem] mt-1.5 text-neutral-200'}>
+                            1740{waterGoals > 0 ? `/${waterGoals}` : ""} mL
                         </span>
                     </div>
                 </div>
 
-                <Link to="/track" className={"self-end"}>
-                    <button className={"mt-5 p-2 bg-sky-700 rounded-xl text-[0.8em] text-white"}>
-                        Continue tracking
-                    </button>
-                </Link>
+                <div className={"flex justify-between"}>
+                    <Link to="/goals">
+                        <button className={"mt-5 p-2 bg-emerald-500 rounded-xl text-[0.8em] text-black"}>
+                            Edit Goals
+                        </button>
+                    </Link>
+
+                    <Link to="/track" className={"self-end"}>
+                        <button className={"mt-5 p-2 bg-emerald-500 rounded-xl text-[0.8em] text-black"}>
+                            Continue tracking
+                        </button>
+                    </Link>
+                </div>
+
             </div>
 
             <div className={"ml-6 text-[1.5rem] font-bold text-neutral-600"}>
@@ -414,7 +428,7 @@ export default function Progress(){
                             <Typography textColor={"#494645"}>{caloriesGained_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
+                        <span className={'text-[0.8rem] mt-1.5 text-gray-700'}>
                             980/2000 Cal
                         </span>
                     </div>
@@ -434,7 +448,7 @@ export default function Progress(){
                             <Typography textColor={"#494645"}>{proteinConsumed_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
+                        <span className={'text-[0.8rem] mt-1.5 text-gray-700'}>
                             24.5/50 g
                         </span>
                     </div>
@@ -453,7 +467,7 @@ export default function Progress(){
                             <Typography textColor={"#494645"}>{fatGained_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
+                        <span className={'text-[0.8rem] mt-1.5 text-gray-700'}>
                             2.5/25 g
                         </span>
                     </div>
@@ -472,7 +486,7 @@ export default function Progress(){
                             <Typography textColor={"#494645"}>{carbsConsumed_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
+                        <span className={'text-[0.8rem] mt-1.5 text-gray-700'}>
                             75/100 Carbs
                         </span>
                     </div>
@@ -491,7 +505,7 @@ export default function Progress(){
                             <Typography textColor={"#494645"}>{sugarConsumed_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-gray-700'}>
+                        <span className={'text-[0.8rem] mt-1.5 text-gray-700'}>
                             8/40 g
                         </span>
                     </div>
@@ -520,11 +534,11 @@ export default function Progress(){
                                 },
                             }}
                             determinate={true}
-                            value={memoizedWorkoutMinutesValue}>
-                            <Typography textColor={"#494645"}>{memoizedWorkoutMinutesValue}%</Typography>
+                            value={workoutMinutes_value}>
+                            <Typography textColor={"#494645"}>{workoutMinutes_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>
+                        <span className={'text-[0.8rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>
                             24 min <MoveRight size={"15"}/> 45 min
                         </span>
                     </div>
@@ -545,7 +559,7 @@ export default function Progress(){
                             <Typography textColor={"#494645"}>{caloriesBurnt_value}%</Typography>
                         </CircularProgress>
 
-                        <span className={'text-[0.6rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>
+                        <span className={'text-[0.8rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>
                             530 Cal <MoveRight size={"15"}/> 480 Cal
                         </span>
                     </div>
