@@ -26,9 +26,14 @@ export default function Track(){
     const [fat, setFat] = useState("");
     const [sleep, setSleep] = useState("")
     const [submittedData, setSubmittedData] = useState([
-        { name: "Chicken Breast", amount: "100", measurement: "g", protein: "31", carbs: "0", fat: "3.6", calories: "165" },
-        { name: "Broccoli", amount: "100", measurement: "cup", protein: "2.8", carbs: "6", fat: "0.4", calories: "34" },
-        { name: "Brown Rice", amount: "100", measurement: "g", protein: "2.6", carbs: "23", fat: "0.9", calories: "112" }
+        { name: "Chicken Breast", amount: "100", measurement: "g", protein: "31", carbs: "0", fat: "3.6", calories: "165", meal: "lunch" },
+        { name: "Broccoli", amount: "100", measurement: "cup", protein: "2.8", carbs: "6", fat: "0.4", calories: "34", meal: "dinner" },
+        { name: "Oatmeal", amount: "100", measurement: "g", protein: "2.4", carbs: "12", fat: "1.6", calories: "68", meal: "breakfast" },
+        { name: "Greek Yogurt", amount: "100", measurement: "g", protein: "10", carbs: "3.6", fat: "0.4", calories: "59", meal: "snack" },
+        { name: "Avocado", amount: "1", measurement: "each", protein: "2", carbs: "12", fat: "15", calories: "120", meal: "breakfast" },
+        { name: "Turkey", amount: "100", measurement: "g", protein: "25", carbs: "0", fat: "1", calories: "110", meal: "lunch" },
+        { name: "Salmon", amount: "300", measurement: "g", protein: "25", carbs: "0", fat: "10", calories: "200", meal: "dinner" },
+        { name: "Almonds", amount: "0.25", measurement: "cup", protein: "6", carbs: "3", fat: "14", calories: "160", meal: "snack" },
     ]);
     const [savedRecipes] = useState([
         { name: "Dairy-Free Protein Pancakes", description: "The Best Dairy-Free Protein Pancakes You've Ever Had.", trainerUsername: "trainerJD", protein: "2.6", carbs: "23", fat: "0.9", calories: "112"},
@@ -658,66 +663,76 @@ export default function Track(){
                         </div>
                     )}
 
+                    
+
                     {/* Display Submitted Data */}
                     {submittedData.length > 0 && (
-                        <div className=" ml-1 mr-1 mt-5">
-                            <div className="flex flex-wrap border-t border-gray-300">
-                                {submittedData.map((data, index) => (
-                                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
-                                        <div className="flex mt-2 items-center">
-                                            {/* Edit Button */}
-                                            <button
-                                                className="focus:outline-none mr-2"
-                                                onClick={() => handleEdit(index)}
-                                                style={{ color: '#000', transition: 'color 0.3s' }}
-                                            >
-                                                <Pencil
-                                                    style={{ color: '#000', cursor: 'pointer' }}
-                                                    onMouseEnter={(e) => {
-                                                        e.target.style.color = '#a855f7';
-                                                    }}
-                                                    onMouseLeave={(e) => {
-                                                        e.target.style.color = '#000';
-                                                    }}
-                                                />
-                                            </button>
-                                            <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{data.name}</p>
-                                            <p className="text-xs mb-2">- {data.amount}</p>
-                                            <p className="text-xs mb-2">{data.measurement}</p>
-                                        </div>
-                                        <div className="flex text-xs md:text-sm mt-2 mb-2 items-center">
-                                            <p className="ml-1">
-                                                <span className="font-semibold">{data.protein}g</span> Protein
-                                            </p>
-                                            <p className="ml-1">
-                                                <span className="font-semibold">{data.carbs}g</span> Carbs
-                                            </p>
-                                            <p className="ml-1">
-                                                <span className="font-semibold">{data.fat}g</span> Fat
-                                            </p>
-                                            <p className="ml-1">
-                                                <span className="font-semibold">{data.calories}</span> Cals
-                                            </p>
-                                            {/* Delete Button */}
-                                            <button
-                                                className="focus:outline-none ml-2"
-                                                onClick={() => handleDelete(index)}
-                                                style={{ color: '#000', transition: 'color 0.3s' }}
-                                            >
-                                                <Trash2
-                                                    style={{ color: '#000', cursor: 'pointer' }}
-                                                    onMouseEnter={(e) => {
-                                                        e.target.style.color = '#a855f7';
-                                                    }}
-                                                    onMouseLeave={(e) => {
-                                                        e.target.style.color = '#000';
-                                                    }}
-                                                />
-                                            </button>
-                                        </div>
+                        <div className="ml-1 mr-1 mt-5">
+                            {/* Filter Data by Meal Type */}
+                            {['breakfast', 'lunch', 'dinner', 'snack'].map((meal) => (
+                                <div key={meal}>
+                                    <h2 className="text-md font-semibold">{meal.charAt(0).toUpperCase() + meal.slice(1)}</h2>
+                                    <div className="flex flex-wrap border-t border-purple-300">
+                                        {submittedData.filter((data) => data.meal === meal).map((data, index) => (
+                                            <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                                                <div className="flex mt-2 items-center ml-4"> {/* Added ml-4 for indentation */}
+                                                    {/* Edit Button */}
+                                                    <button
+                                                        className="focus:outline-none mr-2"
+                                                        onClick={() => handleEdit(index)}
+                                                        style={{ color: '#000', transition: 'color 0.3s' }}
+                                                    >
+                                                        <Pencil
+                                                            style={{ color: '#000', cursor: 'pointer' }}
+                                                            onMouseEnter={(e) => {
+                                                                e.target.style.color = '#a855f7';
+                                                            }}
+                                                            onMouseLeave={(e) => {
+                                                                e.target.style.color = '#000';
+                                                            }}
+                                                        />
+                                                    </button>
+                                                    <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{data.name}</p>
+                                                    <p className="text-xs mb-2">- {data.amount}</p>
+                                                    <p className="text-xs mb-2">{data.measurement}</p>
+                                                </div>
+                                                <div className="flex text-xs md:text-sm mt-2 mb-2 items-center ">
+                                                    <div className="flex justify-between">
+                                                        <p className="ml-1">
+                                                            <span className="font-semibold">{data.protein}g</span> Protein
+                                                        </p>
+                                                        <p className="ml-1">
+                                                            <span className="font-semibold">{data.carbs}g</span> Carbs
+                                                        </p>
+                                                        <p className="ml-1">
+                                                            <span className="font-semibold">{data.fat}g</span> Fat
+                                                        </p>
+                                                        <p className="ml-1">
+                                                            <span className="font-semibold">{data.calories}</span> Cals
+                                                        </p>
+                                                    </div>
+                                                    {/* Delete Button */}
+                                                    <button
+                                                        className="focus:outline-none ml-2"
+                                                        onClick={() => handleDelete(index)}
+                                                        style={{ color: '#000', transition: 'color 0.3s' }}
+                                                    >
+                                                        <Trash2
+                                                            style={{ color: '#000', cursor: 'pointer' }}
+                                                            onMouseEnter={(e) => {
+                                                                e.target.style.color = '#a855f7';
+                                                            }}
+                                                            onMouseLeave={(e) => {
+                                                                e.target.style.color = '#000';
+                                                            }}
+                                                        />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+                            ))}
                         </div>
                     )}
                 </div>

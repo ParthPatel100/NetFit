@@ -4,23 +4,12 @@ import React, {useState} from "react";
 import {useContext} from "react";
 import {Trash2} from "lucide-react";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-{/* 
-const getImageBufferFromUrl = async (imageUrl) => {
-    try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const buffer = await new Response(blob).arrayBuffer();
-      return buffer;
-    } catch (error) {
-      console.error('Error fetching image:', error);
-      throw new Error('Error fetching image');
-    }
-};
-*/}
 
 export default function PostPage(){
     const { user } = useContext(UserContext)
+    const navigate = useNavigate();
     console.log(user)
 
 
@@ -29,6 +18,7 @@ export default function PostPage(){
     const [title, setTitle] = useState();
     const [caption, setCaption] = useState('');
     const [images, setImages] = useState([]);
+    const [imageFiles, setImageFiles] = useState([]);
   
     const handleImageUpload = (imageDataUrl) => {
       setImages((prevImages) => [...prevImages, imageDataUrl]);
@@ -36,10 +26,16 @@ export default function PostPage(){
   
     const handleRemoveImage = (index) => {
       setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+      setImageFiles((prevImages) => prevImages.filter((_, i) => i !== index));
     };
 
     const handleInputChange = (e) => {
         const selectedImage = e.target.files[0];
+
+        
+        //add image file
+        setImageFiles((prevImages) => [...prevImages, selectedImage]);
+
         const reader = new FileReader();
         reader.onload = () => {
           const imageDataUrl = reader.result;
@@ -48,34 +44,43 @@ export default function PostPage(){
         reader.readAsDataURL(selectedImage);
     };
 
-    {/*
+    
     const handleSubmitPost = async () => {
         try {
 
-            const imageBuffers = await Promise.all(
-                images.map(async (imageUrl) => {
-                    const imageBuffer = await getImageBufferFromUrl(imageUrl);
-                    return imageBuffer;
-                })
-            );
-
-            const postData = {
-                title,
-                caption,
-                images: imageBuffers,
-                userId: user._id, // Use user._id as the userId for the post
-            };
 
 
-            const response = await axios.post('/posts', postData);
-            console.log('Post submitted successfully:', response.data);
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("caption", caption);
+            formData.append("date", new Date());
+
+            
+            var i;
+            for(i=0; i < imageFiles.length; i++){
+                formData.append('image', imageFiles[i]);
+            }
+            
+
+            
+
+            const response = await axios.post("/post/uploadPost", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            console.log("Post submitted successfully:", response.data, imageFiles[i]);
+            //window.open('/landing');
+            navigate('/landing');
+
         } catch (error) {
-            console.error('Error posting:', error);
+            console.error("Error posting:", error);
             // Handle error (e.g., show error message to user)
         }
     };
 
-    */}
+    
 
     return (
         <div className="bg-gray-100 h-screen md:mt-14 mt-0 md:ml-[12rem]">
@@ -146,7 +151,7 @@ export default function PostPage(){
                                     <input
                                         id="imageUpload"
                                         type="file"
-                                        accept="image/*"
+                
                                         className="hidden"
                                         onChange={handleInputChange}
                                     />
@@ -157,7 +162,9 @@ export default function PostPage(){
                         </div>
                     </div>
                     <div className="bg-white p-2 rounded-b-2xl ">
-                        <button className="bg-gradient-to-br from-purple-500 to-pink-500 w-full text-white rounded-[10px] p-2">
+                        <button className="bg-gradient-to-br from-purple-500 to-pink-500 w-full text-white rounded-[10px] p-2"
+                        onClick={handleSubmitPost}
+                        >
                             Submit
                         </button>
                     </div>
