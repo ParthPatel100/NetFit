@@ -5,13 +5,13 @@ import {GlassWater, Weight, UtensilsCrossed, Dumbbell, BedDouble, MoveRight} fro
 
 import dayjs from 'dayjs';
 
-import React, {useContext, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {Link} from "react-router-dom";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {ResponsiveLine} from "@nivo/line";
-import {sleepData, waterData, weightData} from "../utils/ProgressData.js";
+import {getWeightData, sleepData, waterData, weightData} from "../utils/ProgressData.js";
 import {GoalAndTrackContext} from "../../context/goalAndTrackContextProvider.jsx";
 
 
@@ -100,6 +100,9 @@ export default function Progress(){
     const {caloriesGoals, carbsGoals,fatsGoals,proteinGoals,sugarGoals,
         sleepGoals,weightGoals,waterGoals,caloriesBurnGoals,workoutSessionsGoals,workoutDurationGoals} = useContext(GoalAndTrackContext)
 
+    useEffect(() => {
+        getWeightData().then()
+    }, []);
 
 
     const [fromDate, setFromDate] = useState(dayjs('2022-04-17'));
@@ -178,6 +181,8 @@ export default function Progress(){
         start: 0,
         end: sugarConsumed,
     });
+
+
 
 
     return(

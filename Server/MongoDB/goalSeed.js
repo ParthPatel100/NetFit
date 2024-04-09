@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const path = require("path");
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
+
 
 main().catch(err => console.log(err));
 
@@ -6,7 +9,7 @@ async function main() {
     const Goals = require('./schema/goals');
 
     // Connect to MongoDB
-    await mongoose.connect("mongodb://admin:password@localhost:27017/app_db?authSource=admin");
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
     console.log("Connected to MongoDB");
 
     const goals = new Goals({
