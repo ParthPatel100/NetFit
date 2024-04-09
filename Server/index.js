@@ -42,3 +42,4 @@ app.listen(port, () => {
 })
 
 app.use('/', require('./routes/authRoutes'))
+app.use('/track', require('./routes/trackingRoutes'))

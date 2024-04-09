@@ -1,6 +1,6 @@
 import {useLocation } from "react-router-dom";
 import {UserContext} from "../../context/userContext.jsx";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useContext} from "react";
 import {Trash2, CirclePlus, Plus, CookingPot, Apple, Pencil} from "lucide-react";
 import axios from 'axios';
@@ -146,6 +146,32 @@ export default function Track(){
         { wname: "Upper Body Blast", description: "Build upper body strength", trainerUsername: "i cant do a push up", reps: "", sets: "", resistance: "", resMeasure: "", duration: "1" },
     ]);
 
+    const [workoutsForSelectedDate, setWorkoutsForSelectedDate] = useState([]); // New state for storing fetched workouts
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Default to today's date
+
+
+
+const fetchWorkoutsForDate = async (selectedDate) => {
+    try {
+        const response = await axios.get(`/track/workoutsByDate?date=${selectedDate}`, { withCredentials: true });
+        if (response.data && Array.isArray(response.data)) {
+            // Assuming the backend directly returns an array of workouts for the date
+            setWorkoutsForSelectedDate(response.data);
+        } else {
+            console.log("No workouts found for the selected date");
+            setWorkoutsForSelectedDate([]);
+        }
+    } catch (error) {
+        console.error('Failed to fetch workouts:', error);
+        setWorkoutsForSelectedDate([]); // Reset or handle errors as appropriate
+    }
+};
+    useEffect(() => {
+        if (date) {
+            fetchWorkoutsForDate(date);
+        }
+    }, [date]); // Depend on the date, refetch when it changes
+
     const handleWorkoutButtonClick = () => {
         setShowWorkoutInputs(!showWorkoutInputs);
         if (showSavedWorkouts) {
@@ -164,29 +190,40 @@ export default function Track(){
         setShowSavedWorkouts(true);
     };
 
-    const handleWorkoutSubmit = () => {
-        const newWorkoutData = {
-            wname,
-            reps,
-            sets,
-            resistance,
-            resMeasure,
-            duration,
-        };
-
-        setSubmittedWorkoutData([...submittedWorkoutData, newWorkoutData]);
-
-        // Clear input fields
-        setWName("");
-        setReps("");
-        setSets("");
-        setResistance("");
-        setResMeasure("");
-        setDuration("");
-
-        // Close the input fields
-        setShowWorkoutInputs(false);
+const handleWorkoutSubmit = async () => {
+    const newWorkoutData = {
+        date: new Date().toISOString().slice(0, 10), // Assuming YYYY-MM-DD format
+        name: wname,
+        reps,
+        sets,
+        resistance,
+        resMeasure,
+        duration,
+        calories: '', // Add input for calories if needed
     };
+
+    try {
+        // Replace 'axios' with your HTTP client if different
+        const response = await axios.post('/track/workout', newWorkoutData, { withCredentials: true });
+        console.log('Workout saved:', response.data);
+
+        // Update local state with the new workout
+        setSubmittedWorkoutData([...submittedWorkoutData, response.data]);
+
+    } catch (error) {
+        console.error('Error saving workout:', error);
+    }
+
+    // Clear input fields and close the inputs
+    setWName("");
+    setReps("");
+    setSets("");
+    setResistance("");
+    setResMeasure("");
+    setDuration("");
+    setShowWorkoutInputs(false);
+};
+
 
     const handleWorkoutClick = (workout) => {
         const newEntry = {
@@ -229,7 +266,6 @@ export default function Track(){
     const [weightEntries, setWeightEntries] = useState([]);
     const [weight, setWeight] = useState('');
     const [unit, setUnit] = useState('kg'); // Default unit is kilograms
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Default to today's date
     const [weightImages, setWeightImages] = useState([]);
 
 
@@ -856,10 +892,10 @@ export default function Track(){
                     )}
 
                     {/* Display Submitted Workouts */}
-                    {submittedWorkoutData.length > 0 && (
+                    {workoutsForSelectedDate.length > 0 && (
                         <div className="ml-1 mr-1 mt-5">
                             <div className="flex flex-wrap border-t border-gray-300">
-                                {submittedWorkoutData.map((workout, index) => (
+                                {workoutsForSelectedDate.map((workout, index) => (
                                     <div key={index} className="w-full flex justify-between border-t border-gray-300">
                                         <div className="flex mt-2 items-center">
                                             {/* Edit Button */}
