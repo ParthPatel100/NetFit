@@ -359,7 +359,7 @@ const handleSleepSubmit = async () => {
     }
 
     const newSleepData = {
-        date: date, // Adjust based on your needs
+        date: date,
         duration: sleepAmount, 
     };
 
@@ -378,7 +378,7 @@ const handleSleepSubmit = async () => {
 useEffect(() => {
     const fetchSleepData = async () => {
         try {
-            const response = await axios.get('/track/sleepGet', { withCredentials: true }); // Adjust if you have specific query parameters
+            const response = await axios.get('/track/sleepGet', { withCredentials: true }); 
             setSubmittedSleepData(response.data);
         } catch (error) {
             console.error('Error fetching sleep data:', error);
@@ -425,7 +425,7 @@ useEffect(() => {
 const handleSleepDelete = async (index) => {
     const sleepEntryToDelete = submittedSleepData[index];
     try {
-        await axios.delete('/track/sleepDelete', { data: { date: sleepEntryToDelete.date } }, { withCredentials: true }); // Adjust according to how your backend expects to receive the date
+        await axios.delete('/track/sleepDelete', { data: { date: sleepEntryToDelete.date } }, { withCredentials: true }); 
         const newSleepData = submittedSleepData.filter((_, idx) => idx !== index);
         setSubmittedSleepData(newSleepData);
     } catch (error) {
@@ -943,7 +943,7 @@ const handleSleepDelete = async (index) => {
                                                     }}
                                                 />
                                             </button>
-                                            <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{workout.wname}</p>
+                                            <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{workout.name}</p>
                                         </div>
                                         <div className="flex text-xs md:text-sm mt-2 mb-2 items-center">
                                             {workout.reps && (

@@ -245,13 +245,11 @@ router.post('/sleepCreate', async (req, res) => {
         const sleep = new Sleep({ date, startTime, duration });
         await sleep.save();
 
-        // Check if tracking for the day exists, if not create one, else add the sleep entry to it
         const trackingForDay = await Tracking.findOne({ username, date });
         if (trackingForDay) {
             trackingForDay.sleep_id.push(sleep._id);
             await trackingForDay.save();
         } else {
-            // If no tracking exists for the day, create a new one with this sleep entry
             const newTracking = new Tracking({
                 username,
                 date,
@@ -297,7 +295,6 @@ router.put('/sleepEdit', async (req, res) => {
 
         let sleepEntryUpdated = false;
 
-        // Assuming there could be multiple sleep entries for the day, we'll update all. Adjust logic if needed.
         for (let sleepId of trackingForDay.sleep_id) {
             const updateData = {};
             if (startTime) updateData.startTime = startTime;
@@ -324,7 +321,7 @@ router.put('/sleepEdit', async (req, res) => {
 
 router.delete('/sleepDelete', async (req, res) => {
     const { token } = req.cookies;
-    const { date } = req.body; // Assuming date is used to find the sleep entry to be deleted
+    const { date } = req.body; // date is used to find the sleep entry to be deleted
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -367,7 +364,7 @@ router.delete('/sleepDelete', async (req, res) => {
 
 router.get('/sleepGet', async (req, res) => {
     const { token } = req.cookies;
-    const { startDate, endDate } = req.query; // Use query params to allow flexibility
+    const { startDate, endDate } = req.query; 
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -384,7 +381,6 @@ router.get('/sleepGet', async (req, res) => {
 
         const username = getUserIdFromToken(token);
 
-        // Define the query based on whether a start and end date are provided
         let query = { username };
         if (startDate && endDate) {
             query.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
@@ -392,10 +388,8 @@ router.get('/sleepGet', async (req, res) => {
             query.date = new Date(startDate);
         }
 
-        // Fetch the tracking entries and populate the sleep_id field to get sleep details
         const trackingEntries = await Tracking.find(query).populate('sleep_id');
 
-        // Extract sleep entries from the tracking documents
         const sleepEntries = trackingEntries.map(entry => entry.sleep_id).flat();
 
         return res.status(200).json(sleepEntries);
