@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema({
     description: { type: String},
     creationDate: { type: Date, required: true},
     post_type: { type: String, enum: ['workout', 'recipe']}, //are we doing meal plans?
-    images: [{ data: Buffer, contentType: String}],
+    images: [{ type: String}],
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment'}],
     likes: {type: Number },
     workout_id: {type: mongoose.Schema.Types.ObjectId, ref: 'workout'}
