@@ -154,7 +154,7 @@ export default function Track(){
     const handleWorkoutButtonClick = () => {
         setShowWorkoutInputs(!showWorkoutInputs);
         if (showSavedWorkouts) {
-            setShowSavedRecipes(false);
+            setShowSavedWorkouts(false);
             setShowWorkoutInputs(false);
         }
     };

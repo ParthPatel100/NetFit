@@ -11,6 +11,7 @@ const upload = multer({dest: 'uploads/'});
 const aws = require("aws-sdk");
 const multerS3 = require("multer-s3");
 const Post = require("../MongoDB/schema/post");
+const Workout = require("../MongoDB/schema/workout");
 
 
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
@@ -95,7 +96,7 @@ router.post("/uploadPost", uploadS3.array("image", 4), async (req, res) => {
 
         const userId = getUserIdFromToken(token);
 
-        const { title, caption, date } = req.body;
+        const { title, caption, date, workoutId } = req.body;
         const images = req.files.map((file) => file.location);
 
         const newPost = new Post({
@@ -107,7 +108,7 @@ router.post("/uploadPost", uploadS3.array("image", 4), async (req, res) => {
             images,
             comments: [],
             likes: 0,
-            workout_id: null, // Workout ID if it's related
+            workout_id: workoutId // Workout ID if it's related
         });
 
         console.log(req.body)
@@ -121,5 +122,56 @@ router.post("/uploadPost", uploadS3.array("image", 4), async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
+
+
+// POST route for creating a new post
+router.post("/postWorkout", async (req, res) => {
+    
+    try {
+
+        const { token } = req.cookies;
+        console.log("TOKEN:", token);
+
+        await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+ 
+        const isValidUser = await new Promise((resolve, reject) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        const userId = getUserIdFromToken(token);
+
+        //const { date, name, reps, sets, resistance, resMeasure, duration } = req.body;
+        console.log("date ", req.body.date);
+
+        const newWorkout = new Workout({
+            date: req.body.date,
+            name: req.body.name,
+            reps: req.body.reps,
+            sets: req.body.sets,
+            resistance: req.body.resistance,
+            resMeasure: req.body.resMeasure,
+            duration: req.body.duration
+        });
+
+        console.log(req.body)
+        console.log(" new workout ", newWorkout);
+
+        const savedWorkout = await newWorkout.save();
+        return res.json(savedWorkout);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error");
+    }
+});
+
+
+
 
 module.exports = router;
