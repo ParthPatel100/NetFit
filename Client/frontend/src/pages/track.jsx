@@ -328,6 +328,7 @@ const handleWorkoutSubmit = async () => {
     const [waterMeasurement, setWaterMeasurement] = useState("ml"); // Default to milliliters
     const [submittedWaterData, setSubmittedWaterData] = useState([]);
     const [submittedSleepData, setSubmittedSleepData] = useState([]);
+    const [displaySleepData, setDisplaySleepData] = useState([]);
 
     // Function to toggle water input form visibility
     const handleWaterButtonClick = () => {
@@ -351,19 +352,41 @@ const handleWorkoutSubmit = async () => {
         setShowWaterInputs(false);
     };
 
-    const handleSleepSubmit = () => {
-        const newSleepData = {
-            amount: sleepAmount,
-        };
+const handleSleepSubmit = async () => {
+    if (!sleepAmount) {
+        console.error('No sleep amount specified');
+        return;
+    }
 
-        setSubmittedSleepData([...submittedSleepData, newSleepData]);
-
-        setSleepAmount("");
-
-        setShowSleepInputs(false);
+    const newSleepData = {
+        date: date, // Adjust based on your needs
+        duration: sleepAmount, 
     };
 
+    try {
+        const response = await axios.post('/track/sleepCreate', newSleepData, { withCredentials: true });
+        console.log('Sleep saved:', response.data);
 
+        // Update local state with the new sleep entry
+        setSubmittedSleepData([...submittedSleepData, response.data]);
+        setSleepAmount("");
+    } catch (error) {
+        console.error('Error saving sleep data:', error);
+    }
+};
+
+useEffect(() => {
+    const fetchSleepData = async () => {
+        try {
+            const response = await axios.get('/track/sleepGet', { withCredentials: true }); // Adjust if you have specific query parameters
+            setSubmittedSleepData(response.data);
+        } catch (error) {
+            console.error('Error fetching sleep data:', error);
+        }
+    };
+
+    fetchSleepData();
+}, []); 
     const handleSleepButtonClick = () => {
         setShowSleepInputs(!showSleepInputs);
     };
@@ -399,10 +422,16 @@ const handleWorkoutSubmit = async () => {
         const newWaterData = submittedWaterData.filter((_, idx) => idx !== index);
         setSubmittedWaterData(newWaterData);
     };
-    const handleSleepDelete = (index) => {
+const handleSleepDelete = async (index) => {
+    const sleepEntryToDelete = submittedSleepData[index];
+    try {
+        await axios.delete('/track/sleepDelete', { data: { date: sleepEntryToDelete.date } }, { withCredentials: true }); // Adjust according to how your backend expects to receive the date
         const newSleepData = submittedSleepData.filter((_, idx) => idx !== index);
         setSubmittedSleepData(newSleepData);
-    };
+    } catch (error) {
+        console.error('Error deleting sleep data:', error);
+    }
+};
     return(
         <div className="bg-gray-100 md:ml-[12rem] md:mt-14 p-4 h-screen">
             <div className=" flex justify-end mb-2.5">
@@ -1170,7 +1199,7 @@ const handleWorkoutSubmit = async () => {
                                             </button>
                                         </div>
                                         <div>
-                                            <p className="mr-1 mb-2 text-s md:text-m font-semibold">{sleep.amount} Hrs</p>
+                                            <p className="mr-1 mb-2 text-s md:text-m font-semibold">{sleep.duration} Hrs</p>
 
 
                                         </div>
