@@ -1,4 +1,15 @@
-import {useCountUp} from "use-count-up";
+import axios from "axios";
+
+export async function getWeightData(){
+
+    const { data } = await axios.get('/progress/getWeightData', {
+        params:{
+            from: new Date("2024-03-01T00:00:00.000Z"),
+            to: new Date("2024-06-01T00:00:00.000Z")
+        }
+    });
+    console.log(data)
+}
 
 export const weightData=[
     {

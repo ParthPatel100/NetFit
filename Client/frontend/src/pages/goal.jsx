@@ -1,30 +1,83 @@
-import React, {useState} from "react";
-import {BedDouble, Weight, UtensilsCrossed, Dumbbell, Heart} from "lucide-react";
+import React, {useContext, useEffect, useState} from "react";
+import {UtensilsCrossed, Dumbbell, Heart} from "lucide-react";
+import axios from "axios";
+import {GoalAndTrackContext} from "../../context/goalAndTrackContextProvider.jsx";
 
 export default function GoalPage(){
-
-
-    const [calories, setCaloriesGoal] = useState(2000)
-    const [carbs, setCarbsGoal] = useState(20)
-    const [fats, setFats] = useState(20)
-    const [protein, setProtein] = useState(20)
-    const [sugar, setSugar] = useState(20)
-
-    const [sleep, setSleep] = useState(8)
-    const [weight, setWeight] = useState(70)
-    const [water, setWater] = useState(2000)
-
-    const [caloriesBurn, setCaloriesBurn] = useState(800)
-    const [workoutSessions, setWorkoutSessions] = useState(7)
-    const [workoutDuration, setWorkoutDuration] = useState(75)
-
+    const {caloriesGoals, setCaloriesGoals, carbsGoals, setCarbsGoals,fatsGoals, setFatsGoals,proteinGoals, setProteinGoals,sugarGoals, setSugarGoals,
+        sleepGoals, setSleepGoals,weightGoals, setWeightGoals,waterGoals, setWaterGoals,caloriesBurnGoals, setCaloriesBurnGoals,workoutSessionsGoals,
+        setWorkoutSessionsGoals,workoutDurationGoals, setWorkoutDurationGoals} = useContext(GoalAndTrackContext)
 
     const [editNutritionState, setNutritionState] = useState(false)
     const [editFitnessState, setEditFitnessState] = useState(false)
     const [editHealthState, setEditHealthState] = useState(false)
 
+
+    useEffect(() => {
+        getCurrentGoals().then()
+    }, []);
+
+
+    function setAllInfo(data){
+        setCaloriesGoals(data.calories)
+        setCarbsGoals(data.carbohydrates)
+        setFatsGoals(data.fat)
+        setProteinGoals(data.protein)
+        setSugarGoals(data.sugar)
+        setSleepGoals(data.sleep)
+        setWeightGoals(data.weight)
+        setWaterGoals(data.water)
+        setCaloriesBurnGoals(data.calories_burn)
+        setWorkoutSessionsGoals(data.workouts)
+        setWorkoutDurationGoals(data.workout_duration)
+    }
+
+    async function updateCurrentGoals(){
+        console.log("Updating")
+        const updatedGoalsData = {
+            calories: caloriesGoals,
+            carbohydrates: carbsGoals, // we need references
+            fat: fatsGoals, // we need references
+            protein: proteinGoals, // we need references
+            sugar: sugarGoals,
+            calories_burn: caloriesBurnGoals,
+            workouts: workoutSessionsGoals,
+            workout_duration: workoutDurationGoals,
+            sleep: sleepGoals,
+            weight: weightGoals,
+            water: waterGoals
+        }
+
+        try {
+            const { data } = await axios.post('/goal/updateCurrentGoals', updatedGoalsData);
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                console.log("Current goals from mongo DB: " , data)
+            }
+        } catch (error) {
+            console.error('Error Getting Data', error);
+        }
+    }
+
+    async function getCurrentGoals(){
+        try {
+            const { data } = await axios.get('/goal/getCurrentGoals');
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                console.log("Current goals from mongo DB: " , data)
+                setAllInfo(data)
+            }
+        } catch (error) {
+            console.error('Error Getting Data', error);
+        }
+    }
+
     return(
-        <div className={"bg-gray-100 flex md:mt-14 md:ml-[12rem] pb-24 md:pb-16 p-2 gap-4 flex-col mx-4" }>
+        <div className={"bg-gray-100"}>
+
+        <div className={" flex md:mt-14 md:ml-[12rem] pb-24 md:pb-16 p-2 gap-4 flex-col mx-4" }>
 
             <span className={"text-3xl text-neutral-600 font-bold"}>
                 Your Fitness <span className={"text-purple-600"}>Goals</span>
@@ -45,7 +98,7 @@ export default function GoalPage(){
 
                     <div className={"text-sm mt-2 text-black shadow-2xl rounded-xl bg-white "}>
                         <div
-                            className={"flex border-b border-gray-600 rounded-t-2xl p-3"}>
+                            className={"flex justify-center content-center items-center border-b border-gray-600 rounded-t-2xl p-3"}>
                             <span>
                                 Calories
                             </span>
@@ -54,18 +107,19 @@ export default function GoalPage(){
                                 {editNutritionState ? (
                                     <input
                                         type="number"
-                                        value={calories}
-                                        onChange={(e) => setCaloriesGoal(e.target.value)}
+                                        value={caloriesGoals > 0 ? caloriesGoals: null}
+                                        onChange={(e) => setCaloriesGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{calories}</span>
+                                    <span>{caloriesGoals > 0 ? caloriesGoals: "-"}</span>
                                 )}
 
                                 <span className={"ml-1"}> Cal</span>
                             </div>
                         </div>
-                        <div className={"flex justify-between border-b border-gray-600 p-3 "}>
+                        <div className={"flex justify-center content-center items-center border-b border-gray-600 p-3 "}>
                             <span>
                                 Carbohydrates
                             </span>
@@ -74,18 +128,19 @@ export default function GoalPage(){
                                 {editNutritionState ? (
                                     <input
                                         type="number"
-                                        value={carbs}
-                                        onChange={(e) => setCarbsGoal(e.target.value)}
+                                        value={carbsGoals > 0 ? carbsGoals : null}
+                                        onChange={(e) => setCarbsGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{carbs}</span>
+                                    <span>{carbsGoals > 0 ? carbsGoals : "-"}</span>
                                 )}
 
                                 <span className={"ml-1"}> %</span>
                             </div>
                         </div>
-                        <div className={"flex justify-between border-b border-gray-600 p-3 "}>
+                        <div className={"flex justify-center content-center items-center border-b border-gray-600 p-3 "}>
                             <span>
                                 Fat
                             </span>
@@ -94,18 +149,19 @@ export default function GoalPage(){
                                 {editNutritionState ? (
                                     <input
                                         type="number"
-                                        value={fats}
-                                        onChange={(e) => setFats(e.target.value)}
+                                        value={fatsGoals > 0 ? fatsGoals: null}
+                                        onChange={(e) => setFatsGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{fats}</span>
+                                    <span>{fatsGoals > 0 ? fatsGoals: "-"}</span>
                                 )}
 
                                 <span className={"ml-1"}> %</span>
                             </div>
                         </div>
-                        <div className={"flex justify-between border-b border-gray-600 p-3 "}>
+                        <div className={"flex justify-center content-center items-center border-b border-gray-600 p-3 "}>
                             <span>
                                 Protein
                             </span>
@@ -114,18 +170,19 @@ export default function GoalPage(){
                                 {editNutritionState ? (
                                     <input
                                         type="number"
-                                        value={protein}
-                                        onChange={(e) => setProtein(e.target.value)}
+                                        value={proteinGoals > 0 ? proteinGoals: null}
+                                        onChange={(e) => setProteinGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{protein}</span>
+                                    <span>{proteinGoals > 0 ? proteinGoals: "-"}</span>
                                 )}
 
                                 <span className={"ml-1"}> %</span>
                             </div>
                         </div>
-                        <div className={"flex justify-between p-3 "}>
+                        <div className={"flex justify-center content-center items-center p-3 "}>
                             <span>
                                 Sugar
                             </span>
@@ -134,12 +191,13 @@ export default function GoalPage(){
                                 {editNutritionState ? (
                                     <input
                                         type="number"
-                                        value={sugar}
-                                        onChange={(e) => setSugar(e.target.value)}
+                                        value={sugarGoals > 0 ? sugarGoals: null}
+                                        onChange={(e) => setSugarGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{sugar}</span>
+                                    <span>{sugarGoals > 0 ? sugarGoals: "-"}</span>
                                 )}
 
                                 <span className={"ml-1"}> %</span>
@@ -162,7 +220,7 @@ export default function GoalPage(){
 
                     <div className={"text-sm mt-2 text-black shadow-2xl rounded-xl bg-white "}>
                         <div
-                            className={"flex border-b border-black p-3 "}>
+                            className={"flex justify-center content-center items-center border-b border-black p-3 "}>
                             <span>
                                 Calories Burn
                             </span>
@@ -171,12 +229,13 @@ export default function GoalPage(){
                                 {editFitnessState ? (
                                     <input
                                         type="number"
-                                        value={caloriesBurn}
-                                        onChange={(e) => setCaloriesBurn(e.target.value)}
+                                        value={caloriesBurnGoals > 0 ? caloriesBurnGoals: null}
+                                        onChange={(e) => setCaloriesBurnGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{caloriesBurn}</span>
+                                    <span>{caloriesBurnGoals > 0 ? caloriesBurnGoals: "-"}</span>
                                 )}
 
                                 <span className={"ml-1"}> Cal</span>
@@ -184,7 +243,7 @@ export default function GoalPage(){
                         </div>
 
                         <div
-                            className={"flex border-b border-black p-3"}>
+                            className={"flex justify-center content-center items-center border-b border-black p-3"}>
                             <span>
                                 Workouts
                             </span>
@@ -193,19 +252,20 @@ export default function GoalPage(){
                                 {editFitnessState ? (
                                     <input
                                         type="number"
-                                        value={workoutSessions}
-                                        onChange={(e) => setWorkoutSessions(e.target.value)}
+                                        value={workoutSessionsGoals > 0 ? workoutSessionsGoals: null}
+                                        onChange={(e) => setWorkoutSessionsGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{workoutSessions}</span>
+                                    <span>{workoutSessionsGoals > 0 ? workoutSessionsGoals: "-"}</span>
                                 )}
 
                             </div>
                         </div>
 
                         <div
-                            className={"flex p-3"}>
+                            className={"flex justify-center content-center items-center p-3"}>
                             <span>
                                 Workout Duration
                             </span>
@@ -214,14 +274,16 @@ export default function GoalPage(){
                                 {editFitnessState ? (
                                     <input
                                         type="number"
-                                        value={workoutDuration}
-                                        onChange={(e) => setWorkoutDuration(e.target.value)}
+                                        value={workoutDurationGoals > 0 ? workoutDurationGoals : null}
+                                        onChange={(e) => setWorkoutDurationGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{workoutDuration}</span>
+                                    <span>{workoutDurationGoals > 0 ? workoutDurationGoals : "-"}</span>
                                 )}
 
+                                <span className={"ml-1"}> Min</span>
                             </div>
                         </div>
 
@@ -242,7 +304,7 @@ export default function GoalPage(){
 
                     <div className={"text-sm mt-2 text-black shadow-2xl rounded-xl bg-white"}>
                         <div
-                            className={"flex border-b border-black p-3"}>
+                            className={"flex justify-center content-center items-center border-b border-black p-3"}>
                             <span>
                                 Sleep
                             </span>
@@ -251,12 +313,13 @@ export default function GoalPage(){
                                 {editHealthState ? (
                                     <input
                                         type="number"
-                                        value={sleep}
-                                        onChange={(e) => setSleep(e.target.value)}
+                                        value={sleepGoals > 0 ? sleepGoals: null}
+                                        onChange={(e) => setSleepGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{sleep}</span>
+                                    <span>{sleepGoals > 0 ? sleepGoals: "-"}</span>
                                 )}
 
                                 <span className={"ml-1"}> Hrs</span>
@@ -264,7 +327,7 @@ export default function GoalPage(){
                         </div>
 
                         <div
-                            className={"flex border-b border-black p-3 "}>
+                            className={"flex justify-center content-center items-center border-b border-black p-3 "}>
                             <span>
                                 Weight
                             </span>
@@ -273,12 +336,13 @@ export default function GoalPage(){
                                 {editHealthState ? (
                                     <input
                                         type="number"
-                                        value={weight}
-                                        onChange={(e) => setWeight(e.target.value)}
+                                        value={weightGoals > 0 ? weightGoals: null}
+                                        onChange={(e) => setWeightGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{weight}</span>
+                                    <span>{weightGoals > 0 ? weightGoals: "-"}</span>
                                 )}
                                 <span className={"ml-1"}> Kg</span>
 
@@ -286,7 +350,7 @@ export default function GoalPage(){
                         </div>
 
                         <div
-                            className={"flex p-3"}>
+                            className={"flex justify-center content-center items-center p-3"}>
                             <span>
                                 Water
                             </span>
@@ -295,12 +359,13 @@ export default function GoalPage(){
                                 {editHealthState ? (
                                     <input
                                         type="number"
-                                        value={water}
-                                        onChange={(e) => setWater(e.target.value)}
+                                        value={waterGoals > 0 ? waterGoals: null}
+                                        onChange={(e) => setWaterGoals(e.target.value)}
+                                        onBlur={updateCurrentGoals}
                                         className={"outline outline-purple-500 w-1/2 self-end ml-auto rounded-full px-2 text-right"}
                                     />
                                 ) : (
-                                    <span>{water}</span>
+                                    <span>{waterGoals > 0 ? waterGoals: "-"}</span>
                                 )}
 
                                 <span className={"ml-1"}> mL</span>
@@ -313,6 +378,7 @@ export default function GoalPage(){
             </div>
 
 
+        </div>
         </div>
     )
 }
