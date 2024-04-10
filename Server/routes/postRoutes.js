@@ -151,6 +151,7 @@ router.post("/postWorkout", async (req, res) => {
         console.log("date ", req.body.date);
 
         const newWorkout = new Workout({
+            userId: userId,
             date: req.body.date,
             name: req.body.name,
             reps: req.body.reps,

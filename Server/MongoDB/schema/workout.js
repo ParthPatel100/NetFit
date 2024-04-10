@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const workoutSchema = new mongoose.Schema({
+    userId: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
     date: { type: Date, required: true },
     name: { type: String, required: true},
     reps: { type: Number, min: 0},
