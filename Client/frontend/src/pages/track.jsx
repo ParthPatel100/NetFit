@@ -328,7 +328,8 @@ const handleWorkoutSubmit = async () => {
     const [waterMeasurement, setWaterMeasurement] = useState("ml"); // Default to milliliters
     const [submittedWaterData, setSubmittedWaterData] = useState([]);
     const [submittedSleepData, setSubmittedSleepData] = useState([]);
-    const [displaySleepData, setDisplaySleepData] = useState([]);
+   // const [displaySleepData, setDisplaySleepData] = useState([]);
+const [editingSleepId, setEditingSleepId] = useState(null);
 
     // Function to toggle water input form visibility
     const handleWaterButtonClick = () => {
@@ -359,24 +360,44 @@ const handleSleepSubmit = async () => {
     }
 
     const newSleepData = {
+        
         date: date,
         duration: sleepAmount, 
     };
-
+    const editedSleepData = {
+        sleepId: editingSleepId,
+        duration: sleepAmount,
+    };
     try {
+
+       let response;
+        if (editingSleepId) {
+
+           
+            response = await axios.put(`/track/sleepEdit/`, editedSleepData, { withCredentials: true });
+
+        console.log('Sleep updated:', response.data);
+
+        } else {
         const response = await axios.post('/track/sleepCreate', newSleepData, { withCredentials: true });
         console.log('Sleep saved:', response.data);
+        }
+        
 
-        // Update local state with the new sleep entry
         setSubmittedSleepData([...submittedSleepData, response.data]);
         setSleepAmount("");
+        setEditingSleepId(null); 
+        setShowSleepInputs(false);
     } catch (error) {
         console.error('Error saving sleep data:', error);
     }
 };
 
+
+
 useEffect(() => {
     const fetchSleepData = async () => {
+        console.log("potato")
         try {
             const response = await axios.get('/track/sleepGet', { withCredentials: true }); 
             setSubmittedSleepData(response.data);
@@ -386,8 +407,10 @@ useEffect(() => {
     };
 
     fetchSleepData();
-}, []); 
-    const handleSleepButtonClick = () => {
+}, [sleepAmount]); 
+    
+
+const handleSleepButtonClick = () => {
         setShowSleepInputs(!showSleepInputs);
     };
 
@@ -401,21 +424,20 @@ useEffect(() => {
         const newWaterData = submittedWaterData.filter((_, idx) => idx !== index);
         setSubmittedWaterData(newWaterData);
 
-        // Show the input fields for editing
+        
         setShowWaterInputs(true);
     };
 
-    const handleSleepEdit = (index) => {
-        const sleepEntryToEdit = submittedSleepData[index];
-        setSleepAmount(sleepEntryToEdit.amount);
+const handleSleepEdit = (index) => {
+    const sleepEntryToEdit = submittedSleepData[index];
+    setSleepAmount(String(sleepEntryToEdit.duration)); 
 
-        // Remove the entry from the list
-        const newSleepData = submittedSleepData.filter((_, idx) => idx !== index);
-        setSubmittedSleepData(newSleepData);
+    
+    setEditingSleepId(sleepEntryToEdit._id);
 
-        // Show the input fields for editing
-        setShowSleepInputs(true);
-    };
+    
+    setShowSleepInputs(true);
+};
 
     // Function to handle deletion of a water intake entry
     const handleWaterDelete = (index) => {

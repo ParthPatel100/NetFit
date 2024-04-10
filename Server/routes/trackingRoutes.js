@@ -269,7 +269,7 @@ router.post('/sleepCreate', async (req, res) => {
 
 router.put('/sleepEdit', async (req, res) => {
     const { token } = req.cookies;
-    const { date, startTime, duration } = req.body;
+    const { sleepId, date, startTime, duration } = req.body;
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -285,32 +285,16 @@ router.put('/sleepEdit', async (req, res) => {
         }
 
         const username = getUserIdFromToken(token);
+       // Directly update the sleep entry by its ID
+        const updatedSleep = await Sleep.findByIdAndUpdate(sleepId, {
+            duration: duration
+        }, { new: true });
 
-        // Find the sleep entry for the user on the given date
-        const trackingForDay = await Tracking.findOne({ username, date }).populate('sleep_id');
-
-        if (!trackingForDay) {
-            return res.status(404).json({ error: "No sleep entry found for the given date" });
-        }
-
-        let sleepEntryUpdated = false;
-
-        for (let sleepId of trackingForDay.sleep_id) {
-            const updateData = {};
-            if (startTime) updateData.startTime = startTime;
-            if (duration) updateData.duration = duration;
-
-            const updatedSleep = await Sleep.findByIdAndUpdate(sleepId, updateData, { new: true });
-            if (updatedSleep) {
-                sleepEntryUpdated = true;
-            }
-        }
-
-        if (!sleepEntryUpdated) {
+        if (!updatedSleep) {
             return res.status(404).json({ error: "Sleep entry not found or unchanged" });
         }
 
-        return res.status(200).json({ message: "Sleep entry updated successfully" });
+        return res.status(200).json({ message: "Sleep entry updated successfully", sleep: updatedSleep });
 
     } catch (error) {
         console.error('Error updating sleep entry:', error);
