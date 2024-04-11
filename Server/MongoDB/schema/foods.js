@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 
 const foodSchema = new mongoose.Schema({
+    userId: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
     name: { type: String },
     date: { type: Date, required: true },
     calories: { type: Number, required: true, min: 1 },

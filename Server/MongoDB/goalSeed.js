@@ -13,7 +13,7 @@ async function main() {
     console.log("Connected to MongoDB");
 
     const goals = new Goals({
-        user_id: "65fbb5e8684d1930c6047600",
+        userId: "65fbb5e8684d1930c6047600",
         calories: "2000",
         carbohydrates: "30", // we need references
         fat: "30", // we need references

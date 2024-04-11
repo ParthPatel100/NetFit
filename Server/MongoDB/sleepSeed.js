@@ -1,43 +1,39 @@
 const mongoose = require('mongoose');
 const path = require("path");
+const Sleep = require("./schema/sleep");
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
 async function main() {
     // Connect to MongoDB
-    const Weight = require("./schema/weight");
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
     console.log("Connected to MongoDB");
 
 
-    const weights = [
+    const sleep = [
         {
             userId: "65fbb5e8684d1930c6047600",
-            date: new Date('2024-01-18'),
-            measurement: 'kg',
-            amount: 80,
+            date: new Date('2024-01-12'),
+            duration: 7.6,
         },
         {
             userId: "65fbb5e8684d1930c6047600",
-            date: new Date('2024-02-15'),
-            measurement: 'kg',
-            amount: 78
+            date: new Date('2024-02-12'),
+            duration: 7.8,
         },
         {
             userId: "65fbb5e8684d1930c6047600",
-            date: new Date('2024-03-15'),
-            measurement: 'kg',
-            amount: 76
+            date: new Date('2024-01-16'),
+            duration: 8.0,
         },
         {
             userId: "65fbb5e8684d1930c6047600",
-            date: new Date('2024-04-15'),
-            measurement: 'kg',
-            amount: 75
+            date: new Date('2024-03-21'),
+            duration: 7.8,
         }
     ];
 
-    await Weight.insertMany(weights)
+    await Sleep.insertMany(sleep)
         .then(result => {
             console.log('Documents saved successfully:', result);
         })
