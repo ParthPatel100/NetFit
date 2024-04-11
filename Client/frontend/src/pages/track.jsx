@@ -272,59 +272,71 @@ const handleWorkoutSubmit = async () => {
     const [weight, setWeight] = useState('');
     const [unit, setUnit] = useState('kg'); // Default unit is kilograms
     const [weightImages, setWeightImages] = useState([]);
+    const [editingWeightId, setEditingWeightId] = useState(null);
 
+const handleWeightSubmit = async () => {
+    if (!weight) {
+        console.error('No weight specified');
+        return;
+    }
 
-    const handleWeightSubmit = () => {
-        const newEntry = { weight, unit, date };
-        setWeightEntries([...weightEntries, newEntry]);
+    const newWeightData = {
+        date: date,
+        measurement: unit,
+        amount: weight,
+    };
+    const editedWeightData = {
+        weightId: editingWeightId,
+        measurement: unit,
+        amount: weight,
+    };
 
-        // Clear input fields
+    try {
+        let response;
+        if (editingWeightId) {
+            response = await axios.put('/track/weightEdit', editedWeightData, { withCredentials: true });
+            console.log('Weight updated:', response.data);
+        } else {
+            response = await axios.post('/track/weightCreate', newWeightData, { withCredentials: true });
+            console.log('Weight saved:', response.data);
+        }
+
         setWeight('');
-        setUnit('kg'); // Reset to default unit
-        setDate(new Date().toISOString().split('T')[0]); // Reset to today's date
-
-        // Close the input fields
+        setUnit('kg'); 
+        setEditingWeightId(null);
         setShowWeightInputs(false);
-    };
+    } catch (error) {
+        console.error('Error saving weight data:', error);
+    }
+};
+ const handleWeightEdit = (index) => {
+    const weightEntryToEdit = weightEntries[index];
+    setWeight(String(weightEntryToEdit.amount));
+    setUnit(weightEntryToEdit.measurement);
+    setDate(weightEntryToEdit.date); 
+    setEditingWeightId(weightEntryToEdit._id);
+    setShowWeightInputs(true);
+};
 
-    const handleWeightEdit = (index) => {
-        const entryToEdit = weightEntries[index];
-        setWeight(entryToEdit.weight);
-        setUnit(entryToEdit.unit);
-        setDate(entryToEdit.date);
 
-        // Remove the entry from the list
-        const newEntries = weightEntries.filter((_, idx) => idx !== index);
-        setWeightEntries(newEntries);
+const handleWeightDelete = async (index) => {
+    const weightEntryToDelete = weightEntries[index];
+    try {
+        await axios.delete('/track/weightDelete', { 
+            data: { weightEntryId: weightEntryToDelete._id },
+            withCredentials: true
+        });
+        console.log('Weight entry deleted successfully');
+        // Remove the entry from the local state to update the UI
+        const newWeightEntries = weightEntries.filter((_, idx) => idx !== index);
+        setWeightEntries(newWeightEntries);
+    } catch (error) {
+        console.error('Error deleting weight data:', error);
+    }
+};
 
-        // Show the input fields for editing
-        setShowWeightInputs(true);
-    };
 
-    const handleWeightDelete = (index) => {
-        const newEntries = weightEntries.filter((_, idx) => idx !== index);
-        setWeightEntries(newEntries);
-    };
-
-    const handleWeightImageUpload = (imageDataUrl) => {
-        setWeightImages((prevImages) => [...prevImages, imageDataUrl]);
-    };
-
-    // Function to remove an image
-    const handleRemoveWeightImage = (index) => {
-        setWeightImages((prevImages) => prevImages.filter((_, i) => i !== index));
-    };
-
-    // Function to process selected image
-    const handleWeightInputChange = (e) => {
-        const selectedImage = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = () => {
-            const imageDataUrl = reader.result;
-            handleWeightImageUpload(imageDataUrl);
-        };
-        reader.readAsDataURL(selectedImage);
-    };
+  
 
 
     const [showWaterInputs, setShowWaterInputs] = useState(false);
@@ -451,7 +463,20 @@ useEffect(() => {
     };
 
     fetchWaterData();
-}, [waterAmount, sleepAmount, date]); 
+
+
+    const fetchWeightData = async () => {
+        try {
+            const response = await axios.get(`/track/weightGet?date=${date}`, { withCredentials: true });
+            setWeightEntries(response.data);
+        } catch (error) {
+            console.error('Error fetching weight data:', error);
+        }
+    };
+
+    fetchWeightData();
+
+}, [waterAmount, sleepAmount, weight, date]); 
 
 
 
@@ -1128,7 +1153,7 @@ const handleSleepDelete = async (index) => {
                                                 }}
                                             />
                                         </button>
-                                        <p className="mr-1 mb-2 text-s md:text-m font-semibold">{entry.weight} {entry.unit}</p>
+                                        <p className="mr-1 mb-2 text-s md:text-m font-semibold">{entry.amount} {entry.measurement}</p>
                                     </div>
                                     <div>
                                         {/* Delete Button */}
