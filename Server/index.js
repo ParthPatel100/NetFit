@@ -54,5 +54,8 @@ app.use('/goal', authenticateToken, require('./routes/goalRoutes'))
 app.use('/progress', authenticateToken, require('./routes/progressDataRoutes'))
 app.use('/navbar', authenticateToken, require('./routes/navbarRoutes'))
 app.use('/user', authenticateToken, require('./routes/user'))
+app.use('/navbar', authenticateToken, require('./routes/navbarRoutes'))
+
+
 app.use('/post', require('./routes/postRoutes'))
 
