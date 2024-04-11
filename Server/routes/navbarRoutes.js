@@ -15,7 +15,6 @@ router.use(
 )
 
 router.get('/getFollowingData', async (req, res) => {
-    console.log("This calsed")
     const username = req.user.name
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
