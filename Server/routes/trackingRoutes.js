@@ -6,6 +6,8 @@ const Tracking = require("../MongoDB/schema/tracking");
 const Workout = require("../MongoDB/schema/workout"); // Import the Workout model
 const Sleep = require("../MongoDB/schema/sleep")
 const Water = require("../MongoDB/schema/water")
+const Weight = require("../MongoDB/schema/weight")
+
 
 const jwt = require("jsonwebtoken");
 
@@ -271,7 +273,7 @@ router.post('/sleepCreate', async (req, res) => {
 
 router.put('/sleepEdit', async (req, res) => {
     const { token } = req.cookies;
-    const { sleepId, date, startTime, duration } = req.body;
+    const { sleepId, duration } = req.body;
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -559,6 +561,179 @@ router.get('/waterGet', async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
+
+
+
+router.post('/weightCreate', async (req, res) => {
+    const { token } = req.cookies;
+    const { date, measurement, amount } = req.body;
+
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+    try {
+        const isValidUser = await new Promise((resolve) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        const username = getUserIdFromToken(token);
+
+        // Create the weight entry
+        const weight = new Weight({ date, measurement, amount });
+        await weight.save();
+
+        const trackingForDay = await Tracking.findOne({ username, date });
+        if (trackingForDay) {
+            trackingForDay.weight_id = trackingForDay.weight_id || [];
+            trackingForDay.weight_id.push(weight._id);
+            await trackingForDay.save();
+        } else {
+            const newTracking = new Tracking({
+                username,
+                date,
+                weight_id: [weight._id] // Initialize with the new weight entry
+            });
+            await newTracking.save();
+        }
+
+        return res.status(200).json(weight);
+
+    } catch (error) {
+        console.error('Error creating or updating weight entry:', error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+
+router.put('/weightEdit', async (req, res) => {
+    const { token } = req.cookies;
+    const { weightId, measurement, amount } = req.body;
+
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+    try {
+        const isValidUser = await new Promise((resolve) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        const updatedWeight = await Weight.findByIdAndUpdate(weightId, {
+            measurement, 
+            amount
+        }, { new: true });
+
+        if (!updatedWeight) {
+            return res.status(404).json({ error: "Weight entry not found or unchanged" });
+        }
+
+        return res.status(200).json({ message: "Weight entry updated successfully", weight: updatedWeight });
+
+    } catch (error) {
+        console.error('Error updating weight entry:', error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+
+router.delete('/weightDelete', async (req, res) => {
+    const { token } = req.cookies;
+    const { weightEntryId } = req.body;
+
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+    try {
+        const isValidUser = await new Promise((resolve) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        // Delete the weight entry by its ID
+        const deletedWeightEntry = await Weight.findByIdAndDelete(weightEntryId);
+
+        if (!deletedWeightEntry) {
+            return res.status(404).json({ error: "Weight entry not found" });
+        }
+
+        // Find the tracking document that references this weight entry ID and remove the ID from it
+        const username = getUserIdFromToken(token);
+        const trackingDocument = await Tracking.findOne({ username, weight_id: { $in: [weightEntryId] } });
+
+        if (trackingDocument) {
+            // Remove the weight entry ID from the tracking document
+            trackingDocument.weight_id = trackingDocument.weight_id.filter(id => id.toString() !== weightEntryId);
+            await trackingDocument.save();
+        }
+
+        return res.status(200).json({ message: "Weight entry deleted successfully and tracking updated" });
+
+    } catch (error) {
+        console.error('Error deleting weight entry:', error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+
+router.get('/weightGet', async (req, res) => {
+    const { token } = req.cookies;
+    const { date } = req.query; 
+
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+    try {
+        const isValidUser = await new Promise((resolve) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        const username = getUserIdFromToken(token);
+
+        let query = { username };
+        if (date) {
+            const startOfDay = new Date(date);
+            startOfDay.setHours(0, 0, 0, 0);
+
+            const endOfDay = new Date(date);
+            endOfDay.setHours(23, 59, 59, 999);
+
+            query.date = { $gte: startOfDay, $lt: endOfDay };
+        }
+        const trackingEntries = await Tracking.find(query).populate('weight_id');
+
+        const weightEntries = trackingEntries.map(entry => entry.weight_id).flat();
+
+        return res.status(200).json(weightEntries);
+
+    } catch (error) {
+        console.error('Error fetching weight entries:', error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 
 
 module.exports = router;
