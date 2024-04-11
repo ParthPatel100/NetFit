@@ -330,28 +330,51 @@ const handleWorkoutSubmit = async () => {
     const [submittedSleepData, setSubmittedSleepData] = useState([]);
    // const [displaySleepData, setDisplaySleepData] = useState([]);
 const [editingSleepId, setEditingSleepId] = useState(null);
+const [editingWaterId, setEditingWaterId] = useState(null);
 
     // Function to toggle water input form visibility
     const handleWaterButtonClick = () => {
         setShowWaterInputs(!showWaterInputs);
     };
 
-    // Function to handle submission of new water intake entry
-    const handleWaterSubmit = () => {
-        const newWaterData = {
-            amount: waterAmount,
-            measurement: waterMeasurement,
-        };
+ const handleWaterSubmit = async () => {
+    if (!waterAmount) {
+        console.error('No water amount specified');
+        return;
+    }
 
-        setSubmittedWaterData([...submittedWaterData, newWaterData]);
-
-        // Clear input fields
-        setWaterAmount("");
-        setWaterMeasurement("ml"); // Reset to default measurement
-
-        // Optionally close the input fields
-        setShowWaterInputs(false);
+    const newWaterData = {
+        date: date, 
+        measurement: waterMeasurement,
+        amount: waterAmount,
     };
+    const editedWaterData = {
+        waterId: editingWaterId,
+        measurement: waterMeasurement,
+        amount: waterAmount,
+    };
+
+    try {
+        let response;
+        if (editingWaterId) {
+
+            response = await axios.put(`/track/waterEdit`, editedWaterData, { withCredentials: true });
+            console.log('Water updated:', response.data);
+        } else {
+
+            response = await axios.post('/track/waterCreate', newWaterData, { withCredentials: true });
+            console.log('Water saved:', response.data);
+        }
+
+        
+        setWaterAmount("");
+        setWaterMeasurement("ml");
+        setEditingWaterId(null); 
+        setShowWaterInputs(false);
+    } catch (error) {
+        console.error('Error saving water data:', error);
+    }
+};
 
 const handleSleepSubmit = async () => {
     if (!sleepAmount) {
@@ -410,40 +433,51 @@ useEffect(() => {
 }, [sleepAmount]); 
     
 
+useEffect(() => {
+    const fetchWaterData = async () => {
+        try {
+            const response = await axios.get(`/track/waterGet?date=${date}`, { withCredentials: true }); 
+            setSubmittedWaterData(response.data);
+            console.log('did it work')
+        } catch (error) {
+            console.error('Error fetching water data:', error);
+        }
+    };
+
+    fetchWaterData();
+}, [waterAmount]); 
+
+
 const handleSleepButtonClick = () => {
         setShowSleepInputs(!showSleepInputs);
     };
 
-    // Function to handle editing of an existing water intake entry
-    const handleWaterEdit = (index) => {
-        const waterEntryToEdit = submittedWaterData[index];
-        setWaterAmount(waterEntryToEdit.amount);
-        setWaterMeasurement(waterEntryToEdit.measurement);
-
-        // Remove the entry from the list
-        const newWaterData = submittedWaterData.filter((_, idx) => idx !== index);
-        setSubmittedWaterData(newWaterData);
-
-        
-        setShowWaterInputs(true);
-    };
+ const handleWaterEdit = (index) => {
+    const waterEntryToEdit = submittedWaterData[index];
+    setWaterAmount(String(waterEntryToEdit.amount));
+    setWaterMeasurement(waterEntryToEdit.measurement);
+    setEditingWaterId(waterEntryToEdit._id);
+    setShowWaterInputs(true);
+};
 
 const handleSleepEdit = (index) => {
     const sleepEntryToEdit = submittedSleepData[index];
     setSleepAmount(String(sleepEntryToEdit.duration)); 
-
-    
     setEditingSleepId(sleepEntryToEdit._id);
-
-    
     setShowSleepInputs(true);
 };
 
-    // Function to handle deletion of a water intake entry
-    const handleWaterDelete = (index) => {
+const handleWaterDelete = async (index) => {
+    const waterEntryToDelete = submittedWaterData[index];
+    try {
+        await axios.delete('/track/waterDelete', { data: { waterEntryId: waterEntryToDelete._id } }, { withCredentials: true });
         const newWaterData = submittedWaterData.filter((_, idx) => idx !== index);
         setSubmittedWaterData(newWaterData);
-    };
+    } catch (error) {
+        console.error('Error deleting water data:', error);
+    }
+};
+
 const handleSleepDelete = async (index) => {
     const sleepEntryToDelete = submittedSleepData[index];
     try {

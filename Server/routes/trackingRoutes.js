@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const Tracking = require("../MongoDB/schema/tracking");
 const Workout = require("../MongoDB/schema/workout"); // Import the Workout model
 const Sleep = require("../MongoDB/schema/sleep")
+const Water = require("../MongoDB/schema/water")
+
 const jwt = require("jsonwebtoken");
 
 // Reuse the same verifyToken function
@@ -349,7 +351,9 @@ router.delete('/sleepDelete', async (req, res) => {
 
 router.get('/sleepGet', async (req, res) => {
     const { token } = req.cookies;
-    const { startDate, endDate } = req.query; 
+    //const { startDate, endDate } = req.query; 
+    const { date } = req.query; 
+
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -367,10 +371,14 @@ router.get('/sleepGet', async (req, res) => {
         const username = getUserIdFromToken(token);
 
         let query = { username };
-        if (startDate && endDate) {
-            query.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
-        } else if (startDate) {
-            query.date = new Date(startDate);
+       if (date) {
+            const startOfDay = new Date(date);
+            startOfDay.setHours(0, 0, 0, 0);
+
+            const endOfDay = new Date(date);
+            endOfDay.setHours(23, 59, 59, 999);
+
+            query.date = { $gte: startOfDay, $lt: endOfDay };
         }
 
         const trackingEntries = await Tracking.find(query).populate('sleep_id');
@@ -384,5 +392,173 @@ router.get('/sleepGet', async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
+router.post('/waterCreate', async (req, res) => {
+    const { token } = req.cookies;
+    const { date, measurement, amount } = req.body;
+
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+    try {
+        const isValidUser = await new Promise((resolve) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        const username = getUserIdFromToken(token);
+
+        // Create the water entry
+        const water = new Water({ date, measurement, amount });
+        await water.save();
+
+        const trackingForDay = await Tracking.findOne({ username, date });
+        if (trackingForDay) {
+            trackingForDay.water_id = trackingForDay.water_id || [];
+            trackingForDay.water_id.push(water._id);
+            await trackingForDay.save();
+        } else {
+            const newTracking = new Tracking({
+                username,
+                date,
+                water_id: [water._id] // Initialize with the new water entry
+            });
+            await newTracking.save();
+        }
+
+        return res.status(200).json(water);
+
+    } catch (error) {
+        console.error('Error creating or updating water entry:', error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+
+router.put('/waterEdit', async (req, res) => {
+    const { token } = req.cookies;
+    const { waterId, measurement, amount } = req.body;
+
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+    try {
+        const isValidUser = await new Promise((resolve) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        const updatedWater = await Water.findByIdAndUpdate(waterId, {
+            measurement, 
+            amount
+        }, { new: true });
+
+        if (!updatedWater) {
+            return res.status(404).json({ error: "Water entry not found or unchanged" });
+        }
+
+        return res.status(200).json({ message: "Water entry updated successfully", water: updatedWater });
+
+    } catch (error) {
+        console.error('Error updating water entry:', error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+
+router.delete('/waterDelete', async (req, res) => {
+    const { token } = req.cookies;
+    const { waterEntryId } = req.body; 
+
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+    try {
+        const isValidUser = await new Promise((resolve) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        // Delete the water entry by its ID
+        const deletedWaterEntry = await Water.findByIdAndDelete(waterEntryId);
+
+        if (!deletedWaterEntry) {
+            return res.status(404).json({ error: "Water entry not found" });
+        }
+
+        // Find the tracking document that references this water entry ID and remove the ID from it
+        const username = getUserIdFromToken(token);
+        const trackingDocument = await Tracking.findOne({ username, water_id: { $in: [waterEntryId] } });
+
+        if (trackingDocument) {
+            // Remove the water entry ID from the tracking document
+            trackingDocument.water_id = trackingDocument.water_id.filter(id => id.toString() !== waterEntryId);
+            await trackingDocument.save();
+        }
+
+        return res.status(200).json({ message: "Water entry deleted successfully and tracking updated" });
+
+    } catch (error) {
+        console.error('Error deleting water entry:', error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+router.get('/waterGet', async (req, res) => {
+    const { token } = req.cookies;
+    const { date } = req.query; 
+
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+    try {
+        const isValidUser = await new Promise((resolve) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        const username = getUserIdFromToken(token);
+
+        let query = { username };
+        if (date) {
+            const startOfDay = new Date(date);
+            startOfDay.setHours(0, 0, 0, 0);
+
+            const endOfDay = new Date(date);
+            endOfDay.setHours(23, 59, 59, 999);
+
+            query.date = { $gte: startOfDay, $lt: endOfDay };
+        }
+        const trackingEntries = await Tracking.find(query).populate('water_id');
+
+        const waterEntries = trackingEntries.map(entry => entry.water_id).flat();
+
+        return res.status(200).json(waterEntries);
+
+    } catch (error) {
+        console.error('Error fetching water entries:', error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 
 module.exports = router;
