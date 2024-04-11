@@ -1064,139 +1064,96 @@ const handleSleepDelete = async (index) => {
                 </div>
 
 {/* Weight Section */}
-<div className="bg-white p-4 rounded-md">
-    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
-        <div className="text-l font-bold">Weight</div>
-        <button className="focus:outline-none" onClick={() => setShowWeightInputs(!showWeightInputs)}>
-            <CirclePlus style={{ color: '#a855f7', cursor: 'pointer' }} />
-        </button>
-    </div>
-    {showWeightInputs && (
-        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between mt-4">
-            <div className="flex flex-wrap justify-around">
-                <input
-                    type="text"
-                    placeholder="Weight"
-                    value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
-                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                />
-                <select
-                    value={unit}
-                    onChange={(e) => setUnit(e.target.value)}
-                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                >
-                    <option value="kg">kg</option>
-                    <option value="lb">lb</option>
-                </select>
-                <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                />
-                <div className="flex lg:flex-row justify-center w-full gap-4">
-                    <button
-                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
-                        onClick={handleWeightSubmit}
-                    >
-                        Submit
-                    </button>
-                </div>
-           <div className="border-2 border-gray-300 rounded-xl p-2 text-left mt-4">
-                <label className="ml-1 text-sm">Add Progress Photo</label>
-                <div className="flex flex-wrap justify-start items-center h-auto">
-                    {weightImages.map((imageUrl, index) => (
-                        <div
-                            key={index}
-                            className="relative m-1.5 border rounded-xl text-center bg-cover bg-center"
-                            style={{
-                                backgroundImage: `url(${imageUrl})`,
-                                width: 'calc(33% - 12px)',
-                                paddingBottom: 'calc(33% - 12px)',
-                            }}
-                        >
-                            <button
-                                className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
-                                onClick={() => handleRemoveWeightImage(index)}
-                                style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-                            >
-                                <Trash2 className="text-white" />
-                            </button>
-                        </div>
-                    ))}
-                    {weightImages.length < 4 && (
-                        <button
-                            className="m-1.5 border border-gray-300 rounded-xl text-center flex justify-center items-center"
-                            onClick={() => document.getElementById("weightImageUpload").click()}
-                            style={{ width: 'calc(33% - 12px)', height: 'calc(33% - 12px)', minWidth: '100px', minHeight: '100px' }}
-                        >
-                            +
+                <div className="bg-white p-4 rounded-md">
+                    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
+                        <div className="text-l font-bold">Weight</div>
+                        <button className="focus:outline-none" onClick={() => setShowWeightInputs(!showWeightInputs)}>
+                            <CirclePlus style={{ color: '#a855f7', cursor: 'pointer' }} />
                         </button>
-                    )}
-                    <input
-                        id="weightImageUpload"
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleWeightInputChange}
-                    />
-                </div>
-            </div>
-            </div>
-        </div>
-    )}
-    {/* List of weight entries */}
-    {weightEntries.length > 0 && (
-        <div className="ml-1 mr-1 mt-5">
-            <div className="flex flex-wrap border-t border-gray-300">
-                {weightEntries.map((entry, index) => (
-                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
-
-                                                    <div className="flex mt-2 items-center">
-                                                            {/* Edit Button */}
-                                                            <button
-                                                                className="focus:outline-none mr-2"
-                                                                onClick={() => handleWeightEdit(index)}
-                                                                style={{ color: '#000', transition: 'color 0.3s' }}
-                                                            >
-                                                                <Pencil
-                                                                    style={{ color: '#000', cursor: 'pointer' }}
-                                                                    onMouseEnter={(e) => {
-                                                                        e.target.style.color = '#a855f7';
-                                                                    }}
-                                                                    onMouseLeave={(e) => {
-                                                                        e.target.style.color = '#000';
-                                                                    }}
-                                                                />
-                                                            </button>
-
-
-                                            <span className="font-bold">{entry.weight}</span>  {entry.unit}, {entry.date}
-                                        </div>
-                                        <div className="flex">
-
-                                            <button
-                                                className="focus:outline-none"
-                                                onClick={() => handleWeightDelete(index)}
-                                                style={{ color: '#000', transition: 'color 0.3s' }}
-                                            >
-                                                <Trash2
-                                                    style={{ color: '#000', cursor: 'pointer' }}
-                                                    onMouseEnter={(e) => {
-                                                        e.target.style.color = '#a855f7';
-                                                    }}
-                                                    onMouseLeave={(e) => {
-                                                        e.target.style.color = '#000';
-                                                    }}
-                                                />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
+                    </div>
+                    {showWeightInputs && (
+                        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between mt-4">
+                            <div className="flex flex-wrap">
+                                <p className="text-xs md:text-sm mt-3">Enter Weight Data</p>
+                                <div className="flex flex-col text-md justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Weight"
+                                        value={weight}
+                                        onChange={(e) => setWeight(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <select
+                                        value={unit}
+                                        onChange={(e) => setUnit(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    >
+                                        <option value="kg">kg</option>
+                                        <option value="lb">lb</option>
+                                    </select>
+                                </div>
+                                <div className="flex lg:flex-row justify-center w-full gap-4">
+                                    <button
+                                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
+                                        onClick={handleWeightSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
+
+                    {/* List of weight entries */}
+                {/* Display Submitted Weight Data */}
+                {weightEntries.length > 0 && (
+                    <div className="ml-1 mr-1 mt-5">
+                        <div className="flex flex-wrap border-t border-gray-300">
+                            {weightEntries.map((entry, index) => (
+                                <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                                    <div className="flex mt-2 items-center">
+                                        {/* Edit Button */}
+                                        <button
+                                            className="focus:outline-none mr-2"
+                                            onClick={() => handleWeightEdit(index)}
+                                            style={{ color: '#000', transition: 'color 0.3s' }}
+                                        >
+                                            <Pencil
+                                                style={{ color: '#000', cursor: 'pointer' }}
+                                                onMouseEnter={(e) => {
+                                                    e.target.style.color = '#a855f7';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.target.style.color = '#000';
+                                                }}
+                                            />
+                                        </button>
+                                        <p className="mr-1 mb-2 text-s md:text-m font-semibold">{entry.weight} {entry.unit}</p>
+                                    </div>
+                                    <div>
+                                        {/* Delete Button */}
+                                        <button
+                                            className="focus:outline-none"
+                                            onClick={() => handleWeightDelete(index)}
+                                            style={{ color: '#000', transition: 'color 0.3s' }}
+                                        >
+                                            <Trash2
+                                                style={{ color: '#000', cursor: 'pointer' }}
+                                                onMouseEnter={(e) => {
+                                                    e.target.style.color = '#a855f7';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.target.style.color = '#000';
+                                                }}
+                                            />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 </div>
 
 
