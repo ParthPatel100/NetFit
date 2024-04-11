@@ -384,7 +384,7 @@ const handleSleepSubmit = async () => {
         }
         
 
-        setSubmittedSleepData([...submittedSleepData, response.data]);
+        setSubmittedSleepData([...submittedSleepData]);
         setSleepAmount("");
         setEditingSleepId(null); 
         setShowSleepInputs(false);
