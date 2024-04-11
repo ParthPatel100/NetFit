@@ -447,7 +447,7 @@ const handleSleepEdit = (index) => {
 const handleSleepDelete = async (index) => {
     const sleepEntryToDelete = submittedSleepData[index];
     try {
-        await axios.delete('/track/sleepDelete', { data: { date: sleepEntryToDelete.date } }, { withCredentials: true }); 
+        await axios.delete('/track/sleepDelete', { data: { sleepEntryId: sleepEntryToDelete._id } }, { withCredentials: true }); 
         const newSleepData = submittedSleepData.filter((_, idx) => idx !== index);
         setSubmittedSleepData(newSleepData);
     } catch (error) {

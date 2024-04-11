@@ -305,7 +305,7 @@ router.put('/sleepEdit', async (req, res) => {
 
 router.delete('/sleepDelete', async (req, res) => {
     const { token } = req.cookies;
-    const { date } = req.body; // date is used to find the sleep entry to be deleted
+    const { sleepEntryId } = req.body; // date is used to find the sleep entry to be deleted
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -320,29 +320,30 @@ router.delete('/sleepDelete', async (req, res) => {
             return res.status(401).json({ error: "User not valid" });
         }
 
-        const username = getUserIdFromToken(token);
+         // First, delete the sleep entry directly by its ID
+        const deletedSleepEntry = await Sleep.findByIdAndDelete(sleepEntryId);
 
-        // Find the tracking entry for the user on the given date
-        const trackingForDay = await Tracking.findOne({ username, date }).populate('sleep_id');
-        
-        if (!trackingForDay || !trackingForDay.sleep_id.length) {
-            return res.status(404).json({ error: "No sleep entry found for the given date" });
+        if (!deletedSleepEntry) {
+            return res.status(404).json({ error: "Sleep entry not found" });
         }
 
-        // Delete the sleep entries for the day and remove them from the tracking document
-        const sleepEntryDeletions = trackingForDay.sleep_id.map(sleepId => Sleep.findByIdAndDelete(sleepId));
-        await Promise.all(sleepEntryDeletions);
+        // Then, find the tracking document that references this sleep entry ID and remove the ID from it
+        const username = getUserIdFromToken(token);
+        const trackingDocument = await Tracking.findOne({ username, sleep_id: { $in: [sleepEntryId] } });
 
-        // Remove the reference to the deleted sleep entries in the tracking document
-        trackingForDay.sleep_id = [];
-        await trackingForDay.save();
+        if (trackingDocument) {
+            // Remove the sleep entry ID from the tracking document
+            trackingDocument.sleep_id = trackingDocument.sleep_id.filter(id => id.toString() !== sleepEntryId);
+            await trackingDocument.save();
+        }
 
-        return res.status(200).json({ message: "Sleep entry deleted successfully" });
+        return res.status(200).json({ message: "Sleep entry deleted successfully and tracking updated" });
 
     } catch (error) {
         console.error('Error deleting sleep entry:', error);
         return res.status(500).json({ error: "Internal Server Error" });
     }
+
 });
 
 
