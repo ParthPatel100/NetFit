@@ -418,11 +418,16 @@ const handleSleepSubmit = async () => {
 
 
 
+
+
 useEffect(() => {
-    const fetchSleepData = async () => {
+
+
+
+  const fetchSleepData = async () => {
         console.log("potato")
         try {
-            const response = await axios.get('/track/sleepGet', { withCredentials: true }); 
+            const response = await axios.get(`/track/sleepGet?date=${date}`, { withCredentials: true }); 
             setSubmittedSleepData(response.data);
         } catch (error) {
             console.error('Error fetching sleep data:', error);
@@ -430,10 +435,6 @@ useEffect(() => {
     };
 
     fetchSleepData();
-}, [sleepAmount]); 
-    
-
-useEffect(() => {
     const fetchWaterData = async () => {
         try {
             const response = await axios.get(`/track/waterGet?date=${date}`, { withCredentials: true }); 
@@ -445,7 +446,8 @@ useEffect(() => {
     };
 
     fetchWaterData();
-}, [waterAmount]); 
+}, [waterAmount, sleepAmount, date]); 
+
 
 
 const handleSleepButtonClick = () => {
