@@ -47,9 +47,12 @@ app.listen(port, () => {
 })
 
 app.use('/', require('./routes/authRoutes'))
+
+app.use('/track', authenticateToken, require('./routes/trackingRoutes'))
+
 app.use('/goal', authenticateToken, require('./routes/goalRoutes'))
 app.use('/progress', authenticateToken, require('./routes/progressDataRoutes'))
 app.use('/navbar', authenticateToken, require('./routes/navbarRoutes'))
-
-
+app.use('/user', authenticateToken, require('./routes/user'))
 app.use('/post', require('./routes/postRoutes'))
+

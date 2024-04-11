@@ -9,7 +9,6 @@ const weightSchema = new mongoose.Schema({
         enum: ['lb', 'kg', 'st']
     },
     amount: { type: Number, required: true},
-    images: [{ data: Buffer, contentType: String}]
 
 });
 
