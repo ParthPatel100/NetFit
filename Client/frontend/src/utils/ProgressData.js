@@ -3,10 +3,10 @@ import axios from "axios";
 
 function extractData(data){
     return data.map((data) => {
-        const formattedDate = data.date.split('T')[0]
+        const formattedDate = data._id.date
         return ({
             x: formattedDate,
-            y: data.amount
+            y: data.totalAmount
         })
     })
 }
@@ -55,10 +55,10 @@ export async function getSleepData(fromDate, toDate){
         }
     });
     const graphData = data.map((data) => {
-        const formattedDate = data.date.split('T')[0]
+        const formattedDate = data._id.date
         return ({
             x: formattedDate,
-            y: data.duration
+            y: data.totalAmount
         })
     })
 
@@ -80,10 +80,10 @@ export async function getCalConsumedData(fromDate, toDate){
         }
     });
     const graphData = data.map((data) => {
-        const formattedDate = data.date.split('T')[0]
+        const formattedDate = data._id.date
         return ({
             x: formattedDate,
-            y: data.calories
+            y: data.totalAmount
         })
     })
 
@@ -105,7 +105,7 @@ export async function getWorkoutInformation(fromDate, toDate){
         }
     });
     const calData = data.map((data) => {
-        const formattedDate = data.date.split('T')[0]
+        const formattedDate = data._id.date
         return ({
             x: formattedDate,
             y: data.calories
@@ -113,7 +113,7 @@ export async function getWorkoutInformation(fromDate, toDate){
     })
 
     const durData = data.map((data) => {
-        const formattedDate = data.date.split('T')[0]
+        const formattedDate = data._id.date
         return ({
             x: formattedDate,
             y: data.duration
@@ -134,4 +134,12 @@ export async function getWorkoutInformation(fromDate, toDate){
         workoutDurData: workoutDurationGraphData,
         calBurntData: caloriesBurntGraphData
     }
+}
+
+export async function getTodayWorkout() {
+    return (await axios.get(`/progress/getTodayProgressData`, {withCredentials: true})).data
+}
+
+export function progressPercentCalc(val1, val2){
+    return (val1/val2) * 100
 }
