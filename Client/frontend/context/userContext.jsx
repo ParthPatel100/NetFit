@@ -49,9 +49,12 @@ export function UserContextProvider({children}){
     const resetUser = () => {
         setUser(null)
     }
-
+    let [nav,setNav]=useState(false)
+    const updateNav = () => {
+        setNav(!nav)
+    }
     return (
-        <UserContext.Provider value={{ user, logoutUser, resetUser, loginUser }}>
+        <UserContext.Provider value={{ user, logoutUser, resetUser, loginUser,nav,updateNav }}>
             {children}
         </UserContext.Provider>
     )

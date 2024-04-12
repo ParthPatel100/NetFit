@@ -6,10 +6,10 @@ import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:8080'
 axios.defaults.withCredentials = true;
 export default function Account(){
-
+    const { nav } = useContext(UserContext);
     const { logoutUser } = useContext(UserContext);
     const { user } = useContext(UserContext);
-
+    const { updateNav } = useContext(UserContext);
     const [profile,setProfile] =useState();
     const [password, setPassword] = useState();
     const [email,setEmail] = useState();
@@ -34,6 +34,8 @@ export default function Account(){
     else {
         imageDataUrl.target.files[0]
         fetchProfile();
+        updateNav();
+        console.log(nav)
     }
 }
   
