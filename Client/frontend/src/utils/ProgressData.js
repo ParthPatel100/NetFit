@@ -54,6 +54,7 @@ export async function getSleepData(fromDate, toDate){
             to: new Date(toDate)
         }
     });
+    console.log("Data received: ", data)
     const graphData = data.map((data) => {
         const formattedDate = data._id.date
         return ({
@@ -137,7 +138,9 @@ export async function getWorkoutInformation(fromDate, toDate){
 }
 
 export async function getTodayWorkout() {
-    return (await axios.get(`/progress/getTodayProgressData`, {withCredentials: true})).data
+    const data = (await axios.get(`/progress/getTodayProgressData`, {withCredentials: true})).data
+    console.log("DAta received: ", data)
+    return data
 }
 
 export function progressPercentCalc(val1, val2){

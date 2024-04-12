@@ -58,3 +58,4 @@ app.use('/navbar', authenticateToken, require('./routes/navbarRoutes'))
 app.use('/post', authenticateToken, require('./routes/postRoutes'))
 app.use('/landing', authenticateToken, require('./routes/landingRoutes'))
 
+app.use('/post', require('./routes/postRoutes'))

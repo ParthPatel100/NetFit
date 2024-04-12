@@ -126,6 +126,7 @@ router.get('/getSleepData', async (req, res) => {
             }
         ]);
 
+        console.log("DAta sleep: ", data)
 
         return res.status(200).json(data)
     } catch (error) {
@@ -216,7 +217,9 @@ router.get('/getTodayProgressData', async (req, res) => {
     const userId = req.user.id
 
     const today = new Date();
-    today.setHours(0,0,0,0)
+
+    today.setHours(-6,0,0,0)
+    today.set
     console.log(today)
 
     const tomorrow = new Date(today);
