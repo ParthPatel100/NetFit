@@ -12,8 +12,6 @@ export default function PostPage(){
     const navigate = useNavigate();
     console.log(user)
 
-
-    
     //image handling
     const [title, setTitle] = useState();
     const [caption, setCaption] = useState('');
@@ -47,19 +45,15 @@ export default function PostPage(){
 
     const getWorkoutID = async (workoutData) => {
         try{
-
-
             const responseWorkout = await axios.post("/post/postWorkout", workoutData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-
             return responseWorkout.data._id;
         }catch (error) {
             console.error("Error workout:", error);
             // Handle error (e.g., show error message to user)
-
         }
     }
 
@@ -68,7 +62,7 @@ export default function PostPage(){
         try {
 
             const promises = submittedWorkoutData.map(async (workout) => {
-                
+
                 console.log(workout.name);
                 const workoutData = {
                     date: workout.date,
@@ -78,7 +72,7 @@ export default function PostPage(){
                     resistance: workout.resistance,
                     ResMeasure: workout.resMeasure,
                     duration: workout.duration,
-                
+
 
                 }
 
@@ -101,15 +95,14 @@ export default function PostPage(){
                 formData.append("workoutId", workoutId);
             });
 
-            
+
             var i;
             for(i=0; i < imageFiles.length; i++){
                 formData.append('image', imageFiles[i]);
             }
 
-            
             //formData.append("workoutId", workoutId)
-            
+
             const response = await axios.post("/post/uploadPost", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -199,7 +192,7 @@ export default function PostPage(){
         <div className="bg-gray-100 h-screen md:mt-14 mt-0 md:ml-[12rem]">
             
                 <button className=" text-sm bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-[10px] p-0.5 w-2/12 ml-3 mt-3 justify-center"
-                    onClick={handleSubmitPost}
+                    onClick={() => {navigate('/landing')}}
                 >
                     <div className="flex flex-row items-center justify-start">
                         <ChevronLeft className="text-white ml-6" />

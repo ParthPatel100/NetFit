@@ -7,6 +7,8 @@ const Sleep = require("../MongoDB/schema/sleep")
 const Water = require("../MongoDB/schema/water")
 const Weight = require("../MongoDB/schema/weight")
 const Workout = require("../MongoDB/schema/workout");
+const Post = require("../MongoDB/schema/post");
+const SavedWorkouts = require("../MongoDB/schema/saved_workouts");
 
 
 const bcrypt = require('bcryptjs')
@@ -182,7 +184,7 @@ router.put('/sleepEdit', async (req, res) => {
         }
 
         const username = getUserIdFromToken(token);
-       // Directly update the sleep entry by its ID
+        // Directly update the sleep entry by its ID
         const updatedSleep = await Sleep.findByIdAndUpdate(sleepId, {
             duration: duration
         }, { new: true });
@@ -217,7 +219,7 @@ router.delete('/sleepDelete', async (req, res) => {
             return res.status(401).json({ error: "User not valid" });
         }
 
-         // First, delete the sleep entry directly by its ID
+        // First, delete the sleep entry directly by its ID
         const deletedSleepEntry = await Sleep.findByIdAndDelete(sleepEntryId);
 
         if (!deletedSleepEntry) {
@@ -246,8 +248,8 @@ router.delete('/sleepDelete', async (req, res) => {
 
 router.get('/sleepGet', async (req, res) => {
     const { token } = req.cookies;
-    //const { startDate, endDate } = req.query; 
-    const { date } = req.query; 
+    //const { startDate, endDate } = req.query;
+    const { date } = req.query;
 
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
@@ -266,7 +268,7 @@ router.get('/sleepGet', async (req, res) => {
         const username = getUserIdFromToken(token);
 
         let query = { username };
-       if (date) {
+        if (date) {
             const startOfDay = new Date(date);
             startOfDay.setHours(0, 0, 0, 0);
 
@@ -354,7 +356,7 @@ router.put('/waterEdit', async (req, res) => {
         }
 
         const updatedWater = await Water.findByIdAndUpdate(waterId, {
-            measurement, 
+            measurement,
             amount
         }, { new: true });
 
@@ -374,7 +376,7 @@ router.put('/waterEdit', async (req, res) => {
 
 router.delete('/waterDelete', async (req, res) => {
     const { token } = req.cookies;
-    const { waterEntryId } = req.body; 
+    const { waterEntryId } = req.body;
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -416,7 +418,7 @@ router.delete('/waterDelete', async (req, res) => {
 
 router.get('/waterGet', async (req, res) => {
     const { token } = req.cookies;
-    const { date } = req.query; 
+    const { date } = req.query;
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -524,7 +526,7 @@ router.put('/weightEdit', async (req, res) => {
         }
 
         const updatedWeight = await Weight.findByIdAndUpdate(weightId, {
-            measurement, 
+            measurement,
             amount
         }, { new: true });
 
@@ -588,7 +590,7 @@ router.delete('/weightDelete', async (req, res) => {
 
 router.get('/weightGet', async (req, res) => {
     const { token } = req.cookies;
-    const { date } = req.query; 
+    const { date } = req.query;
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -660,7 +662,7 @@ router.get("/getAllFoods", async (req, res) => {
     try {
 
         const { token } = req.cookies;
-        console.log("TOKEN:", token);
+        //console.log("TOKEN:", token);
 
         await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -678,7 +680,7 @@ router.get("/getAllFoods", async (req, res) => {
         const userId = getUserIdFromToken(token);
 
         //const { date, name, reps, sets, resistance, resMeasure, duration } = req.body;
-        console.log("new call");
+        //console.log("new call");
         const date = req.query.date;
         const startOfDay = new Date(date);
         startOfDay.setHours(0, 0, 0, 0);
@@ -692,7 +694,7 @@ router.get("/getAllFoods", async (req, res) => {
             date: { $gte: startOfDay, $lte: endOfDay }
         });
 
-        console.log("foods retreived", foods);
+        //console.log("foods retreived", foods);
 
         return res.json(foods);
     } catch (error) {
@@ -708,7 +710,7 @@ router.post("/postFood", async (req, res) => {
     try {
 
         const { token } = req.cookies;
-        console.log("TOKEN:", token);
+        //console.log("TOKEN:", token);
 
         await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -726,7 +728,7 @@ router.post("/postFood", async (req, res) => {
         const userId = getUserIdFromToken(token);
 
         //const { date, name, reps, sets, resistance, resMeasure, duration } = req.body;
-        console.log("date ", req.body.date);
+        //console.log("date ", req.body.date);
 
         const newFood = new Food({
             userId: userId,
@@ -757,8 +759,8 @@ router.post("/postFood", async (req, res) => {
             vitB12: req.body.vitB12
         });
 
-        console.log(req.body)
-        console.log(" new food ", newFood);
+        //console.log(req.body)
+        //console.log(" new food ", newFood);
 
         const savedFood = await newFood.save();
         return res.json(savedFood);
@@ -775,7 +777,7 @@ router.put("/editFood", async (req, res) => {
     try {
 
         const { token } = req.cookies;
-        console.log("TOKEN:", token);
+        //console.log("TOKEN:", token);
 
         await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -793,7 +795,7 @@ router.put("/editFood", async (req, res) => {
         const userId = getUserIdFromToken(token);
 
         //const { date, name, reps, sets, resistance, resMeasure, duration } = req.body;
-        console.log("date ", req.body.date);
+        //console.log("date ", req.body.date);
         const foodId = req.body._id;
 
 
@@ -808,8 +810,8 @@ router.put("/editFood", async (req, res) => {
             newFood.notes = req.body.notes;
         }
 
-        console.log(req.body)
-        console.log(" edit food ", updatedFood);
+        //console.log(req.body)
+        //console.log(" edit food ", updatedFood);
 
         const savedFood = await updatedFood.save();
         return res.json(savedFood);
@@ -825,7 +827,7 @@ router.delete("/deleteFood", async (req, res) => {
     try {
 
         const { token } = req.cookies;
-        console.log("TOKEN:", token);
+        //console.log("TOKEN:", token);
 
         await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -843,7 +845,7 @@ router.delete("/deleteFood", async (req, res) => {
         const userId = getUserIdFromToken(token);
         //const workoutId = req.body._id;
         const foodId = req.query._id;
-        console.log(foodId);
+        //console.log(foodId);
         const deletedWorkout = await Food.findByIdAndDelete(foodId);
         res.json({ message: "Food deleted successfully" });
 
@@ -877,7 +879,7 @@ router.get("/getAllWorkouts", async (req, res) => {
 
         const userId = getUserIdFromToken(token);
 
-        console.log("new call");
+        //console.log("new call");
         const date = req.query.date;
         const startOfDay = new Date(date);
         startOfDay.setHours(0, 0, 0, 0);
@@ -907,7 +909,7 @@ router.post("/postWorkout", async (req, res) => {
     try {
 
         const { token } = req.cookies;
-        console.log("TOKEN:", token);
+        //console.log("TOKEN:", token);
 
         await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -925,7 +927,7 @@ router.post("/postWorkout", async (req, res) => {
         const userId = getUserIdFromToken(token);
 
         //const { date, name, reps, sets, resistance, resMeasure, duration } = req.body;
-        console.log("date ", req.body.date);
+        //console.log("date ", req.body.date);
 
         const newWorkout = new Workout({
 
@@ -936,11 +938,12 @@ router.post("/postWorkout", async (req, res) => {
             sets: req.body.sets,
             resistance: req.body.resistance,
             resMeasure: req.body.resMeasure,
-            duration: req.body.duration
+            duration: req.body.duration,
+            calories: req.body.calories
         });
 
-        console.log(req.body)
-        console.log(" new workout ", newWorkout);
+        //console.log(req.body)
+        //console.log(" new workout ", newWorkout);
 
         const savedWorkout = await newWorkout.save();
         return res.json(savedWorkout);
@@ -957,7 +960,7 @@ router.put("/editWorkout", async (req, res) => {
     try {
 
         const { token } = req.cookies;
-        console.log("TOKEN:", token);
+        //console.log("TOKEN:", token);
 
         await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -975,7 +978,7 @@ router.put("/editWorkout", async (req, res) => {
         const userId = getUserIdFromToken(token);
 
         //const { date, name, reps, sets, resistance, resMeasure, duration } = req.body;
-        console.log("date ", req.body.date);
+        //console.log("date ", req.body.date);
         const workoutId = req.body._id;
 
 
@@ -990,8 +993,8 @@ router.put("/editWorkout", async (req, res) => {
             newWorkout.notes = req.body.notes;
         }
 
-        console.log(req.body)
-        console.log(" new workout ", updatedWorkout);
+        //console.log(req.body)
+        //console.log(" new workout ", updatedWorkout);
 
         const savedWorkout = await updatedWorkout.save();
         return res.json(savedWorkout);
@@ -1007,7 +1010,7 @@ router.delete("/deleteWorkout", async (req, res) => {
     try {
 
         const { token } = req.cookies;
-        console.log("TOKEN:", token);
+        //console.log("TOKEN:", token);
 
         await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -1025,7 +1028,7 @@ router.delete("/deleteWorkout", async (req, res) => {
         const userId = getUserIdFromToken(token);
         //const workoutId = req.body._id;
         const workoutId = req.query._id;
-        console.log(workoutId);
+        //console.log(workoutId);
         const deletedWorkout = await Workout.findByIdAndDelete(workoutId);
         res.json({ message: "Workout deleted successfully" });
 
@@ -1034,6 +1037,117 @@ router.delete("/deleteWorkout", async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
+
+router.get("/getSavedPosts", async (req, res) => {
+
+    try {
+
+        const { token } = req.cookies;
+        console.log("TOKEN:", token);
+
+        await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+
+        const isValidUser = await new Promise((resolve, reject) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        const userId = getUserIdFromToken(token);
+
+        //const { date, name, reps, sets, resistance, resMeasure, duration } = req.body;
+        console.log("new call");
+        console.log(userId);
+
+        const savedWorkouts = await SavedWorkouts.find({
+            user: userId,
+        });
+
+        console.log("savedWorkouts retreived", savedWorkouts);
+
+        return res.json(savedWorkouts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error");
+    }
+});
+
+
+router.get("/getPost", async (req, res) => {
+
+    try {
+
+        const { token } = req.cookies;
+        console.log("TOKEN:", token);
+
+        await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+
+        const isValidUser = await new Promise((resolve, reject) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        const userId = getUserIdFromToken(token);
+
+        const postId = req.query._id; // Assuming postId is the query parameter
+        console.log("query ", postId);
+
+        // Fetch the post by ID
+        const post = await Post.findById(postId);
+        return res.json(post);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error");
+    }
+});
+
+router.get("/getWorkout", async (req, res) => {
+
+    try {
+
+        const { token } = req.cookies;
+        console.log("TOKEN:", token);
+
+        await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+
+        const isValidUser = await new Promise((resolve, reject) => {
+            verifyToken(token, isValid => {
+                resolve(isValid);
+            });
+        });
+
+        if (!isValidUser) {
+            return res.status(401).json({ error: "User not valid" });
+        }
+
+        const userId = getUserIdFromToken(token);
+
+        const workoutId = req.query._id; // Assuming postId is the query parameter
+        console.log("query ", workoutId);
+
+        // Fetch the post by ID
+        const workout = await Workout.findById(workoutId);
+        console.log(workout);
+        return res.json(workout);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error");
+    }
+});
+
+
 
 
 
