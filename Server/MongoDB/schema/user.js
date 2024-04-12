@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
     user_role: { type: String, enum: ['user', 'admin', 'trainer'] },
     gender: { type: String, enum: ['male', 'female', 'other'] },
     age: { type: Number },
-    experienceLevel: { type: String, enum: ['beginner', 'intermediate', 'advanced'] }
+    experienceLevel: { type: String, enum: ['beginner', 'intermediate', 'advanced'] },
+    profilepic: {type: String}
 });
 
 userSchema.index({ username: 1 }, { unique: true });

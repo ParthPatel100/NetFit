@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const goalSchema = new mongoose.Schema({
-    user_id: {type: mongoose.Schema.Types.ObjectId, ref: 'user'}, // we need references
+    userId: {type: mongoose.Schema.Types.ObjectId, ref: 'user'}, // we need references
     calories: {type: Number},
     carbohydrates: {type: Number}, // we need references
     fat: {type: Number}, // we need references

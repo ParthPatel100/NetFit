@@ -9,7 +9,7 @@ const postSchema = new mongoose.Schema({
     images: [{ type: String}],
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment'}],
     likes: {type: Number },
-    workout_id: {type: mongoose.Schema.Types.ObjectId, ref: 'workout'}
+    workout_id: [{type: mongoose.Schema.Types.ObjectId, ref: 'workout'}]
 
 });
 
