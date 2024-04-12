@@ -341,7 +341,7 @@ async function getUsername(userId){
       {showImage? (
         // IMAGE FRAME
         <div className="image">
-          <img src={images} alt="Post" className=""/>
+          <img src={images} alt="Post" className="iDimensions"/>
         </div>
       ) : (
         // WORKOUT FRAME
