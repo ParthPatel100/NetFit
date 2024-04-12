@@ -1595,8 +1595,8 @@ export default function Track(){
                 </div>
 
                 {/* Workout  */}
-                <div className="bg-white p-4 rounded-md">
-                    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
+                <div className="bg-white p-4 rounded-md shadow-2xl">
+                    <div className="flex flex-row text-md md:text-lg mb-2 justify-between ">
                         <div className="text-l font-bold">Workouts</div>
                         <button className="focus:outline-none" onClick={handleWorkoutButtonClick}>
                             <CirclePlus style={{ color: '#a855f7', cursor: 'pointer' }} />
@@ -1976,7 +1976,7 @@ export default function Track(){
                 </div>
 
                 {/* Weight Section */}
-                <div className="bg-white p-4 rounded-md">
+                <div className="bg-white p-4 rounded-md shadow-2xl">
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
                         <div className="text-l font-bold">Weight</div>
                         <button className="focus:outline-none" onClick={() => setShowWeightInputs(!showWeightInputs)}>
@@ -2070,7 +2070,7 @@ export default function Track(){
 
 
                 {/* Sleep Section */}
-                <div className="bg-white p-4 rounded-md">
+                <div className="bg-white p-4 rounded-md shadow-2xl">
 
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
                         <div className="text-l font-bold">
@@ -2173,7 +2173,7 @@ export default function Track(){
                 </div>
 
                 {/* Water Section */}
-                <div className="bg-white p-4 rounded-md">
+                <div className="bg-white p-4 rounded-md shadow-2xl">
 
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
                         <div className="text-l font-bold">
