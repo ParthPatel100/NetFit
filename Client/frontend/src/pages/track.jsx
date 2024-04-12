@@ -521,7 +521,7 @@ const handleSleepDelete = async (index) => {
     }
 };
     return(
-        <div className="bg-gray-100 md:ml-[12rem] md:mt-14 p-4 h-screen">
+        <div className="bg-gray-100 md:ml-[12rem] md:mt-14 pb-24 p-4 min-h-screen">
             <div className=" flex justify-end mb-2.5">
                 <input
                                         type="date"

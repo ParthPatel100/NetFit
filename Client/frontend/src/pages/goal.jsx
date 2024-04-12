@@ -75,7 +75,7 @@ export default function GoalPage(){
     }
 
     return(
-        <div className={"bg-gray-100"}>
+        <div className={"bg-gray-100 min-h-screen"}>
 
         <div className={" flex md:mt-14 md:ml-[12rem] pb-24 md:pb-16 p-2 gap-4 flex-col mx-4" }>
 
