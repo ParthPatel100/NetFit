@@ -125,9 +125,9 @@ const FeedCard = ({ post }) => {
 
   async function getWorkout() {
     try {
-      const workoutResponse = await axios.get(`/landing/getWorkout/${workout_id}`, { withCredentials: true });
+      const workoutResponse = await axios.get(`/landing/getWorkout/${workout_id.join(',')}`, { withCredentials: true });
   
-      const workout =  workoutResponse.data;
+      const workout = workoutResponse.data;
   
       if (workout.error) {
         console.log("error here",workout.error);

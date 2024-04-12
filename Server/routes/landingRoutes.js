@@ -142,17 +142,19 @@ router.get('/getName/:userId', async (req, res) => {
 
 
 router.get('/getWorkout/:workout', async (req, res) => {
-    const workoutId = req.params.workout;
+    const workoutIds = req.params.workout.split(',');
+    console.log("wID!", workoutIds);
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
     try {
-        const workout = await Workout.findById(workoutId);
-        if (!workout) {
-            return res.status(404).json({ error: 'Workout not found' });
-        }
+        const workouts = await Promise.all(workoutIds.map(async (workoutId) => {
+            const workout = await Workout.findById(workoutId);
+            console.log("workout!", workout);
+            return workout ? workout : null;
 
-        res.status(200).json(workout);
+        }));
+        res.status(200).json(workouts.filter(workout => workout !== null));
     } catch (error) {
         console.error('Error finding workout:', error);
         res.status(500).json({ error: "Internal Serve Error" });
