@@ -15,7 +15,7 @@ const authenticateToken = (req, res, next) => {
     return res.sendStatus(401); // Unauthorized
   }
 
-  jwt.verify(token, "process.env.JWT_SECRET", (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       console.error("Error verifying token:", err);
       return res.sendStatus(403); // Forbidden
