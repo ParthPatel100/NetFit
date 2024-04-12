@@ -285,23 +285,6 @@ export default function Track(){
     };
 
     //workout backend
-    const handleWorkoutButtonClick = () => {
-        setShowWorkoutInputs(!showWorkoutInputs);
-        if (showSavedWorkouts) {
-            setShowSavedWorkouts(false);
-            setShowWorkoutInputs(false);
-        }
-    };
-
-    const toggleWorkoutsClick = () => {
-        setShowWorkoutInputs(true);
-        setShowSavedWorkouts(false);
-    };
-
-    const toggleSavedWorkoutsClick = () => {
-        setShowWorkoutInputs(false);
-        setShowSavedWorkouts(true);
-    };
 
     const [workoutData, setWorkoutData] = useState([]);
     const [showWorkoutInputs, setShowWorkoutInputs] = useState(false);
@@ -315,7 +298,282 @@ export default function Track(){
     const [resMeasure, setResMeasure] = useState("");
     const [duration, setDuration] = useState("");
     const [calBurn, setCalBurn] = useState("");
+    const [savedWorkouts, setSavedWorkouts] = useState([]);
+    const [selectedSavedWorkout, setSelectedSavedWorkout] = useState(null);
+    const [savedPosts, setSavedPosts]= useState([]);
+    const [savedWorkoutObject, setSavedWorkoutObject]= useState([]);
+    const [newSavedWorkout, setNewSavedWorkout] = useState([]);
 
+
+
+
+    const handleWorkoutButtonClick = () => {
+        setShowWorkoutInputs(!showWorkoutInputs);
+        if (showSavedWorkouts) {
+            setShowSavedWorkouts(false);
+            setShowWorkoutInputs(false);
+        }
+    };
+
+    const toggleWorkoutsClick = () => {
+        setShowWorkoutInputs(true);
+        setShowSavedWorkouts(false);
+    };
+
+    const toggleSavedWorkoutsClick = async () => {
+        setShowWorkoutInputs(false);
+        setShowSavedWorkouts(true);
+    
+        try {
+            const response = await axios.get("/track/getSavedPosts", {
+                headers: { "Content-Type": "application/json" },
+            });
+
+            //saved posts
+            console.log(response.data)
+            const savedPostIds = response.data[0].post_id;
+            console.log(response.data.post_id);
+
+            for (let i = 0; i < savedPostIds.length; i++) {
+                const postId = savedPostIds[i];
+                console.log("post id: ", postId);
+    
+                getPostObject(postId);
+                
+            }
+    
+            console.log(" post object ", savedPosts);
+
+
+        } catch (error) {
+            console.error('Error fetching saved workouts:', error);
+        }
+    };
+
+    
+
+    const getPostObject = async (postId) => {
+        try {
+
+            const response = await axios.get("/track/getPost", {
+                params: { _id: postId },
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+
+            console.log('Post Retrieved successfully:', response.data);
+
+            // Update the workout data state with the new workout
+            setSavedPosts(prevPosts => [...prevPosts, response.data]);
+            //console.log(" post object ", savedPosts);
+
+            return savedPosts;
+            
+        } catch (error) {
+            console.error('Error getting posts:', error);
+        }
+    };
+
+
+    const handleSubmitSavedWorkout = async (post) => {
+        const workoutIds = post.workout_id;
+        const postName = post.title;
+        console.log("workout array ", postName);
+        
+    
+        // Array to store promises
+        const workoutPromises = workoutIds.map(workoutId => {
+            return getWorkoutObject(workoutId).then(workout => {
+                // Create a duplicate for this user
+                const newName = workout.name + " (" + postName + ")";
+                const newWorkout = {
+                    date: date,
+                    name: newName,
+                    reps: workout.reps,
+                    sets: workout.sets,
+                    resistance: workout.resistance,
+                    resMeasure: workout.resMeasure,
+                    duration: workout.duration,
+                    calories: workout.calories,
+                };
+    
+                // Post the new workout to backend
+                return postNewWorkout(newWorkout).then(response => {
+                    console.log('Workout added successfully:', response.data);
+    
+                    // Add the new workout to savedWorkouts array
+                    setWorkoutData(prevWorkouts => [...prevWorkouts, response.data]);
+                }).catch(error => {
+                    console.error('Error posting new workout:', error);
+                    throw error;
+                });
+            });
+        });
+    
+        try {
+            // Wait for all promises to resolve
+            await Promise.all(workoutPromises);
+
+            console.log(savedWorkouts);
+        } catch (error) {
+            console.error('Error fetching, creating, and saving workouts:', error);
+        }
+    };
+    
+    const getWorkoutObject = (workoutId) => {
+        try {
+            // Return the axios promise without await
+            return axios.get("/track/getWorkout", {
+                params: { _id: workoutId },
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then(response => {
+                console.log('Workout object retrieved successfully:', response.data);
+                return response.data;
+            }).catch(error => {
+                console.error('Error getting workout:', error);
+                throw error;
+            });
+        } catch (error) {
+            console.error('Error getting workout:', error);
+            throw error;
+        }
+    };
+    
+    const postNewWorkout = (newWorkout) => {
+        try {
+            return axios.post("/track/postWorkout", newWorkout, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        } catch (error) {
+            console.error('Error posting new workout:', error);
+            throw error;
+        }
+    };
+
+
+
+/*
+    const handleSubmitSavedWorkout = async (post) => {
+
+ 
+
+        const workoutIds = post.workout_id;
+        console.log("workout array ", workoutIds);
+
+        for (let i = 0; i < workoutIds.length; i++) {
+            const workoutId = workoutIds[i];
+            getWorkoutObject(workoutId);
+            console.log("swo ", savedWorkoutObject);
+            //createOwnWorkout("post name ", savedWorkoutObject[i], post.title);
+            //console.log("dup ", savedWorkouts);
+        }
+
+        //console.log(" workout objects ", newSavedWorkout);
+        //createOwnWorkout("post name ", savedWorkoutObject[0], post.title);
+
+    };
+
+    const getWorkoutObject = async (workoutId) => {
+        try {
+
+            const response = await axios.get("/track/getWorkout", {
+                params: { _id: workoutId },
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+
+            console.log('workout object Retrieved successfully:', response.data);
+            const workout = response.data;
+            console.log("resp ", response.data);
+            //const newName =  workout.name + " (" + postName + ")";
+            //console.log("new name ", newName);
+            const newWorkoutData = {
+                name: workout.name,
+                date: date,
+                reps: workout.reps,
+                sets: workout.sets,
+                resistance: workout.resistance,
+                resMeasure: workout.resMeasure,
+                duration: workout.duration,
+                calories: workout.calBurn,
+
+            };
+
+            const responseWorkout = await axios.post("/track/postWorkout", newWorkoutData, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            
+
+            // Update the workout data state with the new workout
+            //setSavedWorkoutObject(prevObj => [...prevObj, response.data]);
+            //console.log(" post object ", savedPosts);
+
+            console.log('Workout added successfully:', responseWorkout.data);
+
+            setNewSavedWorkout(prevObj => [...prevObj, responseWorkout.data]);
+                //console.log(" post object ", savedPosts);
+
+            return newSavedWorkout;
+            
+        } catch (error) {
+            console.error('Error getting posts:', error);
+        }
+    };
+
+
+    const createOwnWorkout = async (workout, postName) => {
+
+        try{
+            console.log(workout.name);
+            const newName =  workout.name + " (" + postName + ")";
+            console.log("new name ", newName);
+            const newWorkoutData = {
+                name: workout.name,
+                date: date,
+                reps: workout.reps,
+                sets: workout.sets,
+                resistance: workout.resistance,
+                resMeasure: workout.resMeasure,
+                duration: workout.duration,
+                calories: workout.calBurn,
+
+            };
+
+            const responseWorkout = await axios.post("/track/postWorkout", newWorkoutData, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log('Workout added successfully:', responseWorkout.data);
+
+            setNewSavedWorkout(prevObj => [...prevObj, responseWorkout.data]);
+                //console.log(" post object ", savedPosts);
+
+            return newSavedWorkout;
+        
+        } catch (error) {
+            console.error('Error getting posts:', error);
+        }
+
+        //console.log(" workout objects ", savedWorkoutObject);
+        //createOwnWorkout(savedWorkout)
+        setShowSavedWorkouts(false);
+
+
+    };
+
+    
+*/
 
     // Handle form submission to add a new workout
     const handleAddWorkout = async (newWorkoutData) => {
@@ -332,6 +590,7 @@ export default function Track(){
             // Update the workout data state with the new workout
             setWorkoutData([...workoutData, responseWorkout.data]);
             setShowWorkoutInputs(false);
+            
         } catch (error) {
             console.error('Error adding workout:', error);
         }
@@ -448,10 +707,6 @@ export default function Track(){
         setResistance("");
         setResMeasure("");
         setDuration("");
-    };
-
-    const handleSubmitSavedWorkout = () => {
-
     };
 
 
@@ -1530,11 +1785,11 @@ const handleSleepDelete = async (index) => {
                                         Saved Workouts
                                     </button>
                                 </div>
-                                {showSavedWorkouts.map((workout, index) => (
+                                {savedPosts.map((post, index) => (
                                     <div
                                         key={index}
                                         className="w-full flex justify-center rounded-md mb-2 cursor-pointer"
-                                        onClick={() => handleSubmitSavedWorkout(workout)}
+                                        onClick={() => handleSubmitSavedWorkout(post)}
                                         style={{ transition: "background-color 0.3s ease" }}
                                         onMouseEnter={(e) => {
                                             e.target.style.backgroundColor = "purple";
@@ -1544,7 +1799,8 @@ const handleSleepDelete = async (index) => {
                                         }}
                                     >
                                         <div className="flex mt-2 items-center gap-2 text-xs md:text-sm mb-2 font-semibold">
-                                            {workout.trainerUsername}- {workout.wname}
+                                            {/* Display the trainer's username and post title */}
+                                            {post.trainerUsername} - {post.title}
                                         </div>
                                     </div>
                                 ))}
@@ -1620,6 +1876,76 @@ const handleSleepDelete = async (index) => {
                             </div>
                         </div>
                     )}
+
+                    {/* Display savedWorkouts Workouts */}
+                    {savedWorkouts.length > 0 && (
+                        <div className="ml-1 mr-1 mt-5">
+                            <div className="flex flex-wrap border-t border-gray-300">
+                                {workoutData.map((workout, index) => (
+                                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                                        <div className="flex mt-2 items-center">
+                                            {/* Edit Button */}
+                                            <button
+                                                className="focus:outline-none mr-2 mb-2"
+                                                onClick={() => handleWorkoutEdit(index)}
+                                                style={{ color: '#000', transition: 'color 0.3s' }}
+                                            >
+                                                <Pencil
+                                                    style={{ width:'1em', height:'1em', color: '#000', cursor: 'pointer' }}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.color = '#a855f7';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.color = '#000';
+                                                    }}
+                                                />
+                                            </button>
+                                            <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{workout.name}</p>
+                                        </div>
+                                        <div className="flex text-xs md:text-sm mt-2 mb-2 items-center">
+                                            {workout.reps && (
+                                                <p className="ml-1">
+                                                    <span className="font-semibold">{workout.reps}</span> Reps
+                                                </p>
+                                            )}
+                                            {workout.sets && (
+                                                <p className="ml-1">
+                                                    <span className="font-semibold">{workout.sets}</span> Sets
+                                                </p>
+                                            )}
+                                            {workout.resistance && workout.resMeasure && (
+                                                <p className="ml-1">
+                                                    <span className="font-semibold">{workout.resistance}{workout.resMeasure}</span> Resistance
+                                                </p>
+                                            )}
+                                            {workout.duration && (
+                                                <p className="ml-1">  
+                                                    <span className="font-semibold"> {workout.duration}</span> min Duration
+                                                </p>
+                                            )}
+                                            {/* Delete Button */}
+                                            <button
+                                                className="focus:outline-none ml-2"
+                                                onClick={() => handleWorkoutDelete(index)}
+                                                style={{ color: '#000', transition: 'color 0.3s' }}
+                                            >
+                                                <Trash2
+                                                    style={{ color: '#000', cursor: 'pointer' }}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.color = '#a855f7';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.color = '#000';
+                                                    }}
+                                                />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                 </div>
 
 {/* Weight Section */}
