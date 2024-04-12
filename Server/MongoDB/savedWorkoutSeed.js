@@ -8,12 +8,10 @@ async function main() {
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
     console.log("Connected to MongoDB");
-
-
     const sw = [
         {
-          post_id: ["6619510b3aed22bb6fa66d41", "6619510b3aed22bb6fa66d42"],
-          user: "660a3a3efd5ff21bb7e9bc45",
+          post_id: ["66199092d78b1645e0d5d6c8", "66199092d78b1645e0d5d6c9"],
+          user: "65fbb5e8684d1930c6047600",
         },
       ];
 

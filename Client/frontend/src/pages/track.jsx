@@ -317,6 +317,7 @@ export default function Track(){
 
     const toggleWorkoutsClick = () => {
         setShowWorkoutInputs(true);
+        setSavedPosts([])
         setShowSavedWorkouts(false);
     };
 
@@ -1694,7 +1695,7 @@ const handleSleepDelete = async (index) => {
                                 </div>
 
 
-                                <p className="text-xs md:text-sm mt-3">Enter Workout Data</p>
+                                <p className="text-xs  mt-3">Enter Workout Data</p>
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                     <input
                                         type="text"
@@ -1767,7 +1768,7 @@ const handleSleepDelete = async (index) => {
                     {showSavedWorkouts && (
                         <div className="flex flex-col border-2 rounded-lg border-gray-300">
                             <div className="flex flex-wrap">
-                                <div className="flex flex-row justify-center w-full text-xs md:text-sm mb-2 gap-4">
+                                <div className="flex flex-row justify-center w-full gap-4">
                                     <button
                                         className={`focus:outline-none ${
                                             !showSavedWorkouts ? "border-b-2 border-purple-500" : ""
@@ -1788,17 +1789,12 @@ const handleSleepDelete = async (index) => {
                                 {savedPosts.map((post, index) => (
                                     <div
                                         key={index}
-                                        className="w-full flex justify-center rounded-md mb-2 cursor-pointer"
+                                        className="w-full flex justify-center rounded-md cursor-pointer transition-all hover:bg-gradient-to-tr hover:from-purple-200 hover:to-blue-100 "
                                         onClick={() => handleSubmitSavedWorkout(post)}
-                                        style={{ transition: "background-color 0.3s ease" }}
-                                        onMouseEnter={(e) => {
-                                            e.target.style.backgroundColor = "purple";
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.target.style.backgroundColor = "white";
-                                        }}
+
                                     >
-                                        <div className="flex mt-2 items-center gap-2 text-xs md:text-sm mb-2 font-semibold">
+                                        <div className="flex mt-2 items-center gap-2 text-xs mb-2 font-semibold
+                                       ">
                                             {/* Display the trainer's username and post title */}
                                             {post.trainerUsername} - {post.title}
                                         </div>
