@@ -645,6 +645,8 @@ const handleSleepSubmit = async () => {
         } else {
         const response = await axios.post('/track/sleepCreate', newSleepData, { withCredentials: true });
         console.log('Sleep saved:', response.data);
+
+        
         }
 
 
@@ -1051,7 +1053,7 @@ const handleSleepDelete = async (index) => {
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Amount"
                                         value={amount}
                                         onChange={(e) => setAmount(e.target.value)}
@@ -1063,14 +1065,14 @@ const handleSleepDelete = async (index) => {
 
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Calories"
                                         value={calories}
                                         onChange={(e) => setCalories(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Protein"
                                         value={protein}
                                         onChange={(e) => setProtein(e.target.value)}
@@ -1080,14 +1082,14 @@ const handleSleepDelete = async (index) => {
 
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Total Carbohydrates"
                                         value={carb}
                                         onChange={(e) => setCarb(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Fat"
                                         value={fat}
                                         onChange={(e) => setFat(e.target.value)}
@@ -1100,14 +1102,14 @@ const handleSleepDelete = async (index) => {
 
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full m-1 md:m-2">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Sugar"
                                         value={sugar}
                                         onChange={(e) => setSugar(e.target.value)}
                                         className="border-b-2 border-gray-300 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Fibre"
                                         value={fibre}
                                         onChange={(e) => setFibre(e.target.value)}
@@ -1117,14 +1119,14 @@ const handleSleepDelete = async (index) => {
 
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Saturated Fat"
                                         value={satFat}
                                         onChange={(e) => setSatFat(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Trans Fat"
                                         value={transFat}
                                         onChange={(e) => setTransFat(e.target.value)}
@@ -1134,14 +1136,14 @@ const handleSleepDelete = async (index) => {
 
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Sodium"
                                         value={sodium}
                                         onChange={(e) => setSodium(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Cholesterol"
                                         value={cholesterol}
                                         onChange={(e) => setCholesterol(e.target.value)}
@@ -1151,14 +1153,14 @@ const handleSleepDelete = async (index) => {
 
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Iron"
                                         value={iron}
                                         onChange={(e) => setIron(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Potassium"
                                         value={potassium}
                                         onChange={(e) => setPotassium(e.target.value)}
@@ -1168,14 +1170,14 @@ const handleSleepDelete = async (index) => {
 
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Vitamin A"
                                         value={vitA}
                                         onChange={(e) => setVitA(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Vitamin C"
                                         value={vitC}
                                         onChange={(e) => setVitC(e.target.value)}
@@ -1185,14 +1187,14 @@ const handleSleepDelete = async (index) => {
 
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Calcium"
                                         value={calcium}
                                         onChange={(e) => setCalcium(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Vitamin D"
                                         value={vitD}
                                         onChange={(e) => setVitD(e.target.value)}
@@ -1202,14 +1204,14 @@ const handleSleepDelete = async (index) => {
 
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Vitamin B6"
                                         value={vitB6}
                                         onChange={(e) => setVitB6(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Vitamin B12"
                                         value={vitB12}
                                         onChange={(e) => setVitB12(e.target.value)}
@@ -1351,7 +1353,7 @@ const handleSleepDelete = async (index) => {
 
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                 <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Reps"
                                         value={reps}
 
@@ -1359,7 +1361,7 @@ const handleSleepDelete = async (index) => {
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Sets"
                                         value={sets}
 
@@ -1369,7 +1371,7 @@ const handleSleepDelete = async (index) => {
                                 </div>
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                 <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Resistance"
                                         value={resistance}
 
@@ -1388,7 +1390,7 @@ const handleSleepDelete = async (index) => {
                                 </div>
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                 <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Duration (min)"
                                         value={duration}
 
@@ -1396,7 +1398,7 @@ const handleSleepDelete = async (index) => {
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Cals Burned"
                                         value={calBurn}
 
@@ -1450,7 +1452,7 @@ const handleSleepDelete = async (index) => {
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Reps"
                                         value={reps}
 
@@ -1460,7 +1462,7 @@ const handleSleepDelete = async (index) => {
                                 </div>
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Sets"
                                         value={sets}
 
@@ -1468,7 +1470,7 @@ const handleSleepDelete = async (index) => {
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Resistance"
                                         value={resistance}
 
@@ -1486,7 +1488,7 @@ const handleSleepDelete = async (index) => {
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Duration (min)"
                                         value={duration}
 
@@ -1636,7 +1638,7 @@ const handleSleepDelete = async (index) => {
                                 <p className="text-xs md:text-sm mt-3">Enter Weight Data</p>
                                 <div className="flex flex-col text-md justify-around w-full ">
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Weight"
                                         value={weight}
                                         onChange={(e) => setWeight(e.target.value)}
@@ -1846,14 +1848,15 @@ const handleSleepDelete = async (index) => {
                                 <div className="flex flex-col text-md justify-around w-full ">
 
                                     <input
-                                        type="text"
+                                        type="number"
                                         placeholder="Amount"
                                         value={waterAmount}
                                         onChange={(e) => setWaterAmount(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
+
                                     <input
-                                        type="text"
+                                        type="  "
                                         placeholder="Measurement"
                                         value={waterMeasurement}
                                         onChange={(e) => setWaterMeasurement(e.target.value)}

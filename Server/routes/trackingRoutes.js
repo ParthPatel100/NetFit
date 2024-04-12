@@ -137,23 +137,18 @@ router.post('/sleepCreate', async (req, res) => {
         }
 
         const username = getUserIdFromToken(token);
-
+        console.log("here")
         // Create the sleep entry
         const sleep = new Sleep({ userId: username, date, startTime, duration });
         await sleep.save();
-
-        const trackingForDay = await Tracking.findOne({ username, date });
-        if (trackingForDay) {
-            trackingForDay.sleep_id.push(sleep._id);
-            await trackingForDay.save();
-        } else {
-            const newTracking = new Tracking({
-                username,
-                date,
-                sleep_id: [sleep._id] // Initialize with the new sleep entry
-            });
-            await newTracking.save();
-        }
+            console.log(sleep)
+            const startOfDay = new Date(date);
+            startOfDay.setHours(0, 0, 0, 0);
+            // Set the end of the day
+            const endOfDay = new Date(date);
+            endOfDay.setHours(23, 59, 59, 999);
+        console.log(startOfDay)
+ 
 
         return res.status(200).json(sleep);
 
@@ -246,9 +241,7 @@ router.delete('/sleepDelete', async (req, res) => {
 
 router.get('/sleepGet', async (req, res) => {
     const { token } = req.cookies;
-    //const { startDate, endDate } = req.query; 
     const { date } = req.query; 
-
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -263,10 +256,10 @@ router.get('/sleepGet', async (req, res) => {
             return res.status(401).json({ error: "User not valid" });
         }
 
-        const username = getUserIdFromToken(token);
+        const userId = getUserIdFromToken(token); // Ensure this method returns a user ID suitable for the schema
 
-        let query = { username };
-       if (date) {
+        let query = { userId };
+        if (date) {
             const startOfDay = new Date(date);
             startOfDay.setHours(0, 0, 0, 0);
 
@@ -276,9 +269,8 @@ router.get('/sleepGet', async (req, res) => {
             query.date = { $gte: startOfDay, $lt: endOfDay };
         }
 
-        const trackingEntries = await Tracking.find(query).populate('sleep_id');
-
-        const sleepEntries = trackingEntries.map(entry => entry.sleep_id).flat();
+        // Direct query to Sleep model
+        const sleepEntries = await Sleep.find(query);
 
         return res.status(200).json(sleepEntries);
 
@@ -312,19 +304,7 @@ router.post('/waterCreate', async (req, res) => {
         const water = new Water({ userId: username, date, measurement, amount });
         await water.save();
 
-        const trackingForDay = await Tracking.findOne({ username, date });
-        if (trackingForDay) {
-            trackingForDay.water_id = trackingForDay.water_id || [];
-            trackingForDay.water_id.push(water._id);
-            await trackingForDay.save();
-        } else {
-            const newTracking = new Tracking({
-                username,
-                date,
-                water_id: [water._id] // Initialize with the new water entry
-            });
-            await newTracking.save();
-        }
+      
 
         return res.status(200).json(water);
 
@@ -413,10 +393,9 @@ router.delete('/waterDelete', async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 router.get('/waterGet', async (req, res) => {
     const { token } = req.cookies;
-    const { date } = req.query; 
+    const { date } = req.query;
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -431,9 +410,9 @@ router.get('/waterGet', async (req, res) => {
             return res.status(401).json({ error: "User not valid" });
         }
 
-        const username = getUserIdFromToken(token);
+        const userId = getUserIdFromToken(token); 
 
-        let query = { username };
+        let query = { userId };
         if (date) {
             const startOfDay = new Date(date);
             startOfDay.setHours(0, 0, 0, 0);
@@ -443,9 +422,8 @@ router.get('/waterGet', async (req, res) => {
 
             query.date = { $gte: startOfDay, $lt: endOfDay };
         }
-        const trackingEntries = await Tracking.find(query).populate('water_id');
 
-        const waterEntries = trackingEntries.map(entry => entry.water_id).flat();
+        const waterEntries = await Water.find(query);
 
         return res.status(200).json(waterEntries);
 
@@ -454,7 +432,6 @@ router.get('/waterGet', async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 
 
 
@@ -482,19 +459,6 @@ router.post('/weightCreate', async (req, res) => {
         const weight = new Weight({ userId: username, date, measurement, amount });
         await weight.save();
 
-        const trackingForDay = await Tracking.findOne({ username, date });
-        if (trackingForDay) {
-            trackingForDay.weight_id = trackingForDay.weight_id || [];
-            trackingForDay.weight_id.push(weight._id);
-            await trackingForDay.save();
-        } else {
-            const newTracking = new Tracking({
-                username,
-                date,
-                weight_id: [weight._id] // Initialize with the new weight entry
-            });
-            await newTracking.save();
-        }
 
         return res.status(200).json(weight);
 
@@ -585,10 +549,9 @@ router.delete('/weightDelete', async (req, res) => {
 });
 
 
-
 router.get('/weightGet', async (req, res) => {
     const { token } = req.cookies;
-    const { date } = req.query; 
+    const { date } = req.query;
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -603,9 +566,9 @@ router.get('/weightGet', async (req, res) => {
             return res.status(401).json({ error: "User not valid" });
         }
 
-        const username = getUserIdFromToken(token);
+        const userId = getUserIdFromToken(token); // Ensure this method accurately gets the user's ID
 
-        let query = { username };
+        let query = { userId };
         if (date) {
             const startOfDay = new Date(date);
             startOfDay.setHours(0, 0, 0, 0);
@@ -615,9 +578,9 @@ router.get('/weightGet', async (req, res) => {
 
             query.date = { $gte: startOfDay, $lt: endOfDay };
         }
-        const trackingEntries = await Tracking.find(query).populate('weight_id');
 
-        const weightEntries = trackingEntries.map(entry => entry.weight_id).flat();
+        // Direct query to Weight model
+        const weightEntries = await Weight.find(query);
 
         return res.status(200).json(weightEntries);
 
@@ -626,6 +589,7 @@ router.get('/weightGet', async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
 
 
 // Configure AWS SDK
