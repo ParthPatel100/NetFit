@@ -19,6 +19,7 @@ export default function Track(){
     const [showFoodInputs, setShowFoodInputs] = useState(false);
     const [showEditFoodInputs, setShowEditFoodInputs] = useState(false);
     const [foodData, setFoodData] = useState([]);
+    const [showSleepInputs, setShowSleepInputs] = useState(false)
     const [savedRecipes, setSavedRecipes] = useState(false);
     const [showSavedRecipes, setShowSavedRecipes] = useState(false);
     const mealTypeOptions = ['breakfast', 'lunch', 'dinner', 'snack'];
@@ -761,7 +762,7 @@ const handleSleepDelete = async (index) => {
             </div>
             <div className="flex flex-col lg:flex-col gap-4">
                 {/* Food  */}
-                <div className="bg-white p-4 rounded-md">
+                <div className="bg-gradient-to-tr from-purple-50 to-blue-50 p-4 rounded-md outline outline-slate-400 shadow-2xl">
 
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
                         <div className="text-l font-bold">
