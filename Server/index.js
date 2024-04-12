@@ -51,3 +51,4 @@ app.use('/goal', authenticateToken, require('./routes/goalRoutes'))
 app.use('/progress', authenticateToken, require('./routes/progressDataRoutes'))
 
 app.use('/post', require('./routes/postRoutes'))
+app.use('/track', require('./routes/trackRoutes'))

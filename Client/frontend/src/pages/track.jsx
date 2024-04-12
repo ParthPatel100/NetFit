@@ -1,6 +1,6 @@
 import {useLocation } from "react-router-dom";
 import {UserContext} from "../../context/userContext.jsx";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useContext} from "react";
 import {Trash2, CirclePlus, Plus, CookingPot, Apple, Pencil} from "lucide-react";
 import axios from 'axios';
@@ -11,21 +11,44 @@ import axios from 'axios';
 
 export default function Track(){
 
-    
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+    //populate entries based on date
 
-    const [showInputs, setShowInputs] = useState(false);
 
+
+    const [showFoodInputs, setShowFoodInputs] = useState(false);
+    const [showEditFoodInputs, setShowEditFoodInputs] = useState(false);
+    const [foodData, setFoodData] = useState([]);
+    const [savedRecipes, setSavedRecipes] = useState(false);
     const [showSavedRecipes, setShowSavedRecipes] = useState(false);
+    const mealTypeOptions = ['breakfast', 'lunch', 'dinner', 'snack'];
+    const measurementOptions = ['cup', 'L', 'ml', 'tsp', 'tbsp', 'oz', 'lb', 'g', 'kg', 'each'];
     const [name, setName] = useState("");
     const [meal, setMeal] = useState("");
     const [amount, setAmount] = useState("");
     const [measurement, setMeasurement] = useState("");
     const [protein, setProtein] = useState("");
-    const [carbs, setCarbs] = useState("");
+    const [carb, setCarb] = useState("");
     const [calories, setCalories] = useState("");
     const [fat, setFat] = useState("");
-    const [sleep, setSleep] = useState("")
-    const [submittedData, setSubmittedData] = useState([
+    const [sodium, setSodium] = useState("");
+    const [sugar, setSugar] = useState("");
+    const [fibre, setFibre] = useState("");
+    const [satFat, setSatFat] = useState("");
+    const [transFat, setTransFat] = useState("");
+    const [cholesterol, setCholesterol] = useState("");
+    const [potassium, setPotassium] = useState("");
+    const [iron, setIron] = useState("");
+    const [vitA, setVitA] = useState("");
+    const [vitC, setVitC] = useState("");
+    const [calcium, setCalcium] = useState("");
+    const [vitD, setVitD] = useState("");
+    const [vitK, setVitK] = useState("");
+    const [vitB6, setVitB6] = useState("");
+    const [vitB12, setVitB12] = useState("");
+
+    /*
+    const [foodData, setFoodData] = useState([
         { name: "Chicken Breast", amount: "100", measurement: "g", protein: "31", carbs: "0", fat: "3.6", calories: "165", meal: "lunch" },
         { name: "Broccoli", amount: "100", measurement: "cup", protein: "2.8", carbs: "6", fat: "0.4", calories: "34", meal: "dinner" },
         { name: "Oatmeal", amount: "100", measurement: "g", protein: "2.4", carbs: "12", fat: "1.6", calories: "68", meal: "breakfast" },
@@ -41,116 +64,230 @@ export default function Track(){
         { name: "help me name", description: "crying description", trainerUsername: "i cant do a push up", protein: "2.6", carbs: "23", fat: "0.9", calories: "112"},
     ]);
 
+    */
 
 
-    const handleButtonClick = () => {
-        setShowInputs(!showInputs);
+
+    const handleFoodButtonClick = () => {
+        setShowFoodInputs(!showFoodInputs);
         if (showSavedRecipes) {
             setShowSavedRecipes(false);
-            setShowInputs(false);
+            setShowFoodInputs(false);
         }
     };
 
     const toggleFoodButtonClick = () => {
-        setShowInputs(true);
+        setShowFoodInputs(true);
         setShowSavedRecipes(false);
     };
 
     const toggleSavedRecipesClick = () => {
-        setShowInputs(false);
+        setShowFoodInputs(false);
         setShowSavedRecipes(true);
     };
 
 
-    const handleSubmit = () => {
-        const newData = {
-            
-            name,
-            meal,
-            amount,
-            measurement,
-            protein,
-            carbs,
-            calories,
-            fat,
+    const handleFoodSubmit = () => {
+        const newFoodData = {
+            name: name,
+            date: date,
+            meal_type: meal,
+            amount: amount,
+            measurement: measurement,
+            protein: protein,
+            carb: carb,
+            calories: calories,
+            fat: fat,
+            sodium: sodium,
+            sugar: sugar,
+            fibre: fibre,
+            satFat: satFat,
+            transFat: transFat,
+            cholesterol: cholesterol,
+            potassium: potassium,
+            iron: iron,
+            vitA: vitA,
+            vitC: vitC,
+            calcium: calcium,
+            vitD: vitD,
+            vitK: vitK,
+            vitB6: vitB6,
+            vitB12: vitB12
         };
-
-        setSubmittedData([...submittedData, newData]);
-
-        // Clear input fields
+        
+        handleAddFood(newFoodData);
+        
+        // Reset form fields after submission
         setName("");
         setMeal("");
         setAmount("");
         setMeasurement("");
         setProtein("");
-        setCarbs("");
-        setFat("");
+        setCarb("");
         setCalories("");
-
-        // Close the input fields
-        setShowInputs(false);
+        setFat("");
+        setSodium("");
+        setSugar("");
+        setFibre("");
+        setSatFat("");
+        setTransFat("");
+        setCholesterol("");
+        setPotassium("");
+        setIron("");
+        setVitA("");
+        setVitC("");
+        setCalcium("");
+        setVitD("");
+        setVitK("");
+        setVitB6("");
+        setVitB12("");
     };
 
-    
+    // Handle form submission to add a new workout
+    const handleAddFood = async (newFoodData) => {
+        try {
+            
+            
+            const response = await axios.post("/track/postFood", newFoodData, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log('Food added successfully:', response.data);
+            
+            // Update the workout data state with the new workout
+            setFoodData([...foodData, response.data]);
+            console.log("response ", response.data);
+            console.log("foodData for fe ", foodData);
+            setShowFoodInputs(false);
+        } catch (error) {
+            console.error('Error adding workout:', error);
+        }
+    };
+
 
     const handleRecipeClick = (recipe) => {
         const newEntry = {
             name: recipe.name,
             protein: recipe.protein,
-            carbs: recipe.carbs,
+            carb: recipe.carb,
             fat: recipe.fat,
             calories: recipe.calories,
         };
 
-        setSubmittedData([...submittedData, newEntry]);
+        setFoodData([...foodData, newEntry]);
     };
 
-    const handleEdit = (index) => {
+    const handleFoodEdit = (index) => {
         // Create a copy of the submittedData array without the item to delete
-        const updatedData = submittedData.filter((_, idx) => idx !== index);
-    
+        const updatedFoodData = foodData[index];
+
         // Set the state with the values of the selected food item
-        setName(submittedData[index].name);
-        setMeal(submittedData[index].meal);
-        setAmount(submittedData[index].amount);
-        setMeasurement(submittedData[index].measurement);
-        setProtein(submittedData[index].protein);
-        setCarbs(submittedData[index].carbs);
-        setCalories(submittedData[index].calories);
-        setFat(submittedData[index].fat);
-    
-        // Set the showInputs state to true to display the input fields for editing
-        setShowInputs(true);
-    
-        // Update the submittedData array without the deleted item
-        setSubmittedData(updatedData);
+        setName(updatedFoodData.name || "");
+        setMeal(updatedFoodData.meal || "");
+        setAmount(updatedFoodData.amount || "");
+        setMeasurement(updatedFoodData.measurement || "");
+        setProtein(updatedFoodData.protein || "");
+        setCarb(updatedFoodData.carb || "");
+        setCalories(updatedFoodData.calories || "");
+        setFat(updatedFoodData.fat || "");
+        setSodium(updatedFoodData.sodium || 0);
+        setSugar(updatedFoodData.sugar || 0);
+        setFibre(updatedFoodData.fibre || 0);
+        setSatFat(updatedFoodData.satFat || 0);
+        setTransFat(updatedFoodData.transFat || 0);
+        setCholesterol(updatedFoodData.cholesterol || 0);
+        setPotassium(updatedFoodData.potassium || 0);
+        setIron(updatedFoodData.iron || 0);
+        setVitA(updatedFoodData.vitA || 0);
+        setVitC(updatedFoodData.vitC || 0);
+        setCalcium(updatedFoodData.calcium || 0);
+        setVitD(updatedFoodData.vitD || 0);
+        setVitK(updatedFoodData.vitK || 0);
+        setVitB6(updatedFoodData.vitB6 || 0);
+        setVitB12(updatedFoodData.vitB12 || 0);
+
+        setEditIndex(index);
+        setShowEditFoodInputs(true);
     };
 
-    const handleDelete = (index) => {
-        const updatedData = submittedData.filter((_, idx) => idx !== index);
-        setSubmittedData(updatedData);
+    const handleFoodEditSubmit = async () => {
+        try {
+            console.log(editIndex);
+            console.log(foodData[editIndex]);
+            
+            const foodId = foodData[editIndex]._id;
+            console.log(foodId);
+    
+            const updatedFoodData = {
+                _id: foodId,
+                name: name,
+                date: date,
+                meal: meal,
+                amount: amount,
+                measurement: measurement,
+                protein: protein,
+                carb: carb,
+                calories: calories,
+                fat: fat,
+                sodium: sodium,
+                sugar: sugar,
+                fibre: fibre,
+                satFat: satFat,
+                transFat: transFat,
+                cholesterol: cholesterol,
+                potassium: potassium,
+                iron: iron,
+                vitA: vitA,
+                vitC: vitC,
+                calcium: calcium,
+                vitD: vitD,
+                vitK: vitK,
+                vitB6: vitB6,
+                vitB12: vitB12
+            };
+    
+            const responseFood = await axios.put("/track/editFood", updatedFoodData, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            console.log('Food updated successfully:', responseFood.data);
+            
+            // Update the food data state with the updated food item
+            const updatedFoodList = [...foodData];
+            updatedFoodList[editIndex] = responseFood.data;
+            setFoodData(updatedFoodList);
+            setShowEditFoodInputs(false);
+            
+        } catch (error) {
+            console.error('Error updating food:', error);
+        }
     };
 
-    const [showWorkoutInputs, setShowWorkoutInputs] = useState(false);
-    const [showSavedWorkouts, setShowSavedWorkouts] = useState(false);
-    const [showSleepInputs, setShowSleepInputs] = useState(false);
-    const [wname, setWName] = useState("");
-    const [reps, setReps] = useState("");
-    const [sets, setSets] = useState("");
-    const [resistance, setResistance] = useState("");
-    const [resMeasure, setResMeasure] = useState("");
-    const [duration, setDuration] = useState("");
-    const [submittedWorkoutData, setSubmittedWorkoutData] = useState([
-        { wname: "Push-ups", reps: "10", sets: "3", resistance: "", resMeasure: "", duration: "" },
-        { wname: "Squats", reps: "15", sets: "3", resistance: "", resMeasure: "", duration: "" },
-        { wname: "Plank", reps: "", sets: "", resistance: "", resMeasure: "", duration: "1" },
-    ]);
-    const [savedWorkouts] = useState([
-        { wname: "Leg Day", description: "A collection of leg workouts", trainerUsername: "trainerJD", reps: "10", sets: "3", resistance: "", resMeasure: "", duration: "" },
-        { wname: "Core Workout", description: "Strengthen your core muscles", trainerUsername: "im a trainer", reps: "15", sets: "3", resistance: "", resMeasure: "", duration: "" },
-        { wname: "Upper Body Blast", description: "Build upper body strength", trainerUsername: "i cant do a push up", reps: "", sets: "", resistance: "", resMeasure: "", duration: "1" },
-    ]);
+    const handleFoodDelete = async (index) => {
+        try {
+            const foodId = foodData[index]._id;
+            const responseFood = await axios.delete("/track/deleteFood", {
+                params: { _id: foodId },
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            console.log('Food deleted successfully:', responseFood.data);
+    
+            // Update the food data state by removing the deleted food item
+            const updatedFoodList = [...foodData];
+            updatedFoodList.splice(index, 1);
+            setFoodData(updatedFoodList);
+        } catch (error) {
+            console.error('Error deleting food:', error);
+        }
+    };
 
+    //workout backend
     const handleWorkoutButtonClick = () => {
         setShowWorkoutInputs(!showWorkoutInputs);
         if (showSavedWorkouts) {
@@ -169,72 +306,199 @@ export default function Track(){
         setShowSavedWorkouts(true);
     };
 
+    const [workoutData, setWorkoutData] = useState([]);
+    const [showWorkoutInputs, setShowWorkoutInputs] = useState(false);
+    const [showSavedWorkouts, setShowSavedWorkouts] = useState(false);
+    const [showEditWorkoutInputs, setShowEditWorkoutInputs] = useState(false);
+    const [editIndex, setEditIndex] = useState("");
+    const [wname, setWName] = useState("");
+    const [reps, setReps] = useState("");
+    const [sets, setSets] = useState("");
+    const [resistance, setResistance] = useState("");
+    const [resMeasure, setResMeasure] = useState("");
+    const [duration, setDuration] = useState("");
+    const [calBurn, setCalBurn] = useState("");
+
+
+    // Handle form submission to add a new workout
+    const handleAddWorkout = async (newWorkoutData) => {
+        try {
+            
+            
+            const responseWorkout = await axios.post("/track/postWorkout", newWorkoutData, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log('Workout added successfully:', responseWorkout.data);
+            
+            // Update the workout data state with the new workout
+            setWorkoutData([...workoutData, responseWorkout.data]);
+            setShowWorkoutInputs(false);
+        } catch (error) {
+            console.error('Error adding workout:', error);
+        }
+    };
+
+
+    const handleWorkoutEdit = (index) => {
+
+        const updatedWorkoutData = workoutData[index];
+    
+            // Set the state with the values of the selected food item
+            console.log(workoutData);
+            console.log(workoutData[index]);
+            console.log(updatedWorkoutData);
+            setWName(updatedWorkoutData.name || "");
+            setSets(updatedWorkoutData.sets || "");
+            setReps(updatedWorkoutData.reps || "");
+            setResistance(updatedWorkoutData.resistance || "");
+            setResMeasure(updatedWorkoutData.resMeasure || "");
+            setDuration(updatedWorkoutData.duration || "");
+
+            setEditIndex(index);
+        
+            // Set the showInputs state to true to display the input fields for editing
+            setShowEditWorkoutInputs(true);
+        
+            // Update the submittedData array without the deleted item
+            //setWorkoutData(updatedWorkoutData);
+
+    }
+
+    // Handle workout editing
+    const handleWorkoutEditSubmit = async () => {
+        try {
+            console.log(editIndex);
+            console.log(workoutData[editIndex]);
+            
+            const workoutId = workoutData[editIndex]._id;
+            console.log(workoutId);
+            const newWorkoutData = {
+                _id: workoutId,
+                name: wname,
+                date: date,
+                reps: reps,
+                sets: sets,
+                resistance: resistance,
+                resMeasure: resMeasure,
+                duration: duration,
+                calories: calBurn,
+            };
+            
+
+            const responseWorkout = await axios.put("/track/editWorkout", newWorkoutData, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log('Workout updated successfully:', responseWorkout.data);
+            
+            // Update the workout data state with the updated workout
+            const updatedData = [...workoutData];
+            updatedData[editIndex] = responseWorkout.data;
+            setWorkoutData(updatedData);
+            setShowEditWorkoutInputs(false);
+            
+        } catch (error) {
+            console.error('Error updating workout:', error);
+        }
+    };
+
+    // Handle workout deletion
+    const handleWorkoutDelete = async (index) => {
+        try {
+            
+            const workoutId = workoutData[index]._id;
+            const responseWorkout = await axios.delete("/track/deleteWorkout", { params: { _id: workoutId } }, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            
+            
+            console.log('Workout deleted successfully:', responseWorkout.data);
+            
+            // Update the workout data state by removing the deleted workout
+            const updatedData = [...workoutData];
+            updatedData.splice(index, 1);
+            setWorkoutData(updatedData);
+        } catch (error) {
+            console.error('Error deleting workout:', error);
+        }
+    };
+
+    // Handle form submit
     const handleWorkoutSubmit = () => {
+        
         const newWorkoutData = {
-            wname,
-            reps,
-            sets,
-            resistance,
-            resMeasure,
-            duration,
+            name: wname,
+            date: date,
+            reps: reps,
+            sets: sets,
+            resistance: resistance,
+            resMeasure: resMeasure,
+            duration: duration,
+            calories: calBurn,
+            
         };
+        handleAddWorkout(newWorkoutData);
 
-        setSubmittedWorkoutData([...submittedWorkoutData, newWorkoutData]);
-
-        // Clear input fields
+        // Reset form fields after submission
         setWName("");
         setReps("");
         setSets("");
         setResistance("");
         setResMeasure("");
         setDuration("");
-
-        // Close the input fields
-        setShowWorkoutInputs(false);
     };
 
-    const handleWorkoutClick = (workout) => {
-        const newEntry = {
-            wname: workout.wname,
-            reps: workout.reps,
-            sets: workout.sets,
-            resistance: workout.resistance,
-            resMeasure: workout.resMeasure,
-            duration: workout.duration,
+    const handleSubmitSavedWorkout = () => {
+        
+    };
+
+    
+    useEffect(() => {
+        const fetchWorkoutData = async () => {
+            try {
+                const responseWorkout = await axios.get("/track/getAllWorkouts", {
+                    params: { date: date },
+                    headers: { "Content-Type": "application/json" },
+                });
+                setWorkoutData(responseWorkout.data);
+            } catch (error) {
+                console.error('Error fetching workout data:', error);
+            }
         };
+    
+        fetchWorkoutData();
+    }, [date]);
+    
+    useEffect(() => {
+        const fetchFoodData = async () => {
+            try {
+                const response = await axios.get("/track/getAllFoods", {
+                    params: { date: date },
+                    headers: { "Content-Type": "application/json" },
+                });
+                
+                setFoodData(response.data);
+            } catch (error) {
+                console.error('Error fetching food data:', error);
+            }
+        };
+    
+        fetchFoodData();
+    }, [date]);
+      
 
-        setSubmittedWorkoutData([...submittedWorkoutData, newEntry]);
-    };
 
-    const handleWorkoutEdit = (index) => {
-        // Create a copy of the submittedWorkoutData array without the item to edit
-        const updatedWorkoutData = submittedWorkoutData.filter((_, idx) => idx !== index);
-
-        // Set the state with the values of the selected workout item
-        setWName(submittedWorkoutData[index].wname);
-        setReps(submittedWorkoutData[index].reps);
-        setSets(submittedWorkoutData[index].sets);
-        setResistance(submittedWorkoutData[index].resistance);
-        setResMeasure(submittedWorkoutData[index].resMeasure);
-        setDuration(submittedWorkoutData[index].duration);
-
-        // Set the showInputs state to true to display the input fields for editing
-        setShowWorkoutInputs(true);
-
-        // Update the submittedWorkoutData array without the deleted item
-        setSubmittedWorkoutData(updatedWorkoutData);
-    };
-
-    const handleWorkoutDelete = (index) => {
-        const updatedWorkoutData = submittedWorkoutData.filter((_, idx) => idx !== index);
-        setSubmittedWorkoutData(updatedWorkoutData);
-    };
     
     const [showWeightInputs, setShowWeightInputs] = useState(false);
     const [weightEntries, setWeightEntries] = useState([]);
     const [weight, setWeight] = useState('');
     const [unit, setUnit] = useState('kg'); // Default unit is kilograms
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Default to today's date
+    //const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Default to today's date
     const [weightImages, setWeightImages] = useState([]);
 
 
@@ -294,6 +558,7 @@ export default function Track(){
     const [showWaterInputs, setShowWaterInputs] = useState(false);
     const [waterAmount, setWaterAmount] = useState("");
     const [sleepAmount, setSleepAmount] = useState("");
+    const [showSleepInputs, setShowSleepInputs] = useState(false);
     const [waterMeasurement, setWaterMeasurement] = useState("ml"); // Default to milliliters
     const [submittedWaterData, setSubmittedWaterData] = useState([]);
     const [submittedSleepData, setSubmittedSleepData] = useState([]);
@@ -378,7 +643,11 @@ export default function Track(){
                 <input
                                         type="date"
                                         value={date}
-                                        onChange={(e) => setDate(e.target.value)}
+                                        onChange={(e) => {
+                                            const newDate = e.target.value;
+                                            setDate(newDate);
+                                            // Fetch food data for the new date here
+                                        }}
                                         className=" bg-gray-100 border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
 
 
@@ -395,7 +664,7 @@ export default function Track(){
 
                         <button
                             className="focus:outline-none"
-                            onClick={handleButtonClick}
+                            onClick={handleFoodButtonClick}
                         >
                             <CirclePlus
                                 style={{color: '#a855f7', cursor: 'pointer'}}
@@ -403,10 +672,230 @@ export default function Track(){
                         </button>
 
 
-                        {/* Add your food tracking components here */}
-
                     </div>
-                    {showInputs && (
+                    {showFoodInputs && (
+                        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
+                            <div className="flex flex-wrap">
+
+                                {/* toggle here */}
+
+                                <p className="text-xs md:text-sm mt-3">Enter Nutritional Data</p>
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+
+                                    <input
+                                        type="text"
+                                        placeholder="Name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <select
+                                        value={meal}
+                                        onChange={(e) => setMeal(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none md:pr-9 m-1 md:m-2"
+                                        
+                                    >
+                                        <option value="">Select Meal Type </option>
+                                        {mealTypeOptions.map((option) => (
+                                            <option key={option} value={option} >{option.charAt(0).toUpperCase() + option.slice(1)}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    <select
+                                        value={measurement}
+                                        placeholder="Measurement"
+                                        onChange={(e) => setMeasurement(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:pr-2 md:m-2  "
+                                    >
+                                        <option value="">Select Measurement</option>
+                                        {measurementOptions.map((option, index) => (
+                                            <option key={index} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <input
+                                        type="text"
+                                        placeholder="Amount"
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <p className="text-sm mt-3">Calories and Macronutrients</p>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Calories"
+                                        value={calories}
+                                        onChange={(e) => setCalories(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Protein"
+                                        value={protein}
+                                        onChange={(e) => setProtein(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Total Carbohydrates"
+                                        value={carb}
+                                        onChange={(e) => setCarb(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Fat"
+                                        value={fat}
+                                        onChange={(e) => setFat(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <p className="text-sm mt-3">Micronutrients</p>
+
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full m-1 md:m-2">
+                                    <input
+                                        type="text"
+                                        placeholder="Sugar"
+                                        value={sugar}
+                                        onChange={(e) => setSugar(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Fibre"
+                                        value={fibre}
+                                        onChange={(e) => setFibre(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Saturated Fat"
+                                        value={satFat}
+                                        onChange={(e) => setSatFat(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Trans Fat"
+                                        value={transFat}
+                                        onChange={(e) => setTransFat(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Sodium"
+                                        value={sodium}
+                                        onChange={(e) => setSodium(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Cholesterol"
+                                        value={cholesterol}
+                                        onChange={(e) => setCholesterol(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Iron"
+                                        value={iron}
+                                        onChange={(e) => setIron(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Potassium"
+                                        value={potassium}
+                                        onChange={(e) => setPotassium(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Vitamin A"
+                                        value={vitA}
+                                        onChange={(e) => setVitA(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Vitamin C"
+                                        value={vitC}
+                                        onChange={(e) => setVitC(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Calcium"
+                                        value={calcium}
+                                        onChange={(e) => setCalcium(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Vitamin D"
+                                        value={vitD}
+                                        onChange={(e) => setVitD(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Vitamin B6"
+                                        value={vitB6}
+                                        onChange={(e) => setVitB6(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Vitamin B12"
+                                        value={vitB12}
+                                        onChange={(e) => setVitB12(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex lg:flex-row justify-center w-full gap-4">
+                                    <button
+                                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
+                                        onClick={handleFoodSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {showEditFoodInputs && (
                         <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
                             <div className="flex flex-wrap">
 
@@ -486,8 +975,8 @@ export default function Track(){
                                     <input
                                         type="text"
                                         placeholder="Total Carbohydrates"
-                                        value={carbs}
-                                        onChange={(e) => setCarbs(e.target.value)}
+                                        value={carb}
+                                        onChange={(e) => setCarb(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
@@ -506,13 +995,15 @@ export default function Track(){
                                     <input
                                         type="text"
                                         placeholder="Sugar"
-
+                                        value={sugar}
+                                        onChange={(e) => setSugar(e.target.value)}
                                         className="border-b-2 border-gray-300 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Fibre"
-
+                                        value={fibre}
+                                        onChange={(e) => setFibre(e.target.value)}
                                         className="border-b-2 border-gray-300 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                 </div>
@@ -521,13 +1012,15 @@ export default function Track(){
                                     <input
                                         type="text"
                                         placeholder="Saturated Fat"
-                                        
+                                        value={satFat}
+                                        onChange={(e) => setSatFat(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Trans Fat"
-                                        
+                                        value={transFat}
+                                        onChange={(e) => setTransFat(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                 </div>
@@ -536,13 +1029,15 @@ export default function Track(){
                                     <input
                                         type="text"
                                         placeholder="Sodium"
-                                        
+                                        value={sodium}
+                                        onChange={(e) => setSodium(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Cholesterol"
-                                        
+                                        value={cholesterol}
+                                        onChange={(e) => setCholesterol(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                 </div>
@@ -551,13 +1046,15 @@ export default function Track(){
                                     <input
                                         type="text"
                                         placeholder="Iron"
-                                        
+                                        value={iron}
+                                        onChange={(e) => setIron(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Potassium"
-                                        
+                                        value={potassium}
+                                        onChange={(e) => setPotassium(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                 </div>
@@ -566,13 +1063,15 @@ export default function Track(){
                                     <input
                                         type="text"
                                         placeholder="Vitamin A"
-                                        
+                                        value={vitA}
+                                        onChange={(e) => setVitA(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Vitamin C"
-                                        
+                                        value={vitC}
+                                        onChange={(e) => setVitC(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                 </div>
@@ -581,13 +1080,15 @@ export default function Track(){
                                     <input
                                         type="text"
                                         placeholder="Calcium"
-                                        
+                                        value={calcium}
+                                        onChange={(e) => setCalcium(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Vitamin D"
-                                        
+                                        value={vitD}
+                                        onChange={(e) => setVitD(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                 </div>
@@ -596,13 +1097,15 @@ export default function Track(){
                                     <input
                                         type="text"
                                         placeholder="Vitamin B6"
-
+                                        value={vitB6}
+                                        onChange={(e) => setVitB6(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Vitamin B12"
-
+                                        value={vitB12}
+                                        onChange={(e) => setVitB12(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
                                 </div>
@@ -610,7 +1113,7 @@ export default function Track(){
                                 <div className="flex lg:flex-row justify-center w-full gap-4">
                                     <button
                                         className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
-                                        onClick={handleSubmit}
+                                        onClick={handleFoodEditSubmit}
                                     >
                                         Submit
                                     </button>
@@ -619,120 +1122,80 @@ export default function Track(){
                         </div>
                     )}
 
-                    {/* Display Saved Recipes Section */}
-                    {showSavedRecipes && (
-                        <div className="flex flex-col border-2 rounded-lg border-gray-300">
-                            <div className="flex flex-wrap">
-                                <div className="flex flex-row justify-center w-full text-xs md:text-sm mb-2 gap-4">
-                                    <button
-                                        className={`focus:outline-none ${
-                                            !showSavedRecipes ? "border-b-2 border-purple-500" : ""
-                                        }`}
-                                        onClick={toggleFoodButtonClick}
-                                    >
-                                        Add Food
-                                    </button>
-                                    <button
-                                        className={`focus:outline-none ${
-                                            showSavedRecipes ? "border-b-2 border-purple-500" : ""
-                                        }`}
-                                        onClick={toggleSavedRecipesClick}
-                                    >
-                                        Saved Recipes
-                                    </button>
-                                </div>
-                                {savedRecipes.map((recipe, index) => (
-                                    <div
-                                        key={index}
-                                        className="w-full flex justify-center rounded-md mb-2 cursor-pointer"
-                                        onClick={() => handleRecipeClick(recipe)}
-                                        style={{ transition: "background-color 0.3s ease" }}
-                                        onMouseEnter={(e) => {
-                                            e.target.style.backgroundColor = "purple";
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.target.style.backgroundColor = "white";
-                                        }}
-                                    >
-                                        <div className="flex mt-2 items-center gap-2 text-xs md:text-sm mb-2 font-semibold">
-                                            {recipe.trainerUsername}- {recipe.name}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
 
-                    
-
-                    {/* Display Submitted Data */}
-                    {submittedData.length > 0 && (
+                    {foodData.length > 0 && (
                         <div className="ml-1 mr-1 mt-5">
                             {/* Filter Data by Meal Type */}
-                            {['breakfast', 'lunch', 'dinner', 'snack'].map((meal) => (
-                                <div key={meal}>
-                                    <h2 className="text-md font-semibold">{meal.charAt(0).toUpperCase() + meal.slice(1)}</h2>
-                                    <div className="flex flex-wrap border-t border-purple-300">
-                                        {submittedData.filter((data) => data.meal === meal).map((data, index) => (
-                                            <div key={index} className="w-full flex justify-between border-t border-gray-300">
-                                                <div className="flex mt-2 items-center ml-4"> {/* Added ml-4 for indentation */}
-                                                    {/* Edit Button */}
-                                                    <button
-                                                        className="focus:outline-none mr-2"
-                                                        onClick={() => handleEdit(index)}
-                                                        style={{ color: '#000', transition: 'color 0.3s' }}
-                                                    >
-                                                        <Pencil
-                                                            style={{ color: '#000', cursor: 'pointer' }}
-                                                            onMouseEnter={(e) => {
-                                                                e.target.style.color = '#a855f7';
-                                                            }}
-                                                            onMouseLeave={(e) => {
-                                                                e.target.style.color = '#000';
-                                                            }}
-                                                        />
-                                                    </button>
-                                                    <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{data.name}</p>
-                                                    <p className="text-xs mb-2">- {data.amount}</p>
-                                                    <p className="text-xs mb-2">{data.measurement}</p>
-                                                </div>
-                                                <div className="flex text-xs md:text-sm mt-2 mb-2 items-center ">
-                                                    <div className="flex justify-between">
-                                                        <p className="ml-1">
-                                                            <span className="font-semibold">{data.protein}g</span> Protein
-                                                        </p>
-                                                        <p className="ml-1">
-                                                            <span className="font-semibold">{data.carbs}g</span> Carbs
-                                                        </p>
-                                                        <p className="ml-1">
-                                                            <span className="font-semibold">{data.fat}g</span> Fat
-                                                        </p>
-                                                        <p className="ml-1">
-                                                            <span className="font-semibold">{data.calories}</span> Cals
-                                                        </p>
+                            {['breakfast', 'lunch', 'dinner', 'snack'].map((meal) => {
+                                const filteredFoods = foodData.filter((data) => data.meal_type === meal);
+                                if (filteredFoods.length > 0) {
+                                    return (
+                                        <div key={meal}>
+                                            <h2 className="text-md font-semibold">{meal.charAt(0).toUpperCase() + meal.slice(1)}</h2>
+                                            <div className="flex flex-wrap border-t border-purple-300">
+                                                {filteredFoods.map((data, index) => (
+                                                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                                                        <div className="flex mt-2 items-center"> {/* Added ml-4 for indentation */}
+                                                            {/* Edit Button */}
+                                                            <button
+                                                                className="focus:outline-none mr-2 mb-2"
+                                                                onClick={() => handleFoodEdit(index)}
+                                                                style={{ color: '#000', transition: 'color 0.3s' }}
+                                                            >
+                                                                <Pencil
+                                                                    style={{ width:'1em', height:'1em', color: '#000', cursor: 'pointer' }}
+                                                                    onMouseEnter={(e) => {
+                                                                        e.target.style.color = '#a855f7';
+                                                                    }}
+                                                                    onMouseLeave={(e) => {
+                                                                        e.target.style.color = '#000';
+                                                                    }}
+                                                                />
+                                                            </button>
+                                                            <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{data.name}</p>
+                                                            <p className="text-xs mb-2">- {data.amount}</p>
+                                                            <p className="text-xs mb-2">{data.measurement}</p>
+                                                        </div>
+                                                        <div className="flex text-xs md:text-sm mt-2 mb-2 items-center ">
+                                                            <div className="flex justify-between">
+                                                                <p className="ml-1">
+                                                                    <span className="font-semibold">{data.protein}g</span> Protein
+                                                                </p>
+                                                                <p className="ml-1">
+                                                                    <span className="font-semibold">{data.carb}g</span> Carbs
+                                                                </p>
+                                                                <p className="ml-1">
+                                                                    <span className="font-semibold">{data.fat}g</span> Fat
+                                                                </p>
+                                                                <p className="ml-1">
+                                                                    <span className="font-semibold">{data.calories}</span> Cals
+                                                                </p>
+                                                            </div>
+                                                            {/* Delete Button */}
+                                                            <button
+                                                                className="focus:outline-none ml-2"
+                                                                onClick={() => handleFoodDelete(index)}
+                                                                style={{ color: '#000', transition: 'color 0.3s' }}
+                                                            >
+                                                                <Trash2
+                                                                    style={{ color: '#000', cursor: 'pointer' }}
+                                                                    onMouseEnter={(e) => {
+                                                                        e.target.style.color = '#a855f7';
+                                                                    }}
+                                                                    onMouseLeave={(e) => {
+                                                                        e.target.style.color = '#000';
+                                                                    }}
+                                                                />
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                    {/* Delete Button */}
-                                                    <button
-                                                        className="focus:outline-none ml-2"
-                                                        onClick={() => handleDelete(index)}
-                                                        style={{ color: '#000', transition: 'color 0.3s' }}
-                                                    >
-                                                        <Trash2
-                                                            style={{ color: '#000', cursor: 'pointer' }}
-                                                            onMouseEnter={(e) => {
-                                                                e.target.style.color = '#a855f7';
-                                                            }}
-                                                            onMouseLeave={(e) => {
-                                                                e.target.style.color = '#000';
-                                                            }}
-                                                        />
-                                                    </button>
-                                                </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
+                                        </div>
+                                    );
+                                }
+                                return null; // If no foods for this meal, return null
+                            })}
                         </div>
                     )}
                 </div>
@@ -748,6 +1211,110 @@ export default function Track(){
                     {showWorkoutInputs && (
                         <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
                             <div className="flex flex-wrap">
+
+
+                                <div className="flex flex-row justify-center w-full gap-3">
+                                    <button
+                                        className={`focus:outline-none ${
+                                            !showSavedWorkouts ? "border-b-2 border-purple-500" : ""
+                                        }`}
+                                        onClick={toggleWorkoutsClick}
+                                    >Add Workout</button>
+                                    <button
+                                        className={`focus:outline-none ${
+                                            showSavedWorkouts ? "border-b-2 border-purple-500" : ""
+                                        }`}
+                                        onClick={toggleSavedWorkoutsClick}
+                                    >Saved Workouts</button>
+                                </div>
+
+
+                                <p className="text-xs md:text-sm mt-3">Enter Workout Data</p>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Workout Name"
+                                        value={wname}
+                                    
+                                        onChange={(e) => setWName(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                <input
+                                        type="text"
+                                        placeholder="Reps"
+                                        value={reps}
+                                        
+                                        onChange={(e) => setReps(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Sets"
+                                        value={sets}
+                                       
+                                        onChange={(e) => setSets(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                <input
+                                        type="text"
+                                        placeholder="Resistance"
+                                        value={resistance}
+                                        
+                                        onChange={(e) => setResistance(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1  md:m-2"
+                                    />
+                                    <select
+                                        value={resMeasure}
+                                        onChange={(e) => setResMeasure(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:pr-10 md:m-2"
+                                    >
+                                        <option value="">Select Measure</option>
+                                        <option value="">lb</option>
+                                        <option value="">kg</option>
+                                    </select>
+                                </div>
+                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                <input
+                                        type="text"
+                                        placeholder="Duration (min)"
+                                        value={duration}
+                                    
+                                        onChange={(e) => setDuration(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Cals Burned"
+                                        value={calBurn}
+                                    
+                                        onChange={(e) => setCalBurn(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                </div>
+                                <div className="flex lg:flex-row justify-center w-full gap-4">
+                                    <button
+                                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
+                                        onClick={handleWorkoutSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+
+                                 
+                            </div>
+                        </div>
+                    )}
+
+                    {showEditWorkoutInputs && (
+                        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between">
+                            <div className="flex flex-wrap">
+
 
                                 <div className="flex flex-row justify-center w-full gap-3">
                                     <button
@@ -771,6 +1338,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Workout Name"
                                         value={wname}
+                                    
                                         onChange={(e) => setWName(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -778,6 +1346,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Reps"
                                         value={reps}
+                                        
                                         onChange={(e) => setReps(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -787,6 +1356,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Sets"
                                         value={sets}
+                                       
                                         onChange={(e) => setSets(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -794,6 +1364,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Resistance"
                                         value={resistance}
+                                        
                                         onChange={(e) => setResistance(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -803,6 +1374,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Resistance Measure (lb/kg)"
                                         value={resMeasure}
+                                        
                                         onChange={(e) => setResMeasure(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -810,6 +1382,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Duration (min)"
                                         value={duration}
+                                    
                                         onChange={(e) => setDuration(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -817,11 +1390,13 @@ export default function Track(){
                                 <div className="flex lg:flex-row justify-center w-full gap-4">
                                     <button
                                         className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
-                                        onClick={handleWorkoutSubmit}
+                                        onClick={handleWorkoutEditSubmit}
                                     >
                                         Submit
                                     </button>
                                 </div>
+
+                                 
                             </div>
                         </div>
                     )}
@@ -848,11 +1423,11 @@ export default function Track(){
                                         Saved Workouts
                                     </button>
                                 </div>
-                                {savedWorkouts.map((workout, index) => (
+                                {showSavedWorkouts.map((workout, index) => (
                                     <div
                                         key={index}
                                         className="w-full flex justify-center rounded-md mb-2 cursor-pointer"
-                                        onClick={() => handleWorkoutClick(workout)}
+                                        onClick={() => handleSubmitSavedWorkout(workout)}
                                         style={{ transition: "background-color 0.3s ease" }}
                                         onMouseEnter={(e) => {
                                             e.target.style.backgroundColor = "purple";
@@ -871,20 +1446,20 @@ export default function Track(){
                     )}
 
                     {/* Display Submitted Workouts */}
-                    {submittedWorkoutData.length > 0 && (
+                    {workoutData.length > 0 && (
                         <div className="ml-1 mr-1 mt-5">
                             <div className="flex flex-wrap border-t border-gray-300">
-                                {submittedWorkoutData.map((workout, index) => (
+                                {workoutData.map((workout, index) => (
                                     <div key={index} className="w-full flex justify-between border-t border-gray-300">
                                         <div className="flex mt-2 items-center">
                                             {/* Edit Button */}
                                             <button
-                                                className="focus:outline-none mr-2"
+                                                className="focus:outline-none mr-2 mb-2"
                                                 onClick={() => handleWorkoutEdit(index)}
                                                 style={{ color: '#000', transition: 'color 0.3s' }}
                                             >
                                                 <Pencil
-                                                    style={{ color: '#000', cursor: 'pointer' }}
+                                                    style={{ width:'1em', height:'1em', color: '#000', cursor: 'pointer' }}
                                                     onMouseEnter={(e) => {
                                                         e.target.style.color = '#a855f7';
                                                     }}
@@ -893,7 +1468,7 @@ export default function Track(){
                                                     }}
                                                 />
                                             </button>
-                                            <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{workout.wname}</p>
+                                            <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{workout.name}</p>
                                         </div>
                                         <div className="flex text-xs md:text-sm mt-2 mb-2 items-center">
                                             {workout.reps && (
