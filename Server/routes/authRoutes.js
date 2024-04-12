@@ -29,7 +29,7 @@ router.post('/verifyLogin',  async (req, res) => {
         }
         const match = await bcrypt.compare(password, user.password)
         if (match) {
-            jwt.sign({email: user.email, id:user._id, name: user.username}, process.env.JWT_SECRET, {}, (err, token) => {
+            jwt.sign({email: user.email, id:user._id, name: user.username}, "process.env.JWT_SECRET", {}, (err, token) => {
                 if (err) {
                     console.error(err);
                     return res.status(500).json({ error: 'Internal server error' });
@@ -53,7 +53,7 @@ router.post('/verifyLogin',  async (req, res) => {
 router.get('/profile', async (req, res) => {
     const {token} = req.cookies
     if(token){
-        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+        jwt.verify(token, "process.env.JWT_SECRET", {}, (err, user) => {
             if(err) throw err
             res.json(user)
         })

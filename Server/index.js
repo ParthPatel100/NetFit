@@ -15,7 +15,7 @@ const authenticateToken = (req, res, next) => {
     return res.sendStatus(401); // Unauthorized
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, "process.env.JWT_SECRET", (err, user) => {
     if (err) {
       console.error("Error verifying token:", err);
       return res.sendStatus(403); // Forbidden
@@ -55,7 +55,6 @@ app.use('/progress', authenticateToken, require('./routes/progressDataRoutes'))
 app.use('/navbar', authenticateToken, require('./routes/navbarRoutes'))
 app.use('/user', authenticateToken, require('./routes/user'))
 app.use('/navbar', authenticateToken, require('./routes/navbarRoutes'))
-
-
-app.use('/post', require('./routes/postRoutes'))
+app.use('/post', authenticateToken, require('./routes/postRoutes'))
+app.use('/landing', authenticateToken, require('./routes/landingRoutes'))
 
