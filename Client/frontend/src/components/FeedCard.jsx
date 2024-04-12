@@ -125,13 +125,14 @@ const FeedCard = ({ post }) => {
 
   async function getWorkout() {
     try {
-      const workoutResponse = await axios.get(`/landing/getWorkout/${workout_id}`, { withCredentials: true });
+      const workoutResponse = await axios.get(`/landing/getWorkout/${workout_id.join(',')}`, { withCredentials: true });
   
-      const workout =  workoutResponse.data;
+      const workout = workoutResponse.data;
   
       if (workout.error) {
         console.log("error here",workout.error);
       } else {
+        console.log("Received this: ", workout);
         setWorkout(workout);
       }
     } catch (error) {
@@ -349,16 +350,13 @@ async function getUsername(userId){
           <div className="title">{title}
           
           </div>
-          
-  
-
-
-          {workoutPlan.name.map((exercise, index) => (
+          {console.log("Values: ", workoutPlan)}
+          {workoutPlan.map((exercise, index) => (
             <div key={index} className="exerciseRow">
-              <div><b>{exercise}</b> </div>
-              <div>Reps: { workoutPlan.reps[index]}</div>
-              <div>Sets: { workoutPlan.sets[index]}</div>
-              <div>Weight: { workoutPlan.resistance[index]} { workoutPlan.resMeasure}</div>
+              <div><b>{exercise.name}</b> </div>
+              <div>Reps: { exercise.reps}</div>
+              <div>Sets: { exercise.sets}</div>
+              <div>Weight: { exercise.resistance} { exercise.resMeasure}</div>
             </div>
           ))}
         </div>
