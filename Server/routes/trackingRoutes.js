@@ -434,22 +434,26 @@ router.get('/waterGet', async (req, res) => {
         }
 
         const username = getUserIdFromToken(token);
+        const userId = getUserIdFromToken(token);
 
-        let query = { username };
-        if (date) {
-            const startOfDay = new Date(date);
-            startOfDay.setHours(0, 0, 0, 0);
+        //const { date, name, reps, sets, resistance, resMeasure, duration } = req.body;
+        //console.log("new call");
+        //const date = req.query.date;
+        const startOfDay = new Date(date);
+        startOfDay.setHours(0, 0, 0, 0);
 
-            const endOfDay = new Date(date);
-            endOfDay.setHours(23, 59, 59, 999);
+        // Set the end of the day
+        const endOfDay = new Date(date);
+        endOfDay.setHours(23, 59, 59, 999);
 
-            query.date = { $gte: startOfDay, $lt: endOfDay };
-        }
-        const trackingEntries = await Tracking.find(query).populate('water_id');
+        const water = await Water.find({
+            userId: userId,
+            date: { $gte: startOfDay, $lte: endOfDay }
+        });
 
-        const waterEntries = trackingEntries.map(entry => entry.water_id).flat();
+        //console.log("foods retreived", foods);
 
-        return res.status(200).json(waterEntries);
+        return res.json(water);
 
     } catch (error) {
         console.error('Error fetching water entries:', error);
