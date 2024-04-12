@@ -104,21 +104,11 @@ export default function LandingPage() {
               marginRight: '10px',
               backgroundColor: postType === 'Following' ? '#ededed' : 'transparent',
               color: postType === 'Following' ? '#8b5cf6' : 'gray',
-              outline: 'none',
               borderRadius: '5px',
               boxSizing: 'border-box'
             }}
-            onMouseOver={(e) => {
-              e.target.style.outline = '2px solid transparent';
-              e.target.style.outlineColor = '#8b5cf6';
-              e.target.style.boxShadow = '2xl';
-            }}
-            onMouseOut={(e) => {
-              e.target.style.outline = 'none';
-              e.target.style.borderRadius = '5px';
-              e.target.style.boxShadow = 'none';
-              e.target.style.transform = 'none';
-            }}
+              className={"hover:outline hover:outline-purple-500"}
+
           >
           <div style={{ display: 'flex', alignItems: 'center'}}>
           <svg
@@ -145,22 +135,9 @@ export default function LandingPage() {
               backgroundColor: postType === 'Trending' ? '#ededed' : 'transparent',
               color: postType === 'Trending' ? '#8b5cf6' : 'gray',
               border: 'none',
-              outline: 'none',
               borderRadius: '5px',
             }}
-            onMouseOver={(e) => {
-              e.target.style.outline = '2px solid transparent';
-              e.target.style.outlineOffset = '2px';
-              e.target.style.outlineColor = '#8b5cf6';
-              e.target.style.boxShadow = '2xl';
-  
-            }}
-            onMouseOut={(e) => {
-              e.target.style.outline = 'none';
-              e.target.style.borderRadius = '5px';
-              e.target.style.boxShadow = 'none';
-              e.target.style.transform = 'none';
-            }}
+            className={"hover:outline hover:outline-purple-500"}
           >
             <div style={{ display: 'flex', alignItems: 'center'}}>
             <svg
@@ -187,21 +164,9 @@ export default function LandingPage() {
               backgroundColor: postType === 'Saved' ? '#ededed' : 'transparent',
               color: postType === 'Saved' ? '#8b5cf6' : 'gray',
               border: 'none',
-              outline: 'none',
               borderRadius: '5px',
             }}
-            onMouseOver={(e) => {
-              e.target.style.outline = '2px solid transparent';
-              e.target.style.outlineOffset = '2px';
-              e.target.style.outlineColor = '#8b5cf6';
-  
-            }}
-            onMouseOut={(e) => {
-              e.target.style.outline = 'none';
-              e.target.style.borderRadius = '5px';
-              e.target.style.boxShadow = 'none';
-              e.target.style.transform = 'none';
-            }}
+            className={"hover:outline hover:outline-purple-500"}
           >
             <div style={{ display: 'flex', alignItems: 'center'}}>
             <svg
@@ -263,7 +228,9 @@ export default function LandingPage() {
           
           
         </div>
-        
+
+          <div className={"min-h-screen"}>
+
         <div className={"flex justify-center items-center"}>
           {role !== 'user' && (
             <div className="card" >
@@ -314,6 +281,8 @@ export default function LandingPage() {
               ))}
         </div>
         )}
+
+          </div>
 
       </div>
     );

@@ -132,7 +132,7 @@ const FeedCard = ({ post }) => {
       if (workout.error) {
         console.log("error here",workout.error);
       } else {
-        setWorkout(workout);
+        setWorkout([workout]);
       }
     } catch (error) {
       console.error('Error Getting Workout Data', error);
@@ -353,12 +353,12 @@ async function getUsername(userId){
   
 
 
-          {workoutPlan.name.map((exercise, index) => (
+          {workoutPlan.map((exercise, index) => (
             <div key={index} className="exerciseRow">
               <div><b>{exercise}</b> </div>
-              <div>Reps: { workoutPlan.reps[index]}</div>
-              <div>Sets: { workoutPlan.sets[index]}</div>
-              <div>Weight: { workoutPlan.resistance[index]} { workoutPlan.resMeasure}</div>
+              <div>Reps: { exercise.reps}</div>
+              <div>Sets: { exercise.sets}</div>
+              <div>Weight: { exercise.resistance} { workoutPlan.resMeasure}</div>
             </div>
           ))}
         </div>
