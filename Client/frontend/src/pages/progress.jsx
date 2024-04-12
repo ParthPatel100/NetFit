@@ -126,15 +126,15 @@ export default function Progress(){
     const [workoutDurationData, setWorkoutDurationData] = useState([])
     const [calBurntData, setCalBurntData] = useState([])
 
-    const [workoutDurProgress, setWorkoutDurProgress] = useState()
-    const [calGainedProgress, setCalGainedProgress] = useState()
-    const [calBurntProgress, setCalBurntProgress] = useState()
-    const [sleepProgress, setSleepProgress] = useState()
-    const [waterProgress, setWaterProgress] = useState()
-    const [proteinGainedProgress, setProteinGainedProgress] = useState()
-    const [fatGainedProgress, setFatGainedProgress] = useState()
-    const [carbGainedProgress, setCarbGainedProgress] = useState()
-    const [sugarGainedProgress, setSugarGainedProgress] = useState()
+    const [workoutDurProgress, setWorkoutDurProgress] = useState(0)
+    const [calGainedProgress, setCalGainedProgress] = useState(0)
+    const [calBurntProgress, setCalBurntProgress] = useState(0)
+    const [sleepProgress, setSleepProgress] = useState(0)
+    const [waterProgress, setWaterProgress] = useState(0)
+    const [proteinGainedProgress, setProteinGainedProgress] = useState(0)
+    const [fatGainedProgress, setFatGainedProgress] = useState(0)
+    const [carbGainedProgress, setCarbGainedProgress] = useState(0)
+    const [sugarGainedProgress, setSugarGainedProgress] = useState(0)
 
 
     const [fromDate, setFromDate] = useState(dayjs('2023-04-17'));
@@ -161,16 +161,81 @@ export default function Progress(){
 
     useEffect(() => {
         getTodayWorkout().then((data) => {
-            console.log("data:", data)
-            setWorkoutDurProgress(data.workoutData[0].totalDuration)
-            setCalGainedProgress(data.foodData[0].totalCalGained)
-            setCalBurntProgress(data.workoutData[0].totalCalBurnt)
-            setSleepProgress(data.sleepData[0].totalDuration)
-            setWaterProgress(data.waterData[0].totalAmount)
-            setProteinGainedProgress(data.foodData[0].totalProteinGained)
-            setFatGainedProgress(data.foodData[0].totalFatsGained)
-            setCarbGainedProgress(data.foodData[0].totalCarbsGained)
-            setSugarGainedProgress(data.foodData[0].totalSugarGained)
+            setWorkoutDurProgress( () => {
+                if(data.workoutData.length > 0){
+                    return data.workoutData[0].totalDuration
+                }
+                else{
+                    return 0
+                }
+            })
+            setCalGainedProgress(
+                () => {
+                    if(data.foodData.length > 0){
+                        return data.foodData[0].totalCalGained
+                    }
+                    else{
+                        return 0
+                    }
+                }
+                )
+            setCalBurntProgress(
+                () => {
+                    if(data.workoutData.length > 0){
+                        return data.workoutData[0].totalCalBurnt
+                    }
+                    else{
+                        return 0
+                    }
+                })
+            setSleepProgress(() => {
+                if(data.sleepData.length > 0){
+                    return data.sleepData[0].totalDuration
+                }
+                else{
+                    return 0
+                }
+            })
+            setWaterProgress(() => {
+                if(data.waterData.length > 0){
+                    return data.waterData[0].totalAmount
+                }
+                else{
+                    return 0
+                }
+            })
+            setProteinGainedProgress(() => {
+                if(data.foodData.length > 0){
+                    return data.foodData[0].totalProteinGained
+                }
+                else{
+                    return 0
+                }
+            })
+            setFatGainedProgress(() => {
+                if(data.foodData.length > 0){
+                    return data.foodData[0].totalFatsGained
+                }
+                else{
+                    return 0
+                }
+            })
+            setCarbGainedProgress(() => {
+                if(data.foodData.length > 0){
+                    return data.foodData[0].totalCarbsGained
+                }
+                else{
+                    return 0
+                }
+            })
+            setSugarGainedProgress(() => {
+                if(data.foodData.length > 0){
+                    return data.foodData[0].totalSugarGained
+                }
+                else{
+                    return 0
+                }
+            })
         })
     }, [])
 

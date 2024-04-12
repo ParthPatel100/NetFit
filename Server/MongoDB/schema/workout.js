@@ -4,11 +4,11 @@ const workoutSchema = new mongoose.Schema({
     userId: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
     date: { type: Date, required: true },
     name: { type: String, required: true},
-    reps: { type: Number, min: 0},
-    sets: { type: Number, min: 0},
+    reps: { type: Number},
+    sets: { type: Number},
     resistance: {type: Number},
     resMeasure: {type: String, enum: ['lb', 'kg', '']},
-    duration: {type: Number, min: 0},
+    duration: {type: Number},
     calories: {type: Number}
 });
 

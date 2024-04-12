@@ -70,7 +70,65 @@ async function main() {
             duration: 5,
             calories: 25
 
-        }
+        },
+        {
+            userId: "660a3a3ffd5ff21bb7e9bc4c",
+            date: new Date("2024-04-10"),
+            name: "Morning Jog",
+            reps: 0,
+            sets: 0,
+            resistance: 0,
+            resMeasure: "",
+            duration: 30,
+            calories: 250,
+          },
+          {
+            userId: "660a3a3ffd5ff21bb7e9bc4c",
+            date: new Date("2024-04-09"),
+            name: "Bodyweight Workout",
+            reps: 15,
+            sets: 3,
+            resistance: 0,
+            resMeasure: "",
+            duration: 45,
+            calories: 300,
+          },
+          {
+            userId: "660a3a3ffd5ff21bb7e9bc4c",
+            date: new Date("2024-04-08"),
+            name: "Yoga Session",
+            reps: 0,
+            sets: 0,
+            resistance: 0,
+            resMeasure: "",
+            duration: 60,
+            calories: 200,
+          },
+          {
+            userId: "660a3a3ffd5ff21bb7e9bc4c",
+            date: new Date("2024-04-12"),
+            name: "Morning Run",
+            duration: 45,
+            calories: 300,
+          },
+          {
+            userId: "660a3a3ffd5ff21bb7e9bc4c",
+            date: new Date("2024-04-12"),
+            name: "Squat Challenge",
+            reps: 15,
+            sets: 3,
+            duration: 30,
+            calories: 200,
+          },
+          {
+            userId: "660a3a3ffd5ff21bb7e9bc4c",
+            date: new Date("2024-04-12"),
+            name: "Push-up Circuit",
+            reps: 12,
+            sets: 4,
+            duration: 40,
+            calories: 250,
+          }
     ];
 
     await Workout.insertMany(workouts)
