@@ -191,11 +191,11 @@ export default function PostPage(){
     return (
         <div className="bg-gray-100 h-screen md:mt-14 mt-0 md:ml-[12rem]">
             
-                <button className=" text-sm bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-[10px] p-0.5 w-2/12 ml-3 mt-3 justify-center"
+                <button className=" text-sm bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-[10px] p-2 ml-3 mt-3 justify-center"
                     onClick={() => {navigate('/landing')}}
                 >
                     <div className="flex flex-row items-center justify-start">
-                        <ChevronLeft className="text-white ml-6" />
+                        <ChevronLeft className="text-white" />
                         <span className="">Back</span>
                     </div>
                 </button>
@@ -417,8 +417,8 @@ export default function PostPage(){
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white p-2 rounded-b-2xl ">
-                        <button className="bg-gradient-to-br from-purple-500 to-pink-500 w-full text-white rounded-[10px] p-2"
+                    <div className="flex justify-end bg-white p-2 rounded-b-2xl ">
+                        <button className="bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-[10px] p-2 px-6"
                         onClick={handleSubmitPost}
                         >
                             Submit
