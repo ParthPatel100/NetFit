@@ -3,12 +3,30 @@ import Logo from '../assets/fullLogo.png';
 import ProfilePic from "../assets/profilePic.png"
 import React, {useContext, useEffect, useState} from "react";
 import {Home, Dumbbell, LineChart, Goal, UtensilsCrossed, Flame, GlassWater, BedDouble} from "lucide-react";
-import {UserContext} from "../../context/userContext.jsx";
 import Typography from "@mui/joy/Typography";
 import CircularProgress from "@mui/joy/CircularProgress";
 import axios from "axios";
-
-const NavLinks = ({ className, childClassName, onClick}) => {
+import {UserContext} from "../../context/userContext.jsx";
+export const NavLinks = ({ className, childClassName, onClick}) => {
+    const { nav } = useContext(UserContext);
+    const [profile,setProfile] =useState();
+    const fetchProfile = async () =>{
+        try {
+            const { data } = await axios.post('/user/getProfile', {}, { withCredentials: true });
+        
+            if (data.error) {
+                console.log(data.error);
+            } 
+            else {
+                setProfile(data.profilepic);
+            }
+        } catch (error) {
+            console.error('Error Fetching Profile:', error);
+        }
+        }
+        useEffect(()=> {
+            fetchProfile();
+        },[nav])
     return(
         <div className={className}>
             <NavLink
@@ -59,7 +77,7 @@ const NavLinks = ({ className, childClassName, onClick}) => {
                 }}
             >
                 <div className="flex gap-1 align-middle items-center content-center">
-                    <img src={ProfilePic} alt={"Profile Pic"} className={`h-6 w-auto }`}/>
+                    <img src={profile} alt={"Profile Pic"} className={`h-6 w-6 }`}/>
                 </div>
                 <span className={"text-[0.9rem]  hidden md:flex ml-4"}>Me</span>
             </NavLink>
@@ -83,8 +101,12 @@ export default function Navbar() {
             console.log("DataL: ", data.data)
             const list = []
             data.data.map((trainer) => {
-                list.push(trainer.username)
+                const obj ={}
+                obj["trainer"]=trainer.username
+                obj["pic"] =trainer.profilepic
+                list.push(obj)
             })
+            console.log(list)
             setFollowingList(list)
         })
     }, [])
@@ -253,9 +275,9 @@ export default function Navbar() {
                             return (<div key={following}
                                 className={"mx-3 flex-row justify-start items-center box-content hover:underline hover:cursor-pointer hover:text-purple-600 rounded-2xl p-2 py-2 transition-all ease-in-out hover:shadow-2xl hover:scale-110"}>
                                 <div className="flex gap-1 align-middle items-center content-center">
-                                    <img src={ProfilePic} alt={"Profile Pic"}
-                                         className={`h-6 w-auto`}/>
-                                    <span className={"text-[0.9rem]  hidden md:flex ml-2"}>{following}</span>
+                                    <img src={following.pic} alt={"Profile Pic"}
+                                         className={`h-6 w-6 rounded-full`}/>
+                                    <span className={"text-[0.9rem]  hidden md:flex ml-2"}>{following.trainer}</span>
 
                                 </div>
                             </div>)
