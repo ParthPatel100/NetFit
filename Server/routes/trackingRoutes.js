@@ -246,7 +246,7 @@ router.post('/sleepCreate', async (req, res) => {
         const username = getUserIdFromToken(token);
 
         // Create the sleep entry
-        const sleep = new Sleep({ date, startTime, duration });
+        const sleep = new Sleep({ userId: username, date, startTime, duration });
         await sleep.save();
 
         const trackingForDay = await Tracking.findOne({ username, date });
@@ -416,7 +416,7 @@ router.post('/waterCreate', async (req, res) => {
         const username = getUserIdFromToken(token);
 
         // Create the water entry
-        const water = new Water({ date, measurement, amount });
+        const water = new Water({ userId: username, date, measurement, amount });
         await water.save();
 
         const trackingForDay = await Tracking.findOne({ username, date });
