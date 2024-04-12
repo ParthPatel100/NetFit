@@ -8,7 +8,7 @@ import axios from 'axios';
 
 
 const FeedCard = ({ post }) => {
-  const { _id, trainerUsername, creationDate, comments, likes, workout_id, description, title } = post;
+  const { _id, trainerUsername, creationDate, comments, likes, workout_id, description, title, images } = post;
   const [followerList, setFollowerList] = useState([]);
   const [commentList, setCommentList] = useState([]);
   const [showComments, setShowComments] = useState(false);
@@ -23,11 +23,14 @@ const FeedCard = ({ post }) => {
 
     
   useEffect(() => {
+    console.log(images)
     getFollower();
     getComments();
     getWorkout();
     getSavedWorkout();
     getMyID();
+    
+    console.log("here")
   }, []);
 
   useEffect(() => {
@@ -338,7 +341,7 @@ async function getUsername(userId){
       {showImage? (
         // IMAGE FRAME
         <div className="image">
-          <img src="/assets/post1.png" alt="Post" />
+          <img src={images} alt="Post" className=""/>
         </div>
       ) : (
         // WORKOUT FRAME
