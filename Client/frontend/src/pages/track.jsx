@@ -58,11 +58,7 @@ export default function Track(){
         { name: "Salmon", amount: "300", measurement: "g", protein: "25", carbs: "0", fat: "10", calories: "200", meal: "dinner" },
         { name: "Almonds", amount: "0.25", measurement: "cup", protein: "6", carbs: "3", fat: "14", calories: "160", meal: "snack" },
     ]);
-    const [savedRecipes] = useState([
-        { name: "Dairy-Free Protein Pancakes", description: "The Best Dairy-Free Protein Pancakes You've Ever Had.", trainerUsername: "trainerJD", protein: "2.6", carbs: "23", fat: "0.9", calories: "112"},
-        { name: "STupid Stupid recipe", description: "ugh description", trainerUsername: "im a trainer", protein: "2.6", carbs: "23", fat: "0.9", calories: "112"},
-        { name: "help me name", description: "crying description", trainerUsername: "i cant do a push up", protein: "2.6", carbs: "23", fat: "0.9", calories: "112"},
-    ]);
+
 
     */
 
@@ -114,9 +110,9 @@ export default function Track(){
             vitB6: vitB6,
             vitB12: vitB12
         };
-        
+
         handleAddFood(newFoodData);
-        
+
         // Reset form fields after submission
         setName("");
         setMeal("");
@@ -146,15 +142,15 @@ export default function Track(){
     // Handle form submission to add a new workout
     const handleAddFood = async (newFoodData) => {
         try {
-            
-            
+
+
             const response = await axios.post("/track/postFood", newFoodData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
             console.log('Food added successfully:', response.data);
-            
+
             // Update the workout data state with the new workout
             setFoodData([...foodData, response.data]);
             console.log("response ", response.data);
@@ -215,7 +211,7 @@ export default function Track(){
         try {
             console.log(editIndex);
             console.log(foodData[editIndex]);
-            
+
             const foodId = foodData[editIndex]._id;
             console.log(foodId);
     
@@ -246,21 +242,21 @@ export default function Track(){
                 vitB6: vitB6,
                 vitB12: vitB12
             };
-    
+
             const responseFood = await axios.put("/track/editFood", updatedFoodData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-    
+
             console.log('Food updated successfully:', responseFood.data);
-            
+
             // Update the food data state with the updated food item
             const updatedFoodList = [...foodData];
             updatedFoodList[editIndex] = responseFood.data;
             setFoodData(updatedFoodList);
             setShowEditFoodInputs(false);
-            
+
         } catch (error) {
             console.error('Error updating food:', error);
         }
@@ -275,9 +271,9 @@ export default function Track(){
                     "Content-Type": "application/json",
                 },
             });
-    
+
             console.log('Food deleted successfully:', responseFood.data);
-    
+
             // Update the food data state by removing the deleted food item
             const updatedFoodList = [...foodData];
             updatedFoodList.splice(index, 1);
@@ -323,15 +319,15 @@ export default function Track(){
     // Handle form submission to add a new workout
     const handleAddWorkout = async (newWorkoutData) => {
         try {
-            
-            
+
+
             const responseWorkout = await axios.post("/track/postWorkout", newWorkoutData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
             console.log('Workout added successfully:', responseWorkout.data);
-            
+
             // Update the workout data state with the new workout
             setWorkoutData([...workoutData, responseWorkout.data]);
             setShowWorkoutInputs(false);
@@ -344,7 +340,7 @@ export default function Track(){
     const handleWorkoutEdit = (index) => {
 
         const updatedWorkoutData = workoutData[index];
-    
+
             // Set the state with the values of the selected food item
             console.log(workoutData);
             console.log(workoutData[index]);
@@ -357,10 +353,10 @@ export default function Track(){
             setDuration(updatedWorkoutData.duration || "");
 
             setEditIndex(index);
-        
+
             // Set the showInputs state to true to display the input fields for editing
             setShowEditWorkoutInputs(true);
-        
+
             // Update the submittedData array without the deleted item
             //setWorkoutData(updatedWorkoutData);
 
@@ -371,7 +367,7 @@ export default function Track(){
         try {
             console.log(editIndex);
             console.log(workoutData[editIndex]);
-            
+
             const workoutId = workoutData[editIndex]._id;
             console.log(workoutId);
             const newWorkoutData = {
@@ -385,7 +381,7 @@ export default function Track(){
                 duration: duration,
                 calories: calBurn,
             };
-            
+
 
             const responseWorkout = await axios.put("/track/editWorkout", newWorkoutData, {
                 headers: {
@@ -393,13 +389,13 @@ export default function Track(){
                 },
             });
             console.log('Workout updated successfully:', responseWorkout.data);
-            
+
             // Update the workout data state with the updated workout
             const updatedData = [...workoutData];
             updatedData[editIndex] = responseWorkout.data;
             setWorkoutData(updatedData);
             setShowEditWorkoutInputs(false);
-            
+
         } catch (error) {
             console.error('Error updating workout:', error);
         }
@@ -408,17 +404,17 @@ export default function Track(){
     // Handle workout deletion
     const handleWorkoutDelete = async (index) => {
         try {
-            
+
             const workoutId = workoutData[index]._id;
             const responseWorkout = await axios.delete("/track/deleteWorkout", { params: { _id: workoutId } }, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-            
-            
+
+
             console.log('Workout deleted successfully:', responseWorkout.data);
-            
+
             // Update the workout data state by removing the deleted workout
             const updatedData = [...workoutData];
             updatedData.splice(index, 1);
@@ -430,7 +426,7 @@ export default function Track(){
 
     // Handle form submit
     const handleWorkoutSubmit = () => {
-        
+
         const newWorkoutData = {
             name: wname,
             date: date,
@@ -440,7 +436,7 @@ export default function Track(){
             resMeasure: resMeasure,
             duration: duration,
             calories: calBurn,
-            
+
         };
         handleAddWorkout(newWorkoutData);
 
@@ -454,10 +450,10 @@ export default function Track(){
     };
 
     const handleSubmitSavedWorkout = () => {
-        
+
     };
 
-    
+
     useEffect(() => {
         const fetchWorkoutData = async () => {
             try {
@@ -470,10 +466,10 @@ export default function Track(){
                 console.error('Error fetching workout data:', error);
             }
         };
-    
+
         fetchWorkoutData();
     }, [date]);
-    
+
     useEffect(() => {
         const fetchFoodData = async () => {
             try {
@@ -481,16 +477,16 @@ export default function Track(){
                     params: { date: date },
                     headers: { "Content-Type": "application/json" },
                 });
-                
+
                 setFoodData(response.data);
             } catch (error) {
                 console.error('Error fetching food data:', error);
             }
         };
-    
+
         fetchFoodData();
     }, [date]);
-      
+
 
 
     
@@ -498,147 +494,257 @@ export default function Track(){
     const [weightEntries, setWeightEntries] = useState([]);
     const [weight, setWeight] = useState('');
     const [unit, setUnit] = useState('kg'); // Default unit is kilograms
-    //const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Default to today's date
     const [weightImages, setWeightImages] = useState([]);
+    const [editingWeightId, setEditingWeightId] = useState(null);
 
+const handleWeightSubmit = async () => {
+    if (!weight) {
+        console.error('No weight specified');
+        return;
+    }
 
-    const handleWeightSubmit = () => {
-        const newEntry = { weight, unit, date };
-        setWeightEntries([...weightEntries, newEntry]);
+    const newWeightData = {
+        date: date,
+        measurement: unit,
+        amount: weight,
+    };
+    const editedWeightData = {
+        weightId: editingWeightId,
+        measurement: unit,
+        amount: weight,
+    };
 
-        // Clear input fields
+    try {
+        let response;
+        if (editingWeightId) {
+            response = await axios.put('/track/weightEdit', editedWeightData, { withCredentials: true });
+            console.log('Weight updated:', response.data);
+        } else {
+            response = await axios.post('/track/weightCreate', newWeightData, { withCredentials: true });
+            console.log('Weight saved:', response.data);
+        }
+
         setWeight('');
-        setUnit('kg'); // Reset to default unit
-        setDate(new Date().toISOString().split('T')[0]); // Reset to today's date
-
-        // Close the input fields
+        setUnit('kg');
+        setEditingWeightId(null);
         setShowWeightInputs(false);
-    };
+    } catch (error) {
+        console.error('Error saving weight data:', error);
+    }
+};
+ const handleWeightEdit = (index) => {
+    const weightEntryToEdit = weightEntries[index];
+    setWeight(String(weightEntryToEdit.amount));
+    setUnit(weightEntryToEdit.measurement);
+    setDate(weightEntryToEdit.date);
+    setEditingWeightId(weightEntryToEdit._id);
+    setShowWeightInputs(true);
+};
 
-    const handleWeightEdit = (index) => {
-        const entryToEdit = weightEntries[index];
-        setWeight(entryToEdit.weight);
-        setUnit(entryToEdit.unit);
-        setDate(entryToEdit.date);
 
-        // Remove the entry from the list
-        const newEntries = weightEntries.filter((_, idx) => idx !== index);
-        setWeightEntries(newEntries);
+const handleWeightDelete = async (index) => {
+    const weightEntryToDelete = weightEntries[index];
+    try {
+        await axios.delete('/track/weightDelete', {
+            data: { weightEntryId: weightEntryToDelete._id },
+            withCredentials: true
+        });
+        console.log('Weight entry deleted successfully');
+        // Remove the entry from the local state to update the UI
+        const newWeightEntries = weightEntries.filter((_, idx) => idx !== index);
+        setWeightEntries(newWeightEntries);
+    } catch (error) {
+        console.error('Error deleting weight data:', error);
+    }
+};
 
-        // Show the input fields for editing
-        setShowWeightInputs(true);
-    };
 
-    const handleWeightDelete = (index) => {
-        const newEntries = weightEntries.filter((_, idx) => idx !== index);
-        setWeightEntries(newEntries);
-    };
 
-    const handleWeightImageUpload = (imageDataUrl) => {
-        setWeightImages((prevImages) => [...prevImages, imageDataUrl]);
-    };
-
-    // Function to remove an image
-    const handleRemoveWeightImage = (index) => {
-        setWeightImages((prevImages) => prevImages.filter((_, i) => i !== index));
-    };
-
-    // Function to process selected image
-    const handleWeightInputChange = (e) => {
-        const selectedImage = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = () => {
-            const imageDataUrl = reader.result;
-            handleWeightImageUpload(imageDataUrl);
-        };
-        reader.readAsDataURL(selectedImage);
-    };
 
 
     const [showWaterInputs, setShowWaterInputs] = useState(false);
     const [waterAmount, setWaterAmount] = useState("");
     const [sleepAmount, setSleepAmount] = useState("");
-    const [showSleepInputs, setShowSleepInputs] = useState(false);
     const [waterMeasurement, setWaterMeasurement] = useState("ml"); // Default to milliliters
     const [submittedWaterData, setSubmittedWaterData] = useState([]);
     const [submittedSleepData, setSubmittedSleepData] = useState([]);
+   // const [displaySleepData, setDisplaySleepData] = useState([]);
+const [editingSleepId, setEditingSleepId] = useState(null);
+const [editingWaterId, setEditingWaterId] = useState(null);
 
     // Function to toggle water input form visibility
     const handleWaterButtonClick = () => {
         setShowWaterInputs(!showWaterInputs);
     };
 
-    // Function to handle submission of new water intake entry
-    const handleWaterSubmit = () => {
-        const newWaterData = {
-            amount: waterAmount,
-            measurement: waterMeasurement,
-        };
+ const handleWaterSubmit = async () => {
+    if (!waterAmount) {
+        console.error('No water amount specified');
+        return;
+    }
 
-        setSubmittedWaterData([...submittedWaterData, newWaterData]);
+    const newWaterData = {
+        date: date,
+        measurement: waterMeasurement,
+        amount: waterAmount,
+    };
+    const editedWaterData = {
+        waterId: editingWaterId,
+        measurement: waterMeasurement,
+        amount: waterAmount,
+    };
 
-        // Clear input fields
+    try {
+        let response;
+        if (editingWaterId) {
+
+            response = await axios.put(`/track/waterEdit`, editedWaterData, { withCredentials: true });
+            console.log('Water updated:', response.data);
+        } else {
+
+            response = await axios.post('/track/waterCreate', newWaterData, { withCredentials: true });
+            console.log('Water saved:', response.data);
+        }
+
+
         setWaterAmount("");
-        setWaterMeasurement("ml"); // Reset to default measurement
-
-        // Optionally close the input fields
+        setWaterMeasurement("ml");
+        setEditingWaterId(null);
         setShowWaterInputs(false);
+    } catch (error) {
+        console.error('Error saving water data:', error);
+    }
+};
+
+const handleSleepSubmit = async () => {
+    if (!sleepAmount) {
+        console.error('No sleep amount specified');
+        return;
+    }
+
+    const newSleepData = {
+
+        date: date,
+        duration: sleepAmount,
     };
+    const editedSleepData = {
+        sleepId: editingSleepId,
+        duration: sleepAmount,
+    };
+    try {
 
-    const handleSleepSubmit = () => {
-        const newSleepData = {
-            amount: sleepAmount,
-        };
+       let response;
+        if (editingSleepId) {
 
-        setSubmittedSleepData([...submittedSleepData, newSleepData]);
 
+            response = await axios.put(`/track/sleepEdit/`, editedSleepData, { withCredentials: true });
+
+        console.log('Sleep updated:', response.data);
+
+        } else {
+        const response = await axios.post('/track/sleepCreate', newSleepData, { withCredentials: true });
+        console.log('Sleep saved:', response.data);
+        }
+
+
+        setSubmittedSleepData([...submittedSleepData]);
         setSleepAmount("");
-
+        setEditingSleepId(null);
         setShowSleepInputs(false);
+    } catch (error) {
+        console.error('Error saving sleep data:', error);
+    }
+};
+
+
+
+
+
+useEffect(() => {
+
+
+
+  const fetchSleepData = async () => {
+        console.log("potato")
+        try {
+            const response = await axios.get(`/track/sleepGet?date=${date}`, { withCredentials: true });
+            setSubmittedSleepData(response.data);
+        } catch (error) {
+            console.error('Error fetching sleep data:', error);
+        }
     };
 
+    fetchSleepData();
+    const fetchWaterData = async () => {
+        try {
+            const response = await axios.get(`/track/waterGet?date=${date}`, { withCredentials: true });
+            setSubmittedWaterData(response.data);
+            console.log('did it work')
+        } catch (error) {
+            console.error('Error fetching water data:', error);
+        }
+    };
 
-    const handleSleepButtonClick = () => {
+    fetchWaterData();
+
+
+    const fetchWeightData = async () => {
+        try {
+            const response = await axios.get(`/track/weightGet?date=${date}`, { withCredentials: true });
+            setWeightEntries(response.data);
+        } catch (error) {
+            console.error('Error fetching weight data:', error);
+        }
+    };
+
+    fetchWeightData();
+
+}, [waterAmount, sleepAmount, weight, date]);
+
+
+
+const handleSleepButtonClick = () => {
         setShowSleepInputs(!showSleepInputs);
     };
 
-    // Function to handle editing of an existing water intake entry
-    const handleWaterEdit = (index) => {
-        const waterEntryToEdit = submittedWaterData[index];
-        setWaterAmount(waterEntryToEdit.amount);
-        setWaterMeasurement(waterEntryToEdit.measurement);
+ const handleWaterEdit = (index) => {
+    const waterEntryToEdit = submittedWaterData[index];
+    setWaterAmount(String(waterEntryToEdit.amount));
+    setWaterMeasurement(waterEntryToEdit.measurement);
+    setEditingWaterId(waterEntryToEdit._id);
+    setShowWaterInputs(true);
+};
 
-        // Remove the entry from the list
+const handleSleepEdit = (index) => {
+    const sleepEntryToEdit = submittedSleepData[index];
+    setSleepAmount(String(sleepEntryToEdit.duration));
+    setEditingSleepId(sleepEntryToEdit._id);
+    setShowSleepInputs(true);
+};
+
+const handleWaterDelete = async (index) => {
+    const waterEntryToDelete = submittedWaterData[index];
+    try {
+        await axios.delete('/track/waterDelete', { data: { waterEntryId: waterEntryToDelete._id } }, { withCredentials: true });
         const newWaterData = submittedWaterData.filter((_, idx) => idx !== index);
         setSubmittedWaterData(newWaterData);
+    } catch (error) {
+        console.error('Error deleting water data:', error);
+    }
+};
 
-        // Show the input fields for editing
-        setShowWaterInputs(true);
-    };
-
-    const handleSleepEdit = (index) => {
-        const sleepEntryToEdit = submittedSleepData[index];
-        setSleepAmount(sleepEntryToEdit.amount);
-
-        // Remove the entry from the list
+const handleSleepDelete = async (index) => {
+    const sleepEntryToDelete = submittedSleepData[index];
+    try {
+        await axios.delete('/track/sleepDelete', { data: { sleepEntryId: sleepEntryToDelete._id } }, { withCredentials: true });
         const newSleepData = submittedSleepData.filter((_, idx) => idx !== index);
         setSubmittedSleepData(newSleepData);
-
-        // Show the input fields for editing
-        setShowSleepInputs(true);
-    };
-
-    // Function to handle deletion of a water intake entry
-    const handleWaterDelete = (index) => {
-        const newWaterData = submittedWaterData.filter((_, idx) => idx !== index);
-        setSubmittedWaterData(newWaterData);
-    };
-    const handleSleepDelete = (index) => {
-        const newSleepData = submittedSleepData.filter((_, idx) => idx !== index);
-        setSubmittedSleepData(newSleepData);
-    };
+    } catch (error) {
+        console.error('Error deleting sleep data:', error);
+    }
+};
     return(
-        <div className="bg-gray-100 md:ml-[12rem] md:mt-14 p-4 h-screen">
+        <div className="bg-gray-100 md:ml-[12rem] md:mt-14 pb-24 p-4 min-h-screen">
             <div className=" flex justify-end mb-2.5">
                 <input
                                         type="date"
@@ -693,7 +799,7 @@ export default function Track(){
                                         value={meal}
                                         onChange={(e) => setMeal(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none md:pr-9 m-1 md:m-2"
-                                        
+
                                     >
                                         <option value="">Select Meal Type </option>
                                         {mealTypeOptions.map((option) => (
@@ -1236,7 +1342,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Workout Name"
                                         value={wname}
-                                    
+
                                         onChange={(e) => setWName(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1247,7 +1353,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Reps"
                                         value={reps}
-                                        
+
                                         onChange={(e) => setReps(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1255,7 +1361,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Sets"
                                         value={sets}
-                                       
+
                                         onChange={(e) => setSets(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1265,7 +1371,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Resistance"
                                         value={resistance}
-                                        
+
                                         onChange={(e) => setResistance(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1  md:m-2"
                                     />
@@ -1284,7 +1390,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Duration (min)"
                                         value={duration}
-                                    
+
                                         onChange={(e) => setDuration(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1292,7 +1398,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Cals Burned"
                                         value={calBurn}
-                                    
+
                                         onChange={(e) => setCalBurn(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1306,7 +1412,7 @@ export default function Track(){
                                     </button>
                                 </div>
 
-                                 
+
                             </div>
                         </div>
                     )}
@@ -1338,7 +1444,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Workout Name"
                                         value={wname}
-                                    
+
                                         onChange={(e) => setWName(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1346,7 +1452,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Reps"
                                         value={reps}
-                                        
+
                                         onChange={(e) => setReps(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1356,7 +1462,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Sets"
                                         value={sets}
-                                       
+
                                         onChange={(e) => setSets(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1364,7 +1470,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Resistance"
                                         value={resistance}
-                                        
+
                                         onChange={(e) => setResistance(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1374,7 +1480,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Resistance Measure (lb/kg)"
                                         value={resMeasure}
-                                        
+
                                         onChange={(e) => setResMeasure(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1382,7 +1488,7 @@ export default function Track(){
                                         type="text"
                                         placeholder="Duration (min)"
                                         value={duration}
-                                    
+
                                         onChange={(e) => setDuration(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
@@ -1396,7 +1502,7 @@ export default function Track(){
                                     </button>
                                 </div>
 
-                                 
+
                             </div>
                         </div>
                     )}
@@ -1516,139 +1622,96 @@ export default function Track(){
                 </div>
 
 {/* Weight Section */}
-<div className="bg-white p-4 rounded-md">
-    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
-        <div className="text-l font-bold">Weight</div>
-        <button className="focus:outline-none" onClick={() => setShowWeightInputs(!showWeightInputs)}>
-            <CirclePlus style={{ color: '#a855f7', cursor: 'pointer' }} />
-        </button>
-    </div>
-    {showWeightInputs && (
-        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between mt-4">
-            <div className="flex flex-wrap justify-around">
-                <input
-                    type="text"
-                    placeholder="Weight"
-                    value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
-                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                />
-                <select
-                    value={unit}
-                    onChange={(e) => setUnit(e.target.value)}
-                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                >
-                    <option value="kg">kg</option>
-                    <option value="lb">lb</option>
-                </select>
-                <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                />
-                <div className="flex lg:flex-row justify-center w-full gap-4">
-                    <button
-                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
-                        onClick={handleWeightSubmit}
-                    >
-                        Submit
-                    </button>
-                </div>
-           <div className="border-2 border-gray-300 rounded-xl p-2 text-left mt-4">
-                <label className="ml-1 text-sm">Add Progress Photo</label>
-                <div className="flex flex-wrap justify-start items-center h-auto">
-                    {weightImages.map((imageUrl, index) => (
-                        <div
-                            key={index}
-                            className="relative m-1.5 border rounded-xl text-center bg-cover bg-center"
-                            style={{
-                                backgroundImage: `url(${imageUrl})`,
-                                width: 'calc(33% - 12px)',
-                                paddingBottom: 'calc(33% - 12px)',
-                            }}
-                        >
-                            <button
-                                className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
-                                onClick={() => handleRemoveWeightImage(index)}
-                                style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-                            >
-                                <Trash2 className="text-white" />
-                            </button>
-                        </div>
-                    ))}
-                    {weightImages.length < 4 && (
-                        <button
-                            className="m-1.5 border border-gray-300 rounded-xl text-center flex justify-center items-center"
-                            onClick={() => document.getElementById("weightImageUpload").click()}
-                            style={{ width: 'calc(33% - 12px)', height: 'calc(33% - 12px)', minWidth: '100px', minHeight: '100px' }}
-                        >
-                            +
+                <div className="bg-white p-4 rounded-md">
+                    <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
+                        <div className="text-l font-bold">Weight</div>
+                        <button className="focus:outline-none" onClick={() => setShowWeightInputs(!showWeightInputs)}>
+                            <CirclePlus style={{ color: '#a855f7', cursor: 'pointer' }} />
                         </button>
-                    )}
-                    <input
-                        id="weightImageUpload"
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleWeightInputChange}
-                    />
-                </div>
-            </div>
-            </div>
-        </div>
-    )}
-    {/* List of weight entries */}
-    {weightEntries.length > 0 && (
-        <div className="ml-1 mr-1 mt-5">
-            <div className="flex flex-wrap border-t border-gray-300">
-                {weightEntries.map((entry, index) => (
-                    <div key={index} className="w-full flex justify-between border-t border-gray-300">
-
-                                                    <div className="flex mt-2 items-center">
-                                                            {/* Edit Button */}
-                                                            <button
-                                                                className="focus:outline-none mr-2"
-                                                                onClick={() => handleWeightEdit(index)}
-                                                                style={{ color: '#000', transition: 'color 0.3s' }}
-                                                            >
-                                                                <Pencil
-                                                                    style={{ color: '#000', cursor: 'pointer' }}
-                                                                    onMouseEnter={(e) => {
-                                                                        e.target.style.color = '#a855f7';
-                                                                    }}
-                                                                    onMouseLeave={(e) => {
-                                                                        e.target.style.color = '#000';
-                                                                    }}
-                                                                />
-                                                            </button>
-
-
-                                            <span className="font-bold">{entry.weight}</span>  {entry.unit}, {entry.date}
-                                        </div>
-                                        <div className="flex">
-
-                                            <button
-                                                className="focus:outline-none"
-                                                onClick={() => handleWeightDelete(index)}
-                                                style={{ color: '#000', transition: 'color 0.3s' }}
-                                            >
-                                                <Trash2
-                                                    style={{ color: '#000', cursor: 'pointer' }}
-                                                    onMouseEnter={(e) => {
-                                                        e.target.style.color = '#a855f7';
-                                                    }}
-                                                    onMouseLeave={(e) => {
-                                                        e.target.style.color = '#000';
-                                                    }}
-                                                />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
+                    </div>
+                    {showWeightInputs && (
+                        <div className="flex-1 md:flex-col border-t border-gray-300 justify-between mt-4">
+                            <div className="flex flex-wrap">
+                                <p className="text-xs md:text-sm mt-3">Enter Weight Data</p>
+                                <div className="flex flex-col text-md justify-around w-full ">
+                                    <input
+                                        type="text"
+                                        placeholder="Weight"
+                                        value={weight}
+                                        onChange={(e) => setWeight(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    />
+                                    <select
+                                        value={unit}
+                                        onChange={(e) => setUnit(e.target.value)}
+                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                    >
+                                        <option value="kg">kg</option>
+                                        <option value="lb">lb</option>
+                                    </select>
+                                </div>
+                                <div className="flex lg:flex-row justify-center w-full gap-4">
+                                    <button
+                                        className="bg-gradient-to-tr from-purple-500 to-pink-500 hover:bg-purple-700 text-white text-sm font-bold py-1 px-4 rounded-lg mt-4 justify-center"
+                                        onClick={handleWeightSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
+
+                    {/* List of weight entries */}
+                {/* Display Submitted Weight Data */}
+                {weightEntries.length > 0 && (
+                    <div className="ml-1 mr-1 mt-5">
+                        <div className="flex flex-wrap border-t border-gray-300">
+                            {weightEntries.map((entry, index) => (
+                                <div key={index} className="w-full flex justify-between border-t border-gray-300">
+                                    <div className="flex mt-2 items-center">
+                                        {/* Edit Button */}
+                                        <button
+                                            className="focus:outline-none mr-2"
+                                            onClick={() => handleWeightEdit(index)}
+                                            style={{ color: '#000', transition: 'color 0.3s' }}
+                                        >
+                                            <Pencil
+                                                style={{ color: '#000', cursor: 'pointer' }}
+                                                onMouseEnter={(e) => {
+                                                    e.target.style.color = '#a855f7';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.target.style.color = '#000';
+                                                }}
+                                            />
+                                        </button>
+                                        <p className="mr-1 mb-2 text-s md:text-m font-semibold">{entry.amount} {entry.measurement}</p>
+                                    </div>
+                                    <div>
+                                        {/* Delete Button */}
+                                        <button
+                                            className="focus:outline-none"
+                                            onClick={() => handleWeightDelete(index)}
+                                            style={{ color: '#000', transition: 'color 0.3s' }}
+                                        >
+                                            <Trash2
+                                                style={{ color: '#000', cursor: 'pointer' }}
+                                                onMouseEnter={(e) => {
+                                                    e.target.style.color = '#a855f7';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.target.style.color = '#000';
+                                                }}
+                                            />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 </div>
 
 
@@ -1724,7 +1787,7 @@ export default function Track(){
                                             </button>
                                         </div>
                                         <div>
-                                            <p className="mr-1 mb-2 text-s md:text-m font-semibold">{sleep.amount} Hrs</p>
+                                            <p className="mr-1 mb-2 text-s md:text-m font-semibold">{sleep.duration} Hrs</p>
 
 
                                         </div>

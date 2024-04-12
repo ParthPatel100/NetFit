@@ -19,7 +19,7 @@ axios.defaults.withCredentials = true
 export default function App() {
     return (
         <UserContextProvider>
-            <Navbar/>
+            <RequireAuth><Navbar/></RequireAuth>
             <GoalAndTrackContextProvider>
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>

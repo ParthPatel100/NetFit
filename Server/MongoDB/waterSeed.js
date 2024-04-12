@@ -1,43 +1,49 @@
 const mongoose = require('mongoose');
 const path = require("path");
+const Water = require("./schema/water");
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
 async function main() {
     // Connect to MongoDB
-    const Weight = require("./schema/weight");
 
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
     console.log("Connected to MongoDB");
 
 
-    const weights = [
+    const water = [
         {
             userId: "65fbb5e8684d1930c6047600",
-            date: new Date('2024-01-18'),
-            measurement: 'kg',
-            amount: 80,
+            date: new Date('2024-01-12'),
+            measurement: 'ml',
+            amount: 1500,
+        },
+        {
+            userId: "65fbb5e8684d1930c6047600",
+            date: new Date('2024-01-15'),
+            measurement: 'ml',
+            amount: 1600
         },
         {
             userId: "65fbb5e8684d1930c6047600",
             date: new Date('2024-02-15'),
-            measurement: 'kg',
-            amount: 78
+            measurement: 'ml',
+            amount: 1543
         },
         {
             userId: "65fbb5e8684d1930c6047600",
-            date: new Date('2024-03-15'),
-            measurement: 'kg',
-            amount: 76
+            date: new Date('2024-02-15'),
+            measurement: 'ml',
+            amount: 1543
         },
         {
             userId: "65fbb5e8684d1930c6047600",
-            date: new Date('2024-04-15'),
-            measurement: 'kg',
-            amount: 75
+            date: new Date('2024-02-16'),
+            measurement: 'ml',
+            amount: 1780
         }
     ];
 
-    await Weight.insertMany(weights)
+    await Water.insertMany(water)
         .then(result => {
             console.log('Documents saved successfully:', result);
         })
