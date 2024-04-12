@@ -7,7 +7,7 @@ import Typography from "@mui/joy/Typography";
 import CircularProgress from "@mui/joy/CircularProgress";
 import axios from "axios";
 import {UserContext} from "../../context/userContext.jsx";
-export const NavLinks = ({ className, childClassName, onClick}) => {
+export const NavLinks = ({ className, childClassName, onClick}) => { 
     const { nav } = useContext(UserContext);
     const [profile,setProfile] =useState();
     const fetchProfile = async () =>{
