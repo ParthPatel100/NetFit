@@ -586,7 +586,7 @@ router.post('/weightCreate', async (req, res) => {
         const username = getUserIdFromToken(token);
 
         // Create the weight entry
-        const weight = new Weight({ date, measurement, amount });
+        const weight = new Weight({ userId: username, date, measurement, amount });
         await weight.save();
 
         const trackingForDay = await Tracking.findOne({ username, date });
