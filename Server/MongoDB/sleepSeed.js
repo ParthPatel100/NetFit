@@ -28,6 +28,11 @@ async function main() {
         },
         {
             userId: "65fbb5e8684d1930c6047600",
+            date: new Date('2024-01-16'),
+            duration: 8.0,
+        },
+        {
+            userId: "65fbb5e8684d1930c6047600",
             date: new Date('2024-03-21'),
             duration: 7.8,
         }

@@ -31,6 +31,12 @@ async function main() {
         },
         {
             userId: "65fbb5e8684d1930c6047600",
+            date: new Date('2024-02-15'),
+            measurement: 'ml',
+            amount: 1543
+        },
+        {
+            userId: "65fbb5e8684d1930c6047600",
             date: new Date('2024-02-16'),
             measurement: 'ml',
             amount: 1780

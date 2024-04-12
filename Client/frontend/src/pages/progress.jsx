@@ -26,7 +26,8 @@ import {
     getWaterData,
     getSleepData,
     getCalConsumedData,
-    getWorkoutInformation
+    getWorkoutInformation,
+    getTodayWorkout
 } from "../utils/ProgressData.js";
 import {GoalAndTrackContext} from "../../context/goalAndTrackContextProvider.jsx";
 
@@ -115,7 +116,7 @@ const MyResponsiveLine = ({data, xLabel, yLabel}) => {
 export default function Progress(){
 
     const {caloriesGoals, carbsGoals,fatsGoals,proteinGoals,sugarGoals,
-        sleepGoals,weightGoals,waterGoals,caloriesBurnGoals,workoutSessionsGoals,workoutDurationGoals} = useContext(GoalAndTrackContext)
+        sleepGoals,waterGoals,caloriesBurnGoals,workoutDurationGoals} = useContext(GoalAndTrackContext)
 
 
     const [weightData, setWeightData] = useState([])
@@ -124,6 +125,16 @@ export default function Progress(){
     const [calConsumedData, setCalConsumedData] = useState([])
     const [workoutDurationData, setWorkoutDurationData] = useState([])
     const [calBurntData, setCalBurntData] = useState([])
+
+    const [workoutDurProgress, setWorkoutDurProgress] = useState()
+    const [calGainedProgress, setCalGainedProgress] = useState()
+    const [calBurntProgress, setCalBurntProgress] = useState()
+    const [sleepProgress, setSleepProgress] = useState()
+    const [waterProgress, setWaterProgress] = useState()
+    const [proteinGainedProgress, setProteinGainedProgress] = useState()
+    const [fatGainedProgress, setFatGainedProgress] = useState()
+    const [carbGainedProgress, setCarbGainedProgress] = useState()
+    const [sugarGainedProgress, setSugarGainedProgress] = useState()
 
 
     const [fromDate, setFromDate] = useState(dayjs('2023-04-17'));
@@ -148,78 +159,123 @@ export default function Progress(){
 
     }, [fromDate, toDate]);
 
+    useEffect(() => {
+        getTodayWorkout().then((data) => {
+            console.log("data:", data)
+            setWorkoutDurProgress(data.workoutData[0].totalDuration)
+            setCalGainedProgress(data.foodData[0].totalCalGained)
+            setCalBurntProgress(data.workoutData[0].totalCalBurnt)
+            setSleepProgress(data.sleepData[0].totalDuration)
+            setWaterProgress(data.waterData[0].totalAmount)
+            setProteinGainedProgress(data.foodData[0].totalProteinGained)
+            setFatGainedProgress(data.foodData[0].totalFatsGained)
+            setCarbGainedProgress(data.foodData[0].totalCarbsGained)
+            setSugarGainedProgress(data.foodData[0].totalSugarGained)
+        })
+    }, [])
 
-    const workoutMinutes = 87
+
+
     const { value: workoutMinutes_value } = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
-        end: workoutMinutes,
+        end: (()=>{
+            if(workoutDurationGoals > 0){
+                return parseFloat(((workoutDurProgress / workoutDurationGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
     });
-    const caloriesGained = 49
     const { value: caloriesGained_value } = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
-        end: caloriesGained,
+        end: (()=>{
+            if(caloriesGoals > 0){
+                return parseFloat(((calGainedProgress / caloriesGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
     });
-    const proteinConsumed = 49
     const { value: proteinConsumed_value } = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
-        end: proteinConsumed,
+        end: (()=>{
+            if(proteinGoals > 0){
+                return parseFloat(((proteinGainedProgress / proteinGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
     });
-    const caloriesBurntToday = 44
     const { value: caloriesBurntToday_value } = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
-        end: caloriesBurntToday,
+        end: (()=>{
+            if(caloriesBurnGoals > 0){
+                return parseFloat(((calBurntProgress / caloriesBurnGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
     });
-    const caloriesBurnt = -9.3
-    const { value: caloriesBurnt_value } = useCountUp({
-        isCounting: true,
-        duration: duration,
-        start: 0,
-        end: caloriesBurnt,
-    });
-    const fatGained = 10
     const { value: fatGained_value } = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
-        end: fatGained,
+        end: (()=>{
+            if(fatsGoals > 0){
+                return parseFloat(((fatGainedProgress / fatsGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
     });
-    const sleep = 90
     const { value: sleep_value} = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
-        end: sleep,
+        end: (()=>{
+            if(sleepGoals > 0){
+                return parseFloat(((sleepProgress / sleepGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
     });
-    const water = 87
     const { value: water_value} = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
-        end: water,
+        end: (()=>{
+            if(waterGoals > 0){
+                return parseFloat(((waterProgress / waterGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
     });
 
-    const carbsConsumed = 75
     const { value: carbsConsumed_value} = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
-        end: carbsConsumed,
+        end: (()=>{
+            if(carbsGoals > 0){
+                return parseFloat(((carbGainedProgress / carbsGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
     });
 
-    const sugarConsumed = 20
     const { value: sugarConsumed_value} = useCountUp({
         isCounting: true,
         duration: duration,
         start: 0,
-        end: sugarConsumed,
+        end: (()=>{
+            if(sugarGoals > 0){
+                return parseFloat(((sugarGainedProgress / sugarGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
     });
 
 
@@ -246,7 +302,7 @@ export default function Progress(){
                                     stroke: '#c135ee',
                                 },
                                 '.MuiCircularProgress-track': {
-                                    stroke: '#a1a0a0',
+                                    stroke: `${workoutMinutes_value > 100 ? '#c135ee' : '#a1a0a0'}`,
                                 }
                             }}
                             determinate={true}
@@ -255,7 +311,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.8rem] mt-1.5 text-neutral-200 '}>
-                            65{workoutSessionsGoals > 0 ? `/${workoutSessionsGoals}` : ""} Min
+                            {workoutDurProgress}{workoutDurationGoals > 0 ? `/${workoutDurationGoals}` : ""} Min
                         </span>
                     </div>
 
@@ -269,7 +325,7 @@ export default function Progress(){
                                     stroke: '#c135ee',
                                 },
                                 '.MuiCircularProgress-track': {
-                                    stroke: '#a1a0a0',
+                                    stroke: `${caloriesGained_value > 100 ? '#c135ee' : '#a1a0a0'}`,
                                 }
                             }}
                             determinate={true}
@@ -278,7 +334,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.8rem] mt-1.5 text-neutral-200'}>
-                            1960{caloriesGoals > 0 ? `/${caloriesGoals}` : ""} Cal
+                            {calGainedProgress}{caloriesGoals > 0 ? `/${caloriesGoals}` : ""} Cal
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -291,7 +347,7 @@ export default function Progress(){
                                     stroke: '#c135ee',
                                 },
                                 '.MuiCircularProgress-track': {
-                                    stroke: '#a1a0a0',
+                                    stroke: `${caloriesBurntToday_value > 100 ? '#c135ee' : '#a1a0a0'}`,
                                 }
                             }}
                             determinate={true}
@@ -300,7 +356,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.8rem] mt-1.5 text-neutral-200'}>
-                            400{caloriesBurnGoals > 0 ? `/${caloriesBurnGoals}` : ""} Cal
+                            {calBurntProgress}{caloriesBurnGoals > 0 ? `/${caloriesBurnGoals}` : ""} Cal
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -313,7 +369,7 @@ export default function Progress(){
                                     stroke: '#c135ee',
                                 },
                                 '.MuiCircularProgress-track': {
-                                    stroke: '#a1a0a0',
+                                    stroke: `${sleep_value > 100 ? '#c135ee' : '#a1a0a0'}`,
                                 }
                             }}
                             determinate={true}
@@ -322,7 +378,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.8rem] mt-1.5 text-neutral-200'}>
-                            7.2{sleepGoals > 0 ? `/${sleepGoals}` : ""} Hrs
+                            {sleepProgress}{sleepGoals > 0 ? `/${sleepGoals}` : ""} Hrs
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -339,7 +395,7 @@ export default function Progress(){
                                     stroke: '#c135ee',
                                 },
                                 '.MuiCircularProgress-track': {
-                                    stroke: '#a1a0a0',
+                                    stroke: `${water_value > 100 ? '#c135ee' : '#a1a0a0'}`,
                                 }
                             }}
                             determinate={true}
@@ -348,7 +404,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.8rem] mt-1.5 text-neutral-200'}>
-                            1740{waterGoals > 0 ? `/${waterGoals}` : ""} mL
+                            {waterProgress}{waterGoals > 0 ? `/${waterGoals}` : ""} mL
                         </span>
                     </div>
                 </div>
@@ -380,26 +436,6 @@ export default function Progress(){
                 <div className={"self-center gap-8 flex flex-row flex-wrap justify-center items-center content-center"}>
                     <div className={"flex flex-col items-center text-center"}>
                         <span className={'text-[0.8rem] mb-1.5 text-gray-700'}>
-                            Calories Consumed
-                        </span>
-                        <CircularProgress
-                            sx={{
-                                '.MuiCircularProgress-progress': {
-                                    stroke: '#c204b2',
-                                },
-                            }}
-                            determinate={true}
-                            value={parseInt(caloriesGained_value)}>
-                            <Typography textColor={"#494645"}>{caloriesGained_value}%</Typography>
-                        </CircularProgress>
-
-                        <span className={'text-[0.8rem] mt-1.5 text-gray-700'}>
-                            980/2000 Cal
-                        </span>
-                    </div>
-
-                    <div className={"flex flex-col items-center text-center"}>
-                        <span className={'text-[0.8rem] mb-1.5 text-gray-700'}>
                             Protein (g)
                         </span>
                         <CircularProgress
@@ -407,6 +443,9 @@ export default function Progress(){
                                 '.MuiCircularProgress-progress': {
                                     stroke: '#ab039d',
                                 },
+                                '.MuiCircularProgress-track': {
+                                    stroke: `${proteinConsumed_value > 100 ? '#ab039d' : '#f3f2f2'}`,
+                                }
                             }}
                             determinate={true}
                             value={parseInt(proteinConsumed_value)}>
@@ -414,7 +453,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.8rem] mt-1.5 text-gray-700'}>
-                            24.5/50 g
+                            {proteinGainedProgress}{proteinGoals > 0 ? `/${proteinGoals}` : ""} g
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -426,6 +465,9 @@ export default function Progress(){
                                 '.MuiCircularProgress-progress': {
                                     stroke: '#98048d',
                                 },
+                                '.MuiCircularProgress-track': {
+                                    stroke: `${fatGained_value > 100 ? '#98048d' : '#f3f2f2'}`,
+                                }
                             }}
                             determinate={true}
                             value={parseInt(fatGained_value)}>
@@ -433,7 +475,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.8rem] mt-1.5 text-gray-700'}>
-                            2.5/25 g
+                            {fatGainedProgress}{fatsGoals > 0 ? `/${fatsGoals}` : ""} g
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -445,6 +487,9 @@ export default function Progress(){
                                 '.MuiCircularProgress-progress': {
                                     stroke: '#7e0275',
                                 },
+                                '.MuiCircularProgress-track': {
+                                    stroke: `${carbsConsumed_value > 100 ? '#7e0275' : '#f3f2f2'}`,
+                                }
                             }}
                             determinate={true}
                             value={parseInt(carbsConsumed_value)}>
@@ -452,7 +497,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.8rem] mt-1.5 text-gray-700'}>
-                            75/100 Carbs
+                            {carbGainedProgress}{carbsGoals > 0 ? `/${carbsGoals}` : ""} Cal
                         </span>
                     </div>
                     <div className={"flex flex-col items-center text-center"}>
@@ -464,6 +509,9 @@ export default function Progress(){
                                 '.MuiCircularProgress-progress': {
                                     stroke: '#7a0370',
                                 },
+                                '.MuiCircularProgress-track': {
+                                    stroke: `${sugarConsumed_value > 100 ? '#7a0370' : '#f3f2f2'}`,
+                                }
                             }}
                             determinate={true}
                             value={parseInt(sugarConsumed_value)}>
@@ -471,7 +519,7 @@ export default function Progress(){
                         </CircularProgress>
 
                         <span className={'text-[0.8rem] mt-1.5 text-gray-700'}>
-                            8/40 g
+                            {sugarGainedProgress}{sugarGoals > 0 ? `/${sugarGoals}` : ""} g
                         </span>
                     </div>
                 </div>
@@ -542,8 +590,11 @@ export default function Progress(){
                         Weight
                     </div>
                     <div className={"self-center h-[90%] w-full"}>
-                        {weightData.length > 0 ?
-                            <MyResponsiveLine data={weightData} xLabel={"Weight (Kg)"} yLabel={"Date"}/> : <></>}
+                        {weightData.length > 0 && weightData[0].data.length > 0 ?
+                            <MyResponsiveLine data={weightData} xLabel={"Weight (Kg)"} yLabel={"Date"}/> : <div
+                                className={"flex w-full h-full justify-center items-center content-center text-2xl text-slate-600"}>
+                                No data available for the dates chosen.
+                            </div>}
 
                     </div>
                 </div>
@@ -557,8 +608,11 @@ export default function Progress(){
                     </div>
                     <div className={"self-center h-[90%] w-full"}>
 
-                        {waterData.length > 0 ?
-                            <MyResponsiveLine data={waterData} xLabel={"Water (mL)"} yLabel={"Date"}/> : <></>}
+                        {waterData.length > 0 && waterData[0].data.length > 0 ?
+                            <MyResponsiveLine data={waterData} xLabel={"Water (mL)"} yLabel={"Date"}/> : <div
+                                className={"flex w-full h-full justify-center items-center content-center text-2xl text-slate-600"}>
+                                No data available for the dates chosen.
+                            </div>}
                     </div>
                 </div>
             </div>
@@ -575,8 +629,11 @@ export default function Progress(){
                         Sleep
                     </div>
                     <div className={"self-center h-full w-full"}>
-                        {sleepData.length > 0 ?
-                            <MyResponsiveLine data={sleepData} xLabel={"Sleep (Hrs)"} yLabel={"Date"}/> : <></>}
+                        {sleepData.length > 0  && sleepData[0].data.length > 0?
+                            <MyResponsiveLine data={sleepData} xLabel={"Sleep (Hrs)"} yLabel={"Date"}/> : <div
+                                className={"flex w-full h-full justify-center items-center content-center text-2xl text-slate-600"}>
+                                No data available for the dates chosen.
+                            </div>}
                     </div>
                 </div>
 
@@ -587,73 +644,76 @@ export default function Progress(){
                         Calories Consumed
                     </div>
                     <div className={"self-center h-full w-full"}>
-                        {calConsumedData.length > 0 ?
-                            <MyResponsiveLine data={calConsumedData} xLabel={"Consumed (Cal)"} yLabel={"Date"}/> : <></>}
+                        {calConsumedData.length > 0  && calConsumedData[0].data.length > 0?
+                            <MyResponsiveLine data={calConsumedData} xLabel={"Consumed (Cal)"} yLabel={"Date"}/> : <div
+                                className={"flex w-full h-full justify-center items-center content-center text-2xl text-slate-600"}>
+                                No data available for the dates chosen.
+                            </div>}
                     </div>
                 </div>
 
             </div>
 
 
-            <div className={"mx-4 my-4 rounded-2xl p-2 flex justify-center flex-col bg-slate-300 text-black"}>
+            {/*<div className={"mx-4 my-4 rounded-2xl p-2 flex justify-center flex-col bg-slate-300 text-black"}>*/}
 
-                <div
-                    className={"ml-4 self-start flex flex-row gap-1 mt-3 text-purple-500 mb-4 text-xl justify-center content-center items-center"}>
-                    <Dumbbell/>
-                    Workouts
-                </div>
+            {/*    <div*/}
+            {/*        className={"ml-4 self-start flex flex-row gap-1 mt-3 text-purple-500 mb-4 text-xl justify-center content-center items-center"}>*/}
+            {/*        <Dumbbell/>*/}
+            {/*        Workouts*/}
+            {/*    </div>*/}
 
-                <div className={"self-center gap-8 flex flex-row flex-wrap justify-center items-center content-center"}>
-
-
-                    <div className={"flex flex-col items-center text-center"}>
-                        <span className={'text-[0.8rem] mb-1.5 text-gray-700'}>
-                            Workout Minutes
-                        </span>
-                        <CircularProgress
-                            sx={{
-                                '.MuiCircularProgress-progress': {
-                                    stroke: workoutMinutes > 0 ? '#72be73' : '#be3636',
-                                },
-                            }}
-                            determinate={true}
-                            value={workoutMinutes_value}>
-                            <Typography textColor={"#494645"}>{workoutMinutes_value}%</Typography>
-                        </CircularProgress>
-
-                        <span
-                            className={'text-[0.8rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>
-                            24 min <MoveRight size={"15"}/> 45 min
-                        </span>
-                    </div>
+            {/*    <div className={"self-center gap-8 flex flex-row flex-wrap justify-center items-center content-center"}>*/}
 
 
-                    <div className={"flex flex-col items-center text-center"}>
-                        <span className={'text-[0.8rem] mb-1.5 text-gray-700'}>
-                            Calories Burnt
-                        </span>
-                        <CircularProgress
-                            sx={{
-                                '.MuiCircularProgress-progress': {
-                                    stroke: caloriesBurnt > 0 ? '#72be73' : '#be3636',
-                                },
-                            }}
-                            determinate={true}
-                            value={parseInt(caloriesBurnt_value)}>
-                            <Typography textColor={"#494645"}>{caloriesBurnt_value}%</Typography>
-                        </CircularProgress>
+            {/*        <div className={"flex flex-col items-center text-center"}>*/}
+            {/*            <span className={'text-[0.8rem] mb-1.5 text-gray-700'}>*/}
+            {/*                Workout Minutes*/}
+            {/*            </span>*/}
+            {/*            <CircularProgress*/}
+            {/*                sx={{*/}
+            {/*                    '.MuiCircularProgress-progress': {*/}
+            {/*                        stroke: workoutMinutes > 0 ? '#72be73' : '#be3636',*/}
+            {/*                    },*/}
+            {/*                }}*/}
+            {/*                determinate={true}*/}
+            {/*                value={workoutMinutes_value}>*/}
+            {/*                <Typography textColor={"#494645"}>{workoutMinutes_value}%</Typography>*/}
+            {/*            </CircularProgress>*/}
 
-                        <span
-                            className={'text-[0.8rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>
-                            530 Cal <MoveRight size={"15"}/> 480 Cal
-                        </span>
-                    </div>
-                </div>
+            {/*            <span*/}
+            {/*                className={'text-[0.8rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>*/}
+            {/*                24 min <MoveRight size={"15"}/> 45 min*/}
+            {/*            </span>*/}
+            {/*        </div>*/}
 
-            </div>
+
+            {/*        <div className={"flex flex-col items-center text-center"}>*/}
+            {/*            <span className={'text-[0.8rem] mb-1.5 text-gray-700'}>*/}
+            {/*                Calories Burnt*/}
+            {/*            </span>*/}
+            {/*            <CircularProgress*/}
+            {/*                sx={{*/}
+            {/*                    '.MuiCircularProgress-progress': {*/}
+            {/*                        stroke: caloriesBurnt > 0 ? '#72be73' : '#be3636',*/}
+            {/*                    },*/}
+            {/*                }}*/}
+            {/*                determinate={true}*/}
+            {/*                value={parseInt(caloriesBurnt_value)}>*/}
+            {/*                <Typography textColor={"#494645"}>{caloriesBurnt_value}%</Typography>*/}
+            {/*            </CircularProgress>*/}
+
+            {/*            <span*/}
+            {/*                className={'text-[0.8rem] mt-1.5 text-gray-700 flex flex-row justify-center content-center items-center gap-1'}>*/}
+            {/*                530 Cal <MoveRight size={"15"}/> 480 Cal*/}
+            {/*            </span>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+
+            {/*</div>*/}
 
             <div
-                className={"flex flex-col md:grid md:grid-cols-2 justify-center content-center items-center text-center mx-4 gap-4 mb-6"}>
+                className={"flex flex-col md:grid md:grid-cols-2 justify-center content-center items-center text-center mx-4 gap-4 mb-6 my-4"}>
 
 
                 <div className={"bg-slate-300 rounded-lg flex justify-center content-center flex-col h-[25rem] w-full"}>
@@ -663,8 +723,12 @@ export default function Progress(){
                         Workout Duration
                     </div>
                     <div className={"self-center h-full w-full"}>
-                        {workoutDurationData.length > 0 ?
-                            <MyResponsiveLine data={workoutDurationData} xLabel={"Duration (Min)"} yLabel={"Date"}/> : <></>}
+                        {workoutDurationData.length > 0 && workoutDurationData[0].data.length > 0 ?
+                            <MyResponsiveLine data={workoutDurationData} xLabel={"Duration (Min)"} yLabel={"Date"}/> :
+                            <div
+                                className={"flex w-full h-full justify-center items-center content-center text-2xl text-slate-600"}>
+                                No data available for the dates chosen.
+                            </div>}
                     </div>
                 </div>
 
@@ -675,8 +739,12 @@ export default function Progress(){
                         Calories Burnt
                     </div>
                     <div className={"self-center h-full w-full"}>
-                        {calBurntData.length > 0 ?
-                            <MyResponsiveLine data={calBurntData} xLabel={"Burnt (Cal)"} yLabel={"Date"}/> : <></>}
+                        {calBurntData.length > 0 && calBurntData[0].data.length > 0 ?
+                            <MyResponsiveLine data={calBurntData} xLabel={"Burnt (Cal)"} yLabel={"Date"}/> :
+                            <div className={"flex w-full h-full justify-center items-center content-center text-2xl text-slate-600"}>
+                                No data available for the dates chosen.
+                            </div>
+                        }
                     </div>
                 </div>
 
