@@ -9,7 +9,6 @@ import axios from "axios";
 
 
 
-
 export default function LandingPage() {
     const [postType, setPostType] = useState('Following');
     const [posts, setPosts] = useState([]);
@@ -18,6 +17,7 @@ export default function LandingPage() {
     const [savedWorkout, setSavedWorkout] = useState([]);
     const [role, setRole] = useState('');
     const [myPost, setMyPosts] = useState([]);
+    const [showDropdown, setShowDropdown] = useState(false);
     
 
     
@@ -84,11 +84,13 @@ export default function LandingPage() {
         console.error('Error Getting Data', error);
       }
     }  
+    const toggleDropdown = () => {
+      setShowDropdown(!showDropdown);
+    };
 
     
 
     
-
 
     return (
       <div style={{ backgroundColor: 'whitesmoke', paddingBottom: '100px' }}>
@@ -182,7 +184,11 @@ export default function LandingPage() {
 
             </div>
           </button>
+          <>
+          
+        </>
 
+        
         {role !== 'user' && (
             <button
               onClick={() => {
@@ -211,15 +217,41 @@ export default function LandingPage() {
               </svg><div>My Posts</div>
               </div>
             </button>
-        )}
-
-          
+        )}          
           
         </div>
+        
+        <div className={"min-h-screen"}>
+        
+        <div className="topnav" style={{ display: 'flex', justifyContent: 'center', marginBottom:'10px' }}>
+          <input type="text" placeholder=" Search Trainers.."></input>
+          <button onClick={toggleDropdown}>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                style={{ width: '2em', height: '1.3em', alignItems:'center', marginTop: '2px'}}
+                
+                >  
+                <path
+                fill="#8204bd"
 
-          <div className={"min-h-screen"}>
+                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+                />
+              </svg>
+
+          </button>
+          {showDropdown && (
+            <select style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)' }}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+      )}
+             
+        </div>
 
         <div className={"flex justify-center items-center"}>
+        
           {role !== 'user' && (
             <div className="card" >
               <div style={{ fontSize: '14px', fontWeight: 'bold', borderBottom: '1px solid #e1e3e6', marginLeft: '5px' }}>Post Something...</div>
@@ -238,16 +270,28 @@ export default function LandingPage() {
 
         {postType === 'Following' && (
           <div style={{ paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {postData.map((post, index) => (
-              <FeedCard key={index} post={post} style={{ marginBottom: '20px' }} />
-            ))}
+            {postData.length > 0 ? (
+              postData.map((post, index) => (
+                <FeedCard key={index} post={post} style={{ marginBottom: '20px' }} />
+              ))
+            ) : (
+              <div className={"flex justify-center items-center"}>
+                <div className="card" style={{display: 'flex'}} >
+                    <div style={{ textAlign: 'left', fontSize: "20px", color: '#5c5c5c'}}> No followed users...</div> 
+
+                </div>
+                
+
+              </div>
+              
+            )}
           </div>
         )}
 
         {postType === 'Trending' && (
           <div style={{ paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {allPost
-              .sort((a, b) => b.likes - a.likes) // Sort posts based on likes value in descending order
+              .sort((a, b) => b.likes - a.likes) 
               .map((post, index) => (
                 <FeedCard key={index} post={post} style={{ marginBottom: '20px' }} />
               ))}
@@ -256,10 +300,19 @@ export default function LandingPage() {
 
         {postType === 'Saved' && (
             <div style={{ paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              {savedWorkout.map((post, index) => (
+            {savedWorkout.length > 0 ? (
+              savedWorkout.map((post, index) => (
                 <FeedCard key={index} post={post} style={{ marginBottom: '20px' }} />
-              ))}
-        </div>
+              ))
+            ) : (
+              <div className={"flex justify-center items-center"}>
+                <div className="card" style={{display: 'flex'}} >
+                    <div style={{ textAlign: 'left', fontSize: "20px", color: '#5c5c5c'}}> No saved posts...</div> 
+                </div>
+              </div>
+              
+            )}
+          </div>
         )}
 
         {postType === 'My Posts' && (
