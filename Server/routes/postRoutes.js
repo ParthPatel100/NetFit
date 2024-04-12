@@ -16,7 +16,7 @@ const Post = require("../MongoDB/schema/post");
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
 function verifyToken(token, callback) {
-    jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+    jwt.verify(token, "process.env.JWT_SECRET", {}, (err, user) => {
         if (err) {
             console.error("Error verifying token:", err);
             callback(false);

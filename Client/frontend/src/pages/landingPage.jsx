@@ -2,72 +2,103 @@ import {useLocation } from "react-router-dom";
 import {UserContext} from "../../context/userContext.jsx";
 import {useContext} from "react";
 import FeedCard from '../components/FeedCard';
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react'; 
 import {Link, NavLink} from 'react-router-dom'
 import '../Landing.css';
+import axios from "axios";
 
 
 
 
 export default function LandingPage() {
     const [postType, setPostType] = useState('Following');
-  
-    const postData = [
-        {
-          name: 'John Doe',
-          date: 'April 1, 2024',
-          comments: 10,
-          likes: 20,
-          type: ['Trending', 'Following'],
-          content: 'Completed a 5-mile run today! 🏃‍♂️ Feeling amazing and energized! #running #fitnessgoals'
-        },
-        {
-          name: 'Jane Smith',
-          date: 'April 2, 2024',
-          comments: 8,
-          likes: 15,
-          type: ['Following'],
-          content: 'Just finished an intense HIIT workout! 💪 My heart rate was through the roof, but it feels so good! #HIIT #workout'
-        },
-        {
-          name: 'David Johnson',
-          date: 'April 3, 2024',
-          comments: 12,
-          likes: 25,
-          type: ['Saved'],
-          content: 'Great day at the gym today! Hit new PRs on bench press and squats! 🏋️‍♂️ Feeling strong and motivated! #gym #strengthtraining'
-        },
-        {
-          name: 'Emily Brown',
-          date: 'April 4, 2024',
-          comments: 5,
-          likes: 18,
-          type: ['Trending'],
-          content: 'Just completed my first marathon! 🏅 It was tough, but crossing that finish line made it all worth it! #marathon #achievement'
-        },
-        {
-          name: 'Michael Clark',
-          date: 'April 5, 2024',
-          comments: 15,
-          likes: 30,
-          type: ['Following', 'Saved'],
-          content: 'Started my journey to a healthier lifestyle today with a nutritious breakfast and a morning yoga session! 🧘‍♂️ Feeling refreshed and ready to conquer the day! #healthyliving #yoga'
-        },
-        {
-          name: 'Sarah Adams',
-          date: 'April 6, 2024',
-          comments: 20,
-          likes: 40,
-          type: ['Trending', 'Following', 'Saved'],
-          content: 'Embarked on a hiking adventure with friends and explored breathtaking trails and scenic vistas! 🏞️ Nature truly is the best therapy! #hiking #adventure'
+    const [posts, setPosts] = useState([]);
+    const [postData, setPostData] = useState([]);
+    const [allPost, setAllPostData] = useState([]);
+    const [savedWorkout, setSavedWorkout] = useState([]);
+    const [role, setRole] = useState('');
+    const [myPost, setMyPosts] = useState([]);
+    
+
+    
+    useEffect(() => {
+      getFollower();
+      getMyPosts();
+      }, []);
+    
+    async function getFollower(){
+      let followingList = [];
+      let savedList = [];
+
+      try {
+        const followingResponse = await axios.get('/landing/getFollower', {}, { withCredentials: true });
+        const allPostsResponse = await axios.get('/landing/getFollowingPosts', {}, { withCredentials: true });
+        const savedResponse = await axios.get('/landing/getSavedWorkouts', {}, { withCredentials: true });
+        
+
+        const followingData = followingResponse.data;
+        const allPostData = allPostsResponse.data;
+        const savedData = savedResponse.data;
+
+        if (followingData.error) {
+          console.log(followingData.error);
+        } else {
+          followingList =  followingData.following_list;
+          setRole(followingData.user_role);
         }
-      ];
-  
+        if (savedData.error) {
+          console.log(savedData.error);
+        } else {
+          savedList =  savedData.post_id;
+        }
+
+        if (allPostData.error) {
+          console.log(allPostData.error);
+        } else {
+          setAllPostData(allPostData);
+          const filteredPosts = allPostData.filter(post => followingList.includes(post.trainerUsername));
+          setPostData(filteredPosts);
+
+          const savedPosts = allPostData.filter(post => savedList.includes(post._id));
+          setSavedWorkout(savedPosts);
+
+        }
+      } catch (error) {
+        console.error('Error Getting Data', error);
+      }
+    }  
+
+    async function getMyPosts(){
+      try {
+        const myPostsResponse = await axios.get('/landing/getMyPosts', {}, { withCredentials: true });
+        const myPosts = myPostsResponse.data;
+
+        if (myPosts.error) {
+          console.log(myPosts.error);
+        } else {
+          console.log("THESE ARE MY POSTS", myPosts);
+          setMyPosts(myPosts);
+        }
+
+      } catch (error) {
+        console.error('Error Getting Data', error);
+      }
+    }  
+
+    
+
+    
+
+
     return (
-      <div style={{ backgroundColor: 'whitesmoke' }}>
+      <div style={{ backgroundColor: 'whitesmoke', paddingBottom: '100px' }}>
         <div className="page" style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
           <button
-            onClick={() => setPostType('Following')}
+            onClick={() => {
+              setPostType('Following');
+              getFollower();
+            }}
+            
             style={{
               padding: '10px 20px',
               marginRight: '10px',
@@ -89,22 +120,25 @@ export default function LandingPage() {
               e.target.style.transform = 'none';
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center'}}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                style={{ width: '0.9em', height: '1em', verticalAlign: '-.125em', paddingRight: '3px'}}
-                >
-                <path
-                fill="currentColor"
-                d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"
-                />
-             </svg><div>Following</div>
+          <div style={{ display: 'flex', alignItems: 'center'}}>
+          <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 448 512"
+              style={{ width: '0.9em', height: '1em', verticalAlign: '-.125em', paddingRight: '3px'}}
+              >
+              <path
+              fill="currentColor"
+              d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"
+              />
+            </svg><div>Following</div>
 
             </div>
           </button>
           <button
-            onClick={() => setPostType('Trending')}
+            onClick={() => {
+              setPostType('Trending');
+              getFollower();
+            }}
             style={{
               padding: '10px 20px',
               marginRight: '10px',
@@ -143,7 +177,11 @@ export default function LandingPage() {
             </div>
           </button>
           <button
-            onClick={() => setPostType('Saved')}
+            onClick={() => {
+              getFollower();
+              setPostType('Saved');
+      
+            }}
             style={{
               padding: '10px 20px',
               backgroundColor: postType === 'Saved' ? '#ededed' : 'transparent',
@@ -175,36 +213,108 @@ export default function LandingPage() {
                 fill="currentColor"
                 d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
                 />
-             </svg><div>Saved</div>
+            </svg><div>Saved</div>
 
             </div>
           </button>
+
+        {role !== 'user' && (
+            <button
+              onClick={() => {
+                getFollower();
+                setPostType('My Posts');
+              }}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: postType === 'My Posts' ? '#ededed' : 'transparent',
+                color: postType === 'My Posts' ? '#8b5cf6' : 'gray',
+                border: 'none',
+                outline: 'none',
+                borderRadius: '5px',
+              }}
+              onMouseOver={(e) => {
+                e.target.style.outline = '2px solid transparent';
+                e.target.style.outlineOffset = '2px';
+                e.target.style.outlineColor = '#8b5cf6';
+    
+              }}
+              onMouseOut={(e) => {
+                e.target.style.outline = 'none';
+                e.target.style.borderRadius = '5px';
+                e.target.style.boxShadow = 'none';
+                e.target.style.transform = 'none';
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center'}}>
+              <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                  style={{ width: '0.9em', height: '1em', verticalAlign: '-.125em', paddingRight: '3px'}}
+                  >
+                  <path
+                  fill="currentColor"
+                  d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
+                  />
+              </svg><div>My Posts</div>
+              </div>
+            </button>
+        )}
+
+          
           
         </div>
         
         <div className={"flex justify-center items-center"}>
-          <div className="card" >
-          <div style={{ fontSize: '14px', fontWeight: 'bold', borderBottom: '1px solid #e1e3e6', marginLeft: '5px' }}>Post Something...</div>
-          <div className="flex" style={{ alignItems: 'center', justifyContent: 'space-between'}}>
-            <div className="flex" style={{marginTop: '5px'}}>
-              <div className="my_pic" style={{ marginLeft: '5px'}}></div>
-              <div style={{ fontSize: '15px', color:'#898b8f', marginLeft: '10px'}}>What's on your mind?</div>
+          {role !== 'user' && (
+            <div className="card" >
+              <div style={{ fontSize: '14px', fontWeight: 'bold', borderBottom: '1px solid #e1e3e6', marginLeft: '5px' }}>Post Something...</div>
+              <div className="flex" style={{ alignItems: 'center', justifyContent: 'space-between'}}>
+                <div className="flex" style={{marginTop: '5px'}}>
+                  <div className="my_pic" style={{ marginLeft: '5px'}}></div>
+                  <div style={{ fontSize: '15px', color:'#898b8f', marginLeft: '10px'}}>What's on your mind?</div>
+                </div>
+                <NavLink to="/post" className={"bg-gradient-to-br from-purple-500 to-pink-500 text-white border-gray-500 rounded-[10px] p-2 mt-2"}>
+                      + Create Post 
+                </NavLink>
+              </div>
             </div>
-            <NavLink to="/post" className={"bg-gradient-to-br from-purple-500 to-pink-500 text-white border-gray-500 rounded-[10px] p-2 mt-2"}>
-                  + Create Post 
-            </NavLink>
+          )}
+        </div>
+
+        {postType === 'Following' && (
+          <div style={{ paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {postData.map((post, index) => (
+              <FeedCard key={index} post={post} style={{ marginBottom: '20px' }} />
+            ))}
           </div>
-          
+        )}
+
+        {postType === 'Trending' && (
+          <div style={{ paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {allPost
+              .sort((a, b) => b.likes - a.likes) // Sort posts based on likes value in descending order
+              .map((post, index) => (
+                <FeedCard key={index} post={post} style={{ marginBottom: '20px' }} />
+              ))}
+          </div>
+        )}
+
+        {postType === 'Saved' && (
+            <div style={{ paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {savedWorkout.map((post, index) => (
+                <FeedCard key={index} post={post} style={{ marginBottom: '20px' }} />
+              ))}
         </div>
+        )}
+
+        {postType === 'My Posts' && (
+            <div style={{ paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {myPost.map((post, index) => (
+                <FeedCard key={index} post={post} style={{ marginBottom: '20px' }} />
+              ))}
         </div>
-        <div style={{ paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {postData.map((post, index) => {
-                if (post.type.includes(postType)) {
-                return <FeedCard key={index} post={post} style={{ marginBottom: '20px' }} />;
-                }
-                return null;
-            })}
-        </div>
+        )}
+
       </div>
     );
   }
