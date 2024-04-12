@@ -412,22 +412,43 @@ router.get('/waterGet', async (req, res) => {
             return res.status(401).json({ error: "User not valid" });
         }
 
+<<<<<<< HEAD
+        const username = getUserIdFromToken(token);
+        const userId = getUserIdFromToken(token);
+
+        //const { date, name, reps, sets, resistance, resMeasure, duration } = req.body;
+        //console.log("new call");
+        //const date = req.query.date;
+        const startOfDay = new Date(date);
+        startOfDay.setHours(0, 0, 0, 0);
+=======
         const userId = getUserIdFromToken(token); 
 
         let query = { userId };
         if (date) {
             const startOfDay = new Date(date);
             startOfDay.setHours(0, 0, 0, 0);
+>>>>>>> main
 
-            const endOfDay = new Date(date);
-            endOfDay.setHours(23, 59, 59, 999);
+        // Set the end of the day
+        const endOfDay = new Date(date);
+        endOfDay.setHours(23, 59, 59, 999);
 
+<<<<<<< HEAD
+        const water = await Water.find({
+            userId: userId,
+            date: { $gte: startOfDay, $lte: endOfDay }
+        });
+
+        //console.log("foods retreived", foods);
+=======
             query.date = { $gte: startOfDay, $lt: endOfDay };
         }
 
         const waterEntries = await Water.find(query);
+>>>>>>> main
 
-        return res.status(200).json(waterEntries);
+        return res.json(water);
 
     } catch (error) {
         console.error('Error fetching water entries:', error);

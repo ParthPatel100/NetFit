@@ -6,6 +6,8 @@ import React, { useState,useEffect } from 'react';
 import '../Landing.css';
 import axios from 'axios';
 import ProfilePic from '../assets/profilePic.png'
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const FeedCard = ({ post }) => {
   const { _id, trainerUsername, creationDate, comments, likes, workout_id, description, title, images } = post;
@@ -21,6 +23,7 @@ const FeedCard = ({ post }) => {
   const [role, setRole] = useState('');
   const [dict, setDict] = useState({});
   const [pict,setPict] = useState({});
+  const navigate = useNavigate();
 
     
   useEffect(() => {
@@ -334,7 +337,14 @@ async function getDict(){
                 {role === 'admin' || trainerUsername === myID && (
                 // Brooklyn's page connects to this button
                 <div>
-                  <button style={{ border: '1px solid #ad54ef', borderRadius: '10px', padding: '5px'}}>
+                  <button 
+                    style={{ border: '1px solid #ad54ef', borderRadius: '10px', padding: '5px'}}
+                    onClick={() => { 
+                      console.log("pot", post)
+                      navigate('/post', { state:{editPost : post}});
+                    }}
+                  
+                  >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 448 512"
