@@ -57,10 +57,6 @@ router.get('/getFollower', async (req, res) => {
 });
 
 router.get('/getFollowingPosts', async (req, res) => {
-    //console.log(req.user)
-    //const username = req.user.name
-
-   //const username = "john_doe"; 
 
    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
 
@@ -294,6 +290,24 @@ router.put('/removeFollow/:trainerUsername', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+router.get('/getDict', async (req, res) => {
+
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+ 
+     try {
+         const user = await User.find();
+         if (user) {
+             return res.status(200).json(user);
+         } else {
+             console.log('No posts found: ',user);
+             return res.status(200).json({ error: "No user found for the user" });
+         }
+     } catch (error) {
+         console.error('Error finding user:', error);
+         return res.status(500).json({ error: "Internal Server Error" });
+     }
+ });
 
 
 module.exports = router

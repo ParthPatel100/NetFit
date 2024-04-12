@@ -19,6 +19,7 @@ const FeedCard = ({ post }) => {
   const [savedWorkout, setSavedWorkout] = useState([]);
   const [myID, setMyID] = useState('');
   const [role, setRole] = useState('');
+  const [dict, setDict] = useState({});
   
 
     
@@ -29,8 +30,9 @@ const FeedCard = ({ post }) => {
     getWorkout();
     getSavedWorkout();
     getMyID();
+    getDict()
     
-    console.log("here")
+    console.log("here: ")
   }, []);
 
   useEffect(() => {
@@ -132,7 +134,7 @@ const FeedCard = ({ post }) => {
       if (workout.error) {
         console.log("error here",workout.error);
       } else {
-        console.log("Received this: ", workout);
+        //console.log("Received this: ", workout);
         setWorkout(workout);
       }
     } catch (error) {
@@ -193,11 +195,11 @@ async function getSavedWorkout(){
 async function handleSave(){
   try {
     if (savedWorkout.includes(_id)) {
-      console.log("saved already");
+      //console.log("saved already");
       await axios.put(`/landing/removeSavedWorkout/${_id}`);
       setSavedWorkout(savedWorkout.filter(id => id !== _id));
     } else {
-      console.log("not saved yet");
+      //console.log("not saved yet");
       await axios.put(`/landing/addSavedWorkout/${_id}`);
       setSavedWorkout([...savedWorkout, _id]);
     }
@@ -210,13 +212,13 @@ async function handleSave(){
 async function handleFollow(){
   try {
     if (followerList.includes(trainerUsername)) {
-      console.log("following already");
+      //console.log("following already");
       await axios.put(`/landing/removeFollow/${trainerUsername}`);
       setFollowerList(followerList.filter(id => id !== trainerUsername));
 
       //setSavedWorkout(savedWorkout.filter(id => id !== _id));
     } else {
-      console.log("not following yet");
+      //console.log("not following yet");
       await axios.put(`/landing/addFollow/${trainerUsername}`);
       setFollowerList([...followerList, trainerUsername]);
     }
@@ -245,10 +247,10 @@ async function getMyID(){
 } 
 
 
-async function getUsername(userId){
+async function getDict(){
   try {
     
-    const userResponse = await axios.get('/landing/getUsername/${userId}', { withCredentials: true });
+    const userResponse = await axios.get('/landing/getDict/', {}, { withCredentials: true });
     
     const userData = userResponse.data;
 
@@ -256,8 +258,12 @@ async function getUsername(userId){
       console.log(userData.error);
       return null;
     } else {
-      //setSavedWorkout(suserDat.post_id);
-      return userData.username;
+      const dict = {};
+      userData.forEach(user => {
+        dict[user._id] = user.username;
+      });
+      setDict(dict)
+      //console.log("Dictionary: ", dict)
     }
 
   } catch (error) {
@@ -277,9 +283,9 @@ async function getUsername(userId){
                     <div style={{ padding: '5px' }}>
                       <div style={{ display: 'flex'}}>
                           {trainerUsername === myID ? (
-                            <div style={{ fontSize: '14px', fontWeight: 'bold' }}>You</div>
+                            <div style={{ fontSize: '14px', fontWeight: 'bold'}}>You</div>
                           ) : (
-                            <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{trainerUsername}</div>
+                            <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{dict[trainerUsername]}</div>
                           )}
                           {(() => {
                             if (!followerList.includes(trainerUsername) && !(myID === trainerUsername)) {
@@ -341,40 +347,73 @@ async function getUsername(userId){
     <div>      
       {showImage? (
         // IMAGE FRAME
-        <div className="image">
-          <img src={images} alt="Post" className="iDimensions"/>
-        </div>
-      ) : (
-        // WORKOUT FRAME
-        <div className="image">
-          <div className="title">{title}
+        <div style={{ position: 'relative' }}>
+          <div className="image">
+            <img src={images} alt="Post" className="iDimensions"/>
+            <button
+                onClick={handleSwipeRight}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '0',
+                  fontSize: '20px',
+                  cursor: 'pointer',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  backgroundColor: 'rgba(173, 84, 239, 0.6)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                &#8594;
+              </button>
           
           </div>
-          {console.log("Values: ", workoutPlan)}
-          {workoutPlan.map((exercise, index) => (
-            <div key={index} className="exerciseRow">
-              <div><b>{exercise.name}</b> </div>
-              <div>Reps: { exercise.reps}</div>
-              <div>Sets: { exercise.sets}</div>
-              <div>Weight: { exercise.resistance} { exercise.resMeasure}</div>
-            </div>
-          ))}
+
         </div>
+        
+      ) : (
+        // WORKOUT FRAME
+        <div style={{ position: 'relative' }}>
+          <div className="image">
+            <div className="title">{title}</div>
+            {console.log("Values: ", workoutPlan)}
+            {workoutPlan.map((exercise, index) => (
+              <div key={index} className="exerciseRow">
+                <div><b>{exercise.name}</b></div>
+                <div>Reps: {exercise.reps}</div>
+                <div>Sets: {exercise.sets}</div>
+                <div>Weight: {exercise.resistance} {exercise.resMeasure}</div>
+              </div>
+            ))}
+              </div>
+              <button
+                onClick={handleSwipeLeft}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '0',
+                  fontSize: '20px',
+                  cursor: 'pointer',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  backgroundColor: 'rgba(173, 84, 239, 0.6)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                &#8592;
+              </button>
+            </div>
       )}
 
       <div style={{ textAlign: 'center' }}>
-        <button onClick={handleSwipeLeft} style={{
-            fontSize: '20px',
-            marginRight: '10px',
-            cursor: 'pointer',
-            color: '#ad54ef'
-          }}>&#8592;</button>
-
-        <button onClick={handleSwipeRight} style={{
-            fontSize: '20px',
-            cursor: 'pointer',
-            color: '#ad54ef'
-          }}>&#8594;</button>
       </div>
     </div>
           
@@ -412,7 +451,11 @@ async function getUsername(userId){
           <div className="comment">
             {commentList.map((comment, index) => (
               <div className="commentCard" key={index}>
-                  <div style={{ fontSize: '10px', color: '#3d3d3d', fontWeight: 'bold'}}>{comment.username} </div>
+                  {comment.username === myID ? (
+                      <div style={{ fontSize: '10px', color: '#3d3d3d', fontWeight: 'bold'}}>You</div>
+                  ) : (
+                      <div style={{ fontSize: '10px', color: '#3d3d3d', fontWeight: 'bold'}}>{dict[comment.username]}</div>
+                  )}
                   <div style={{ fontSize: '12px' }}>{comment.description}</div>
               </div>
             ))}

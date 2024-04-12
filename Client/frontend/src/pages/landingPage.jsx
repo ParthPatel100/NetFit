@@ -194,22 +194,10 @@ export default function LandingPage() {
                 backgroundColor: postType === 'My Posts' ? '#ededed' : 'transparent',
                 color: postType === 'My Posts' ? '#8b5cf6' : 'gray',
                 border: 'none',
-                outline: 'none',
                 borderRadius: '5px',
               }}
-              onMouseOver={(e) => {
-                e.target.style.outline = '2px solid transparent';
-                e.target.style.outlineOffset = '2px';
-                e.target.style.outlineColor = '#8b5cf6';
-    
-              }}
-              onMouseOut={(e) => {
-                e.target.style.outline = 'none';
-                e.target.style.borderRadius = '5px';
-                e.target.style.boxShadow = 'none';
-                e.target.style.transform = 'none';
-              }}
-            >
+              className={"hover:outline hover:outline-purple-500"}>
+
               <div style={{ display: 'flex', alignItems: 'center'}}>
               <svg
                   xmlns="http://www.w3.org/2000/svg"
