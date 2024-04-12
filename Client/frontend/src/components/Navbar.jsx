@@ -18,7 +18,13 @@ export const NavLinks = ({ className, childClassName, onClick}) => {
                 console.log(data.error);
             } 
             else {
+                console.log(data.profilepic)
+                if(data.profilepic==undefined){
+                    setProfile(ProfilePic)
+                }
+                else{
                 setProfile(data.profilepic);
+                }
             }
         } catch (error) {
             console.error('Error Fetching Profile:', error);
@@ -26,7 +32,7 @@ export const NavLinks = ({ className, childClassName, onClick}) => {
         }
         useEffect(()=> {
             fetchProfile();
-        },[nav])
+        },[nav,profile])
     return(
         <div className={className}>
             <NavLink
@@ -103,7 +109,12 @@ export default function Navbar() {
             data.data.map((trainer) => {
                 const obj ={}
                 obj["trainer"]=trainer.username
-                obj["pic"] =trainer.profilepic
+                if(trainer.profilepic==undefined){
+                obj["pic"]=ProfilePic
+            }
+            else{
+            obj["pic"] =trainer.profilepic
+            }
                 list.push(obj)
             })
             console.log(list)
