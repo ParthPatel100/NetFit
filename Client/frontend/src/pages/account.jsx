@@ -3,6 +3,7 @@ import {UserContext} from "../../context/userContext.jsx";
 import Popup from 'reactjs-popup';
 import {Navigate} from "react-router-dom";
 import axios from 'axios'
+import ProfilePic from '../assets/profilePic.png'
 axios.defaults.baseURL = 'http://localhost:8080'
 axios.defaults.withCredentials = true;
 export default function Account(){
@@ -35,7 +36,6 @@ export default function Account(){
         imageDataUrl.target.files[0]
         fetchProfile();
         updateNav();
-        console.log(nav)
     }
 }
   
@@ -60,7 +60,11 @@ try {
         console.log(data.error);
     } 
     else {
+        if(data.profilepic==undefined){
+            setProfile(ProfilePic)
+        }else{
         setProfile(data.profilepic);
+        }
         setEmail(data.email);
         setName(data.username);
         setGender(data.gender);

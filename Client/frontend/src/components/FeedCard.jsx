@@ -5,7 +5,7 @@ import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import React, { useState,useEffect } from 'react'; 
 import '../Landing.css';
 import axios from 'axios';
-
+import ProfilePic from '../assets/profilePic.png'
 
 const FeedCard = ({ post }) => {
   const { _id, trainerUsername, creationDate, comments, likes, workout_id, description, title, images } = post;
@@ -20,7 +20,7 @@ const FeedCard = ({ post }) => {
   const [myID, setMyID] = useState('');
   const [role, setRole] = useState('');
   const [dict, setDict] = useState({});
-  
+  const [pict,setPict] = useState({});
 
     
   useEffect(() => {
@@ -31,7 +31,6 @@ const FeedCard = ({ post }) => {
     getSavedWorkout();
     getMyID();
     getDict()
-    
     console.log("here: ")
   }, []);
 
@@ -252,17 +251,27 @@ async function getDict(){
     
     const userResponse = await axios.get('/landing/getDict/', {}, { withCredentials: true });
     
-    const userData = userResponse.data;
-
+    const userData = await userResponse.data;
+    console.log("Heeeeere",userResponse.data)
     if (userData.error) {
       console.log(userData.error);
       return null;
     } else {
       const dict = {};
+      const pict ={};
       userData.forEach(user => {
-        dict[user._id] = user.username;
+
+      if(user.profilepic==undefined){
+        pict[user._id] = ProfilePic;
+      }
+      else{
+        pict[user._id] = user.profilepic;
+      }
+      dict[user._id] = user.username;
       });
-      setDict(dict)
+      console.log("Yeeeeeeeehooooooooooo",dict)
+      setDict(dict);
+      setPict(pict);
       //console.log("Dictionary: ", dict)
     }
 
@@ -279,7 +288,7 @@ async function getDict(){
           <div className="top">
             <div className="header">
                 <div style={{ display: 'flex', alignItems: 'center'}}>
-                    <div className="profile_pic"></div>
+                    <img src={pict[trainerUsername]} alt={"Profile Pic"} className="actPic"/>
                     <div style={{ padding: '5px' }}>
                       <div style={{ display: 'flex'}}>
                           {trainerUsername === myID ? (
@@ -463,7 +472,7 @@ async function getDict(){
           )}
 
           <div className="flex" style={{ paddingTop: '15px', borderTop: '1px solid #e1e3e6' }}>
-            <div className="my_pic"></div>
+            <img src={pict[myID]} className="my_pic"/>
             <div className="write_comment">
               <input type="text" placeholder=" Write a comment..." style={{ width: '100%', backgroundColor: '#f2f2f2', borderRadius: '20px', padding: '5px', fontSize: '12px' }} maxLength={100} value={commentInput} onChange={(e) => setCommentInput(e.target.value)}/>
             </div>
