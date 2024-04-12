@@ -1049,7 +1049,7 @@ export default function Track(){
             </div>
             <div className="flex flex-col lg:flex-col gap-4">
                 {/* Food  */}
-                <div className="bg-gradient-to-tr from-purple-50 to-blue-50 p-4 rounded-md outline outline-slate-400 shadow-2xl">
+                <div className="bg-white p-4 rounded-md outline outline-slate-200 shadow-lg">
 
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
                         <div className="text-l font-bold">
@@ -1595,7 +1595,7 @@ export default function Track(){
                 </div>
 
                 {/* Workout  */}
-                <div className="bg-white p-4 rounded-md shadow-2xl">
+                <div className="bg-white p-4 rounded-md outline outline-slate-200 shadow-lg">
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between ">
                         <div className="text-l font-bold">Workouts</div>
                         <button className="focus:outline-none" onClick={handleWorkoutButtonClick}>
@@ -1838,7 +1838,7 @@ export default function Track(){
                     {/* Display Submitted Workouts */}
                     {workoutData.length > 0 && (
                         <div className="ml-1 mr-1 mt-5">
-                            <div className="flex flex-wrap border-t border-gray-300">
+                            <div className="flex flex-wrap border-t border-purple-300">
                                 {workoutData.map((workout, index) => (
                                     <div key={index} className="w-full flex justify-between border-t border-gray-300">
                                         <div className="flex mt-2 items-center">
@@ -1907,7 +1907,7 @@ export default function Track(){
                     {/* Display savedWorkouts Workouts */}
                     {savedWorkouts.length > 0 && (
                         <div className="ml-1 mr-1 mt-5">
-                            <div className="flex flex-wrap border-t border-gray-300">
+                            <div className="flex flex-wrap border-t border-purple-300">
                                 {workoutData.map((workout, index) => (
                                     <div key={index} className="w-full flex justify-between border-t border-gray-300">
                                         <div className="flex mt-2 items-center">
@@ -1976,7 +1976,7 @@ export default function Track(){
                 </div>
 
                 {/* Weight Section */}
-                <div className="bg-white p-4 rounded-md shadow-2xl">
+                <div className="bg-white p-4 rounded-md outline outline-slate-200 shadow-lg">
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
                         <div className="text-l font-bold">Weight</div>
                         <button className="focus:outline-none" onClick={() => setShowWeightInputs(!showWeightInputs)}>
@@ -2020,7 +2020,7 @@ export default function Track(){
                     {/* Display Submitted Weight Data */}
                     {weightEntries.length > 0 && (
                         <div className="ml-1 mr-1 mt-5">
-                            <div className="flex flex-wrap border-t border-gray-300">
+                            <div className="flex flex-wrap border-t border-purple-300">
                                 {weightEntries.map((entry, index) => (
                                     <div key={index} className="w-full flex justify-between border-t border-gray-300">
                                         <div className="flex mt-2 items-center">
@@ -2070,7 +2070,7 @@ export default function Track(){
 
 
                 {/* Sleep Section */}
-                <div className="bg-white p-4 rounded-md shadow-2xl">
+                <div className="bg-white p-4 rounded-md outline outline-slate-200 shadow-lg">
 
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
                         <div className="text-l font-bold">
@@ -2119,7 +2119,7 @@ export default function Track(){
                     {/* Display Submitted Data */}
                     {submittedSleepData.length > 0 && (
                         <div className=" ml-1 mr-1 mt-5">
-                            <div className="flex flex-wrap border-t border-gray-300">
+                            <div className="flex flex-wrap border-t border-purple-300">
                                 {submittedSleepData.map((sleep, index) => (
                                     <div key={index} className="w-full flex justify-between border-t border-gray-300">
                                         <div className="flex mt-2 items-center">
@@ -2173,7 +2173,7 @@ export default function Track(){
                 </div>
 
                 {/* Water Section */}
-                <div className="bg-white p-4 rounded-md shadow-2xl">
+                <div className="bg-white p-4 rounded-md outline outline-slate-200 shadow-lg">
 
                     <div className="flex flex-row text-md md:text-lg mb-2 justify-between">
                         <div className="text-l font-bold">
@@ -2230,7 +2230,7 @@ export default function Track(){
                     {/* Display Submitted Data */}
                     {submittedWaterData.length > 0 && (
                         <div className=" ml-1 mr-1 mt-5">
-                            <div className="flex flex-wrap border-t border-gray-300">
+                            <div className="flex flex-wrap border-t border-purple-300">
                                 {submittedWaterData.map((water, index) => (
                                     <div key={index} className="w-full flex justify-between border-t border-gray-300">
                                         <div className="flex mt-2 items-center">
