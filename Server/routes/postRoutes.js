@@ -122,7 +122,26 @@ router.post("/uploadPost", uploadS3.array("image", 4), async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
+router.post("/editPost", async (req, res) => {
+    
+    try {
 
+        const { token } = req.cookies;
+        console.log("TOKEN:", token);
+        id = req.body.id
+        title = req.body.title
+        description = req.body.title
+        await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+
+        query = {'_id':id}
+        update ={'title':title,'description':description}
+        await Post.findOneAndUpdate(query,update)
+        return res.json("Success");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error");
+    }
+});
 
 // POST route for creating a new post
 router.post("/postWorkout", async (req, res) => {
