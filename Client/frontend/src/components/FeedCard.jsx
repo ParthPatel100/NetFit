@@ -65,6 +65,7 @@ const FeedCard = ({ post }) => {
         console.log(followingData.error);
       } else {
         setRole(followingData.user_role);
+        console.log("ROLE: ", followingData.user_role)
         setFollowerList(followingData.following_list);
       }
 
@@ -129,8 +130,10 @@ const FeedCard = ({ post }) => {
 
   async function getWorkout() {
     try {
+      console.log("RESPOSNEW!: ",workout_id);
       const workoutResponse = await axios.get(`/landing/getWorkout/${workout_id.join(',')}`, { withCredentials: true });
-  
+      
+      console.log("REPOSNE!: ",workoutResponse);
       const workout = workoutResponse.data;
   
       if (workout.error) {
@@ -177,22 +180,24 @@ const FeedCard = ({ post }) => {
         return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
     }
 }
-async function getSavedWorkout(){
-
+async function getSavedWorkout() {
   try {
     const savedResponse = await axios.get('/landing/getSavedWorkouts', {}, { withCredentials: true });
     
     const savedData = savedResponse.data;
 
-    if (savedData.error) {
+    if (savedData === null || savedData.length === 0) {
+      console.log("Saved data is null or empty.");
+    } else if (savedData.error) {
       console.log(savedData.error);
     } else {
       setSavedWorkout(savedData.post_id);
+      console.log("Saving just ID, " ,savedData.post_id)
     }
   } catch (error) {
     console.error('Error Getting Data', error);
   }
-}  
+}
 
 async function handleSave(){
   try {
@@ -334,7 +339,7 @@ async function getDict(){
                 
 
                 
-                {role === 'admin' || trainerUsername === myID && (
+                {(role === 'admin'|| trainerUsername === myID) && (
                 // Brooklyn's page connects to this button
                 <div>
                   <button 

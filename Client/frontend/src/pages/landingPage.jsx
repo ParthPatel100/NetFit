@@ -80,6 +80,7 @@ export default function LandingPage() {
 
             const userResponse = await axios.get('/landing/getTrainerDict/', {}, { withCredentials: true });
             const userData = await userResponse.data;
+            setRole(userData.user_role);
             if (userData.error) {
                 console.log(userData.error);
                 return null;
@@ -121,55 +122,56 @@ export default function LandingPage() {
     }
 
     async function getFollower(){
-        let followingList = [];
-        let savedList = [];
+      let followingList = [];
+      let savedList = [];
 
-        try {
-            const followingResponse = await axios.get('/landing/getFollower', {}, { withCredentials: true });
-            const allPostsResponse = await axios.get('/landing/getFollowingPosts', {}, { withCredentials: true });
-            const savedResponse = await axios.get('/landing/getSavedWorkouts', {}, { withCredentials: true });
+      try {
+        const followingResponse = await axios.get('/landing/getFollower', {}, { withCredentials: true });
+        const allPostsResponse = await axios.get('/landing/getFollowingPosts', {}, { withCredentials: true });
+        const savedResponse = await axios.get('/landing/getSavedWorkouts', {}, { withCredentials: true });
+        
 
+        const followingData = followingResponse.data;
+        const allPostData = allPostsResponse.data;
+        const savedData = savedResponse.data;
 
-            const followingData = followingResponse.data;
-            const allPostData = allPostsResponse.data;
-            const savedData = savedResponse.data;
-
-            if (followingData.error) {
-                console.log(followingData.error);
-            } else {
-                followingList =  followingData.following_list;
-                setFollow(followingData.following_list);
-                setRole(followingData.user_role);
-            }
-            if (savedData.error) {
-                console.log(savedData.error);
-            } else {
-                savedList =  savedData.post_id;
-            }
-
-            if (allPostData.error) {
-                console.log(allPostData.error);
-            } else {
-                setAllPostData(allPostData);
-                const filteredPosts = allPostData.filter(post => followingList.includes(post.trainerUsername));
-                setPostData(filteredPosts);
-
-                const savedPosts = allPostData.filter(post => savedList.includes(post._id));
-                setSavedWorkout(savedPosts);
-
-            }
-        } catch (error) {
-            console.error('Error Getting Data', error);
+        if (followingData.error) {
+          console.log(followingData.error);
+        } else {
+          followingList =  followingData.following_list;
+          setFollow(followingData.following_list);
+          setRole(followingData.user_role);
         }
+        if (savedData.error) {
+          console.log(savedData.error);
+        } else {
+          savedList =  savedData.post_id;
+        }
+
+        if (allPostData.error) {
+          console.log(allPostData.error);
+        } else {
+          setAllPostData(allPostData);
+          const filteredPosts = allPostData.filter(post => followingList.includes(post.trainerUsername));
+          setPostData(filteredPosts);
+
+          const savedPosts = allPostData.filter(post => savedList.includes(post._id));
+          setSavedWorkout(savedPosts);
+
+        }
+      } catch (error) {
+        console.error('Error Getting Data', error);
+      }
     }
 
     async function getMyPosts(){
       try {
         const myPostsResponse = await axios.get('/landing/getMyPosts', {}, { withCredentials: true });
         const myPosts = myPostsResponse.data;
+        console.log("printing this:", myPosts);
 
         if (myPosts.error) {
-          console.log(myPosts.error);
+          console.log("THIS Error", myPosts);
         } else {
           console.log("THESE ARE MY POSTS", myPosts);
           setMyPosts(myPosts);
@@ -276,10 +278,7 @@ export default function LandingPage() {
           {showDropdown && (
             <div className={"flex flex-col absolute bg-gray-300 top-0 mt-10 px-6 rounded-lg"}>
                 
-                {searchList.map((trainer) => {
-                    console.log("trainer thisS: ", trainer[0])
-                    
-                    
+                {searchList.map((trainer) => {                    
                     if(trainer[0] !== myID){
                         return (
                             <div>
@@ -291,9 +290,8 @@ export default function LandingPage() {
                                                     {trainer[1]}
                                                 </div>
                                                 <button onClick={() => {
-                                                    console.log("Sending this arg 0!: ", trainer[0])
-                                                    console.log("Sending this arg 1!: ", trainer[2])
                                                     handleFollow(trainer[0])
+                                                    window.location.reload();
                                                 }} style={{
                                                     color: '#9045d6',
                                                     fontSize: '11px',
@@ -320,9 +318,8 @@ export default function LandingPage() {
                                                     {trainer[1]}
                                                 </div>
                                                 <button onClick={() => {
-                                                    console.log("Sending this arg 0!: ", trainer[0])
-                                                    console.log("Sending this arg 1!: ", trainer[2])
                                                     handleFollow(trainer[0]).then()
+                                                    window.location.reload();
                                                 }} style={{
                                                     color: '#9045d6',
                                                     fontSize: '11px',
@@ -404,8 +401,10 @@ export default function LandingPage() {
           </div>
         )}
 
+        
         {postType === 'Saved' && (
             <div style={{ paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            
             {savedWorkout.length > 0 ? (
               savedWorkout.map((post, index) => (
                 <FeedCard key={index} post={post} style={{ marginBottom: '20px' }} />
