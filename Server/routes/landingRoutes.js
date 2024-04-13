@@ -257,11 +257,13 @@ router.get('/getMyID', async (req, res) => {
 
 router.put('/addFollow/:trainerUsername', async (req, res) => {
     try {
+        
         const trainerId = req.params.trainerUsername;
+        console.log('add Follow this: ', trainerId);
         const userId = req.user.id;
 
         let savedFollower = await User.findOne({ _id: userId });
-        console.log("was tjere?: ", savedFollower);
+        console.log("add follow was tjere?: ", savedFollower);
 
         savedFollower.following_list.push(trainerId);
         await savedFollower.save();
@@ -276,10 +278,11 @@ router.put('/addFollow/:trainerUsername', async (req, res) => {
 router.put('/removeFollow/:trainerUsername', async (req, res) => {
     try {
         const trainerId = req.params.trainerUsername;
+        console.log('remove Follow this: ', trainerId);
         const userId = req.user.id;
 
         let savedFollower = await User.findOne({ _id: userId });
-        console.log("Still there: ", savedFollower);
+        console.log("Remove follow was there?: ", savedFollower);
 
         savedFollower.following_list.pull(trainerId);
         await savedFollower.save();
@@ -297,6 +300,24 @@ router.get('/getDict', async (req, res) => {
  
      try {
          const user = await User.find();
+         if (user) {
+             return res.status(200).json(user);
+         } else {
+             console.log('No posts found: ',user);
+             return res.status(200).json({ error: "No user found for the user" });
+         }
+     } catch (error) {
+         console.error('Error finding user:', error);
+         return res.status(500).json({ error: "Internal Server Error" });
+     }
+ });
+
+ router.get('/getTrainerDict', async (req, res) => {
+
+    await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
+ 
+     try {
+         const user = await User.find({ user_role: { $ne: 'user' } });
          if (user) {
              return res.status(200).json(user);
          } else {
