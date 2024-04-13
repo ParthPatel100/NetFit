@@ -7,6 +7,9 @@ import Typography from "@mui/joy/Typography";
 import CircularProgress from "@mui/joy/CircularProgress";
 import axios from "axios";
 import {UserContext} from "../../context/userContext.jsx";
+import {getTodayWorkout} from "../utils/ProgressData.js";
+import {useCountUp} from "use-count-up";
+import {GoalAndTrackContext} from "../../context/goalAndTrackContextProvider.jsx";
 export const NavLinks = ({ className, childClassName, onClick}) => { 
     const { nav } = useContext(UserContext);
     const [profile,setProfile] =useState();
@@ -93,6 +96,8 @@ export const NavLinks = ({ className, childClassName, onClick}) => {
 }
 
 export default function Navbar() {
+    const {caloriesGoals, carbsGoals,fatsGoals,proteinGoals,sugarGoals,
+        sleepGoals,waterGoals,caloriesBurnGoals,workoutDurationGoals} = useContext(GoalAndTrackContext)
     const { user } = useContext(UserContext)
 
     const [isFoodHovered, setIsFoodHovered] = useState(false);
@@ -100,6 +105,101 @@ export default function Navbar() {
     const [isWaterHovered, setIsWaterHovered] = useState(false);
     const [isSleepHovered, setIsSleepHovered] = useState(false);
     const [followingList, setFollowingList] = useState([]);
+
+    const [calGainedProgress, setCalGainedProgress] = useState(0)
+    const [calBurntProgress, setCalBurntProgress] = useState(0)
+    const [sleepProgress, setSleepProgress] = useState(0)
+    const [waterProgress, setWaterProgress] = useState(0)
+
+    const duration=2
+
+    const { value: caloriesGained_value } = useCountUp({
+        isCounting: true,
+        duration: duration,
+        start: 0,
+        end: (()=>{
+            if(caloriesGoals > 0){
+                return parseFloat(((calGainedProgress / caloriesGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
+    });
+
+    const { value: caloriesBurntToday_value } = useCountUp({
+        isCounting: true,
+        duration: duration,
+        start: 0,
+        end: (()=>{
+            if(caloriesBurnGoals > 0){
+                return parseFloat(((calBurntProgress / caloriesBurnGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
+    });
+
+    const { value: sleep_value} = useCountUp({
+        isCounting: true,
+        duration: duration,
+        start: 0,
+        end: (()=>{
+            if(sleepGoals > 0){
+                return parseFloat(((sleepProgress / sleepGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
+    });
+    const { value: water_value} = useCountUp({
+        isCounting: true,
+        duration: duration,
+        start: 0,
+        end: (()=>{
+            if(waterGoals > 0){
+                return parseFloat(((waterProgress / waterGoals) * 100).toFixed(1));
+            }
+            return 0;
+        })(),
+    });
+
+    useEffect(() => {
+        getTodayWorkout().then((data) => {
+            console.log("data recive: ", data)
+            setCalGainedProgress(
+                () => {
+                    if(data.foodData.length > 0){
+                        return data.foodData[0].totalCalGained
+                    }
+                    else{
+                        return 0
+                    }
+                }
+            )
+            setCalBurntProgress(
+                () => {
+                    if(data.workoutData.length > 0){
+                        return data.workoutData[0].totalCalBurnt
+                    }
+                    else{
+                        return 0
+                    }
+                })
+            setSleepProgress(() => {
+                if(data.sleepData.length > 0){
+                    return data.sleepData[0].totalDuration
+                }
+                else{
+                    return 0
+                }
+            })
+            setWaterProgress(() => {
+                if(data.waterData.length > 0){
+                    return data.waterData[0].totalAmount
+                }
+                else{
+                    return 0
+                }
+            })
+        })
+    }, [])
 
 
     useEffect(() => {
@@ -149,13 +249,13 @@ export default function Navbar() {
 
                                     },
                                     '.MuiCircularProgress-track': {
-                                        stroke: '#a1a0a0',
+                                        stroke: `${caloriesGained_value > 100 ? '#c135ee' : '#a1a0a0'}`,
                                         strokeWidth: 5
                                     }
                                 }}
                                 className={"nav-bar-var mainElem"}
                                 determinate={true}
-                                value={parseInt(20)}>
+                                value={caloriesGained_value}>
                                 <Typography textColor={"#414040"}><UtensilsCrossed/></Typography>
                             </CircularProgress>
 
@@ -165,7 +265,7 @@ export default function Navbar() {
                                     Calories Consumed
                                 </div>
                                 <div>
-                                    600Cal
+                                    {calGainedProgress}Cal
                                 </div>
                             </div>
                         </div>
@@ -182,13 +282,13 @@ export default function Navbar() {
 
                                     },
                                     '.MuiCircularProgress-track': {
-                                        stroke: '#a1a0a0',
+                                        stroke: `${caloriesBurntToday_value > 100 ? '#c135ee' : '#a1a0a0'}`,
                                         strokeWidth: 5
                                     }
                                 }}
                                 className={"nav-bar-var mainElem"}
                                 determinate={true}
-                                value={parseInt(76)}>
+                                value={caloriesBurntToday_value}>
                                 <Typography textColor={"#414040"}><Flame/></Typography>
                             </CircularProgress>
 
@@ -198,7 +298,7 @@ export default function Navbar() {
                                     Calories Burnt
                                 </div>
                                 <div>
-                                    300Cal
+                                    {calBurntProgress}Cal
                                 </div>
                             </div>
                         </div>
@@ -216,13 +316,13 @@ export default function Navbar() {
 
                                     },
                                     '.MuiCircularProgress-track': {
-                                        stroke: '#a1a0a0',
+                                        stroke: `${water_value > 100 ? '#c135ee' : '#a1a0a0'}`,
                                         strokeWidth: 5
                                     }
                                 }}
                                 className={"nav-bar-var"}
                                 determinate={true}
-                                value={parseInt(78)}>
+                                value={parseInt(water_value)}>
                                 <Typography textColor={"#414040"}><GlassWater/></Typography>
                             </CircularProgress>
 
@@ -232,7 +332,7 @@ export default function Navbar() {
                                     Water Consumed
                                 </div>
                                 <div>
-                                    1450 mL
+                                    {waterProgress} mL
                                 </div>
                             </div>
                         </div>
@@ -250,13 +350,13 @@ export default function Navbar() {
 
                                     },
                                     '.MuiCircularProgress-track': {
-                                        stroke: '#a1a0a0',
+                                        stroke: `${sleep_value > 100 ? '#c135ee' : '#a1a0a0'}`,
                                         strokeWidth: 5
                                     }
                                 }}
                                 className={"nav-bar-var"}
                                 determinate={true}
-                                value={parseInt(90)}>
+                                value={parseInt(sleep_value)}>
                                 <Typography textColor={"#414040"}><BedDouble/></Typography>
                             </CircularProgress>
 
@@ -266,7 +366,7 @@ export default function Navbar() {
                                     Sleep
                                 </div>
                                 <div>
-                                    7.5 Hrs
+                                    {sleepProgress} Hrs
                                 </div>
                             </div>
                         </div>

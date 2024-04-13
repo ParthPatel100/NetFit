@@ -218,7 +218,7 @@ router.get('/getTodayProgressData', async (req, res) => {
 
     const today = new Date();
 
-    today.setHours(-6,0,0,0)
+    today.setHours(0,0,0,0)
     today.set
     console.log(today)
 
@@ -318,6 +318,8 @@ router.get('/getTodayProgressData', async (req, res) => {
                 $sort: { '_id.date': 1 } // Optional: Sort the result by date in ascending order
             }
         ]);
+
+        console.log("THIS HERE: , " , sleepData)
 
         return res.status(200).json({workoutData, foodData, sleepData, waterData})
     } catch (error) {

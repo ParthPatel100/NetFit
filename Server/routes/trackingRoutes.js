@@ -145,7 +145,7 @@ router.post('/sleepCreate', async (req, res) => {
         await sleep.save();
             console.log(sleep)
             const startOfDay = new Date(date);
-            startOfDay.setHours(-6, 0, 0, 0);
+            startOfDay.setHours(0,0,0,0)
             // Set the end of the day
             const endOfDay = new Date(date);
             endOfDay.setHours(23, 59, 59, 999);
@@ -263,7 +263,7 @@ router.get('/sleepGet', async (req, res) => {
         let query = { userId };
         if (date) {
             const startOfDay = new Date(date);
-            startOfDay.setHours(-6, 0, 0, 0);
+            startOfDay.setHours(0,0,0,0)
 
             const endOfDay = new Date(date);
             endOfDay.setHours(23, 59, 59, 999);
@@ -419,7 +419,7 @@ router.get('/waterGet', async (req, res) => {
         //console.log("new call");
         //const date = req.query.date;
         const startOfDay = new Date(date);
-        startOfDay.setHours(-6, 0, 0, 0);
+        startOfDay.setHours(0,0,0,0)
 
 
         // Set the end of the day
@@ -579,7 +579,7 @@ router.get('/weightGet', async (req, res) => {
         let query = { userId };
         if (date) {
             const startOfDay = new Date(date);
-            startOfDay.setHours(-6, 0, 0, 0);
+            startOfDay.setHours(0,0,0,0)
 
             const endOfDay = new Date(date);
             endOfDay.setHours(23, 59, 59, 999);
@@ -653,7 +653,7 @@ router.get("/getAllFoods", async (req, res) => {
         //console.log("new call");
         const date = req.query.date;
         const startOfDay = new Date(date);
-        startOfDay.setHours(-6, 0, 0, 0);
+        startOfDay.setHours(0,0,0,0)
 
         // Set the end of the day
         const endOfDay = new Date(date);
@@ -852,7 +852,7 @@ router.get("/getAllWorkouts", async (req, res) => {
         //console.log("new call");
         const date = req.query.date;
         const startOfDay = new Date(date);
-        startOfDay.setHours(-6, 0, 0, 0);
+        startOfDay.setHours(0,0,0,0)
 
         // Set the end of the day
         const endOfDay = new Date(date);

@@ -142,7 +142,3 @@ export async function getTodayWorkout() {
     console.log("DAta received: ", data)
     return data
 }
-
-export function progressPercentCalc(val1, val2){
-    return (val1/val2) * 100
-}
