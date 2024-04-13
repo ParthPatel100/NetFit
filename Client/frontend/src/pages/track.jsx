@@ -1033,6 +1033,9 @@ export default function Track(){
     };
     return(
         <div className="bg-gray-100 md:ml-[12rem] md:mt-14 pb-24 p-4 min-h-screen">
+            <span className={"text-3xl text-neutral-600 font-bold"}>
+                Your Fitness <span className={"text-purple-600"}>Track</span>
+            </span>
             <div className=" flex justify-end mb-2.5">
                 <input
                     type="date"
@@ -1529,7 +1532,7 @@ export default function Track(){
                                             <div className="flex flex-wrap border-t border-purple-300">
                                                 {filteredFoods.map((data, index) => (
                                                     <div key={index} className="w-full flex justify-between border-t border-gray-300">
-                                                        <div className="flex mt-2 items-center"> {/* Added ml-4 for indentation */}
+                                                        <div className="flex mt-2 items-center "> {/* Added ml-4 for indentation */}
                                                             {/* Edit Button */}
                                                             <button
                                                                 className="focus:outline-none mr-2 mb-2"
@@ -1546,7 +1549,7 @@ export default function Track(){
                                                                     }}
                                                                 />
                                                             </button>
-                                                            <p className="mr-1 mb-2 text-xs md:text-sm font-semibold">{data.name}</p>
+                                                            <p className="mr-1 mb-2 text-xs md:text-md font-semibold">{data.name}</p>
                                                             <p className="text-xs mb-2">- {data.amount}</p>
                                                             <p className="text-xs mb-2">{data.measurement}</p>
                                                         </div>
