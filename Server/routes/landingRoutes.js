@@ -35,7 +35,6 @@ router.get('/getComments/:comments', async (req, res) => {
 
 
 router.get('/getFollower', async (req, res) => {
-    console.log(req.user)
     const username = req.user.name
 
    //const username = "john_doe"; 
@@ -45,6 +44,7 @@ router.get('/getFollower', async (req, res) => {
     try {
         const user = await User.findOne({ username: username  });
         if (user) {
+            console.log("User found!", user)
             return res.status(200).json(user);
         } else {
             console.log('No user found for the user with ID:',user);
@@ -199,7 +199,10 @@ router.get('/getSavedWorkouts', async (req, res) => {
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
     try {
 
-      const savedWorkouts = await SavedWorkout.findOne({ user: userId });
+      let savedWorkouts = await SavedWorkout.findOne({ user: userId });
+      if(savedWorkouts==null){
+          savedWorkouts = []
+      }
       res.status(200).json(savedWorkouts);
       
     } catch (error) {
