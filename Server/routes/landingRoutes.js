@@ -95,6 +95,42 @@ router.post('/postComment', async (req, res) => {
     }
 });
 
+router.post('/deleteUser', async (req,res) =>{
+    const id = req.body.id
+    try {
+        await Comment.deleteMany({'username':id})
+    }
+    catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+        console.error('Error deleting user comments', error);
+    }
+    try {
+        await Post.deleteMany({'trainerUsername':id});
+    }
+    catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+        console.error('Error deleting user posts', error);
+    }
+    try{
+        await User.deleteOne({'_id':id})
+    }
+    catch (error){
+        res.status(500).json({ error: "Internal Server Error" });
+        console.error('Error deleting ')
+    }
+    res.status(200).json("User Deleted");
+})
+router.post('/deletePost', async (req,res) =>{
+    const id = req.body.id
+    try {
+        await Post.deleteOne({'_id':id});
+    }
+    catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+        console.error('Error deleting user posts', error);
+    }
+    res.status(200).json("User Deleted");
+})
 router.put('/updateLikes/:postId', async (req, res) => {
     const { postId } = req.params;
   
