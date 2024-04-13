@@ -1672,8 +1672,8 @@ export default function Track(){
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:pr-10 md:m-2"
                                     >
                                         <option value="">Select Measure</option>
-                                        <option value="">lb</option>
-                                        <option value="">kg</option>
+                                        <option value="lb">lb</option>
+                                        <option value="kg">kg</option>
                                     </select>
                                 </div>
                                 <div className="flex md:flex-row flex-col text-sm justify-around w-full">
