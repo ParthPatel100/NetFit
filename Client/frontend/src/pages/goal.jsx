@@ -78,11 +78,11 @@ export default function GoalPage(){
         <div className={"bg-gray-100 min-h-screen"}>
 
         <div className={" flex md:mt-14 md:ml-[12rem] pb-24 md:pb-16 p-2 gap-4 flex-col mx-4" }>
-
-            <span className={"text-3xl text-neutral-600 font-bold"}>
-                Your Fitness <span className={"text-purple-600"}>Goals</span>
-            </span>
-
+            <div className="flex md:m-4 m-1">
+                <span className={"text-3xl text-neutral-600 font-bold"}>
+                    Your Fitness <span className={"text-purple-600"}>Goals</span>
+                </span>
+            </div>
             <div className={"mt-5 flex gap-4 mx-auto md:w-[50%] w-full flex-col text-neutral-600"}>
                 <div className={"flex self-start flex-col w-full"}>
                     <div className={"flex flex-row justify-between"}>
