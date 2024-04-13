@@ -43,6 +43,8 @@ export default function LandingPage() {
 
 
     async function handleFollow(trainerUsername){
+      console.log("searching this: ", trainerUsername);
+      console.log("searching From: ", followingList);
         try {
             if (followingList.includes(trainerUsername)) {
                 //console.log("following already");
@@ -64,7 +66,7 @@ export default function LandingPage() {
     useEffect(() => {
         getFollower();
         getMyPosts();
-        getDict();
+        getTrainerDict();
         getMyID();
     }, []);
 
@@ -73,10 +75,10 @@ export default function LandingPage() {
         getFollower();
     }, []);
 
-    async function getDict(){
+    async function getTrainerDict(){
         try {
 
-            const userResponse = await axios.get('/landing/getDict/', {}, { withCredentials: true });
+            const userResponse = await axios.get('/landing/getTrainerDict/', {}, { withCredentials: true });
             const userData = await userResponse.data;
             if (userData.error) {
                 console.log(userData.error);
@@ -255,7 +257,7 @@ export default function LandingPage() {
         <div className={"min-h-screen"}>
         
         <div className="relative" style={{ display: 'flex', justifyContent: 'center', marginBottom:'10px' }}>
-          <input type="text" placeholder=" Search Trainers.." className={"rounded-xl p-2 w-[30%] focus:outline focus:outline-purple-500"} onChange={(e) => {searchUsers(e.target.value)}}></input>
+          <input type="text" placeholder=" Search .." className={"rounded-xl p-2 w-[30%] focus:outline focus:outline-purple-500"} onChange={(e) => {searchUsers(e.target.value)}}></input>
           <button onClick={toggleDropdown}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -273,21 +275,25 @@ export default function LandingPage() {
           </button>
           {showDropdown && (
             <div className={"flex flex-col absolute bg-gray-300 top-0 mt-10 px-6 rounded-lg"}>
+                
                 {searchList.map((trainer) => {
-                    console.log("trainer: ", trainer)
+                    console.log("trainer thisS: ", trainer[0])
+                    
+                    
                     if(trainer[0] !== myID){
                         return (
                             <div>
                                 {(() => {
                                     if (!trainer[2]) {
-                                        console.log(trainer[0])
                                         return (
                                             <div className={"flex flex-row"}>
                                                 <div>
                                                     {trainer[1]}
                                                 </div>
                                                 <button onClick={() => {
-                                                    handleFollow(trainer[0]).then()
+                                                    console.log("Sending this arg 0!: ", trainer[0])
+                                                    console.log("Sending this arg 1!: ", trainer[2])
+                                                    handleFollow(trainer[0])
                                                 }} style={{
                                                     color: '#9045d6',
                                                     fontSize: '11px',
@@ -313,7 +319,11 @@ export default function LandingPage() {
                                                 <div>
                                                     {trainer[1]}
                                                 </div>
-                                                <button onClick={handleFollow} style={{
+                                                <button onClick={() => {
+                                                    console.log("Sending this arg 0!: ", trainer[0])
+                                                    console.log("Sending this arg 1!: ", trainer[2])
+                                                    handleFollow(trainer[0]).then()
+                                                }} style={{
                                                     color: '#9045d6',
                                                     fontSize: '11px',
                                                     cursor: 'pointer',
