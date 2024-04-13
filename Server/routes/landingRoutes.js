@@ -122,6 +122,7 @@ router.post('/deleteUser', async (req,res) =>{
 })
 router.post('/deletePost', async (req,res) =>{
     const id = req.body.id
+    console.log("Idhere: ", id)
     try {
         await Post.deleteOne({'_id':id});
     }
@@ -129,7 +130,7 @@ router.post('/deletePost', async (req,res) =>{
         res.status(500).json({ error: "Internal Server Error" });
         console.error('Error deleting user posts', error);
     }
-    res.status(200).json("User Deleted");
+    res.status(200).json("Post Deleted");
 })
 router.put('/updateLikes/:postId', async (req, res) => {
     const { postId } = req.params;
