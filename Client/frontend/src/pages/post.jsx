@@ -33,7 +33,8 @@ export default function PostPage(){
         if(editPost){
             setTitle(editPost.title)
             setCaption(editPost.description)
-        
+
+
             // setImages(editPost.images)
             
         }
