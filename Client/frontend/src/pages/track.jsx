@@ -2209,13 +2209,18 @@ export default function Track(){
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                     />
 
-                                    <input
-                                        type="  "
-                                        placeholder="Measurement"
+                                     <select
                                         value={waterMeasurement}
                                         onChange={(e) => setWaterMeasurement(e.target.value)}
                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                                    />
+                                    >
+                                        <option value="">Select unit</option>
+
+                                        <option value="cup">cup</option>
+                                        <option value="L">L</option>
+                                        <option value="ml">ml</option>
+                                        <option value="oz">oz</option>
+                                    </select>
                                 </div>
 
                                 <div className="flex lg:flex-row justify-center w-full gap-4">
