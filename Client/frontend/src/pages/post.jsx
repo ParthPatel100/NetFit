@@ -5,7 +5,6 @@ import {Trash2, ChevronLeft, Pencil, CirclePlus} from "lucide-react";
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-
 export default function PostPage(){
     const { user } = useContext(UserContext)
     const navigate = useNavigate();
@@ -18,14 +17,34 @@ export default function PostPage(){
     const [imageFiles, setImageFiles] = useState([]);
     const [showEditPostInputs, setShowEditPostInputs] = useState(false);
     const [showPostInputs, setPostInputs] = useState(true);
-
+    const [editP,setEdit] = useState(false);
 
 
 
     
     
 
-    
+
+    useEffect(() => {
+        var editPost
+        if(location.state!=null){
+            editPost = location.state
+        }
+        else
+        {
+            editPost=false;
+        }
+        console.log("Edit :", editPost['editPost']);    
+        if(editPost){
+            console.log(console.log(editPost['editPost'].title))
+            setTitle(editPost['editPost'].title)
+            setCaption(editPost['editPost'].description)
+            setEdit(true)
+            
+        }
+
+    }, []);
+
 
 
   
@@ -73,7 +92,6 @@ export default function PostPage(){
     
     const handleSubmitPost = async () => {
         try {
-
             const promises = submittedWorkoutData.map(async (workout) => {
 
                 console.log(workout.name);
@@ -125,7 +143,6 @@ export default function PostPage(){
             console.log("Post submitted successfully:", response.data, imageFiles[i]);
             //window.open('/landing');
             navigate('/landing');
-            
         } catch (error) {
             console.error("Error posting:", error);
             // Handle error (e.g., show error message to user)
