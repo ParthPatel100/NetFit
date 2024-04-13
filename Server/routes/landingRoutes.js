@@ -241,7 +241,8 @@ router.get('/getMyPosts', async (req, res) => {
             return res.status(200).json(userPosts);
         } else {
             console.log('No posts found for the user:', username);
-            return res.status(404).json({ error: "No posts found for the user" });
+            return res.status(200).json(userPosts);
+            //return res.status(404).json({ error: "No posts found for the user" });
         }
     } catch (error) {
         console.error('Error finding user:', error);
