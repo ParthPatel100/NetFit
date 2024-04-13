@@ -83,52 +83,52 @@ async function main() {
     const saveduser2 = await user2.save();
     const workout1 = new Workout({
         date: new Date(),
-        name: ['crunches','pushups','situps'],
-        reps: [20,10,15],
-        sets: [2,3,3],
-        resistance: [0,0,0],
-        resMeasure: ['lb'],
-        duration: []
+        name: 'crunches',
+        reps: 20,
+        sets: 2,
+        resistance: 0,
+        resMeasure: 'lb',
+        duration: 5
     });
     const savedw1 = await workout1.save();
     const workout2 = new Workout({
         date: new Date(),
-        name: ['Bench Press','Bicep Curls','Squats'],
-        reps: [8,15,6],
-        sets: [4,3,3],
-        resistance: [125,30,160],
-        resMeasure: ['lb'],
-        duration: []
+        name: 'Bench Press',
+        reps: 8,
+        sets: 4,
+        resistance: 125,
+        resMeasure: 'lb',
+        duration: 5
     });
     const savedw2 = await workout2.save();
     const workout3 = new Workout({
         date: new Date(),
-        name: ['run'],
-        reps: [0],
-        sets: [0],
-        resistance: [0],
-        resMeasure: ['lb'],
-        duration: [50]
+        name: 'run',
+        reps: 0,
+        sets: 0,
+        resistance: 0,
+        resMeasure: 'lb',
+        duration: 50
     });
     const savedw3 = await workout3.save();
     const workout4 = new Workout({
         date: new Date(),
-        name: ['tricep dips','lat pulldown'],
-        reps: [25,10],
-        sets: [6,3],
-        resistance: [0,140],
-        resMeasure: ['lb'],
-        duration: []
+        name: 'tricep dips',
+        reps: 25,
+        sets: 6,
+        resistance: 0,
+        resMeasure: 'lb',
+        duration: 5
     });
     const savedw4 = await workout4.save();
     const workout5 = new Workout({
         date: new Date(),
-        name: ['crunches','plank','situps','v-sit','hip twists'],
-        reps: [20,0,15,10,40],
-        sets: [3,3,3,3,3],
-        resistance: [0,0,0,0,0],
-        resMeasure: ['lb'],
-        duration: [0,60,0,0,0]
+        name: 'crunches',
+        reps: 20,
+        sets: 3,
+        resistance: 0,
+        resMeasure: 'lb',
+        duration: 0
     });
     const savedw5 = await workout5.save();
 
