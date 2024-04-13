@@ -20,26 +20,12 @@ export default function PostPage(){
     const [showPostInputs, setPostInputs] = useState(true);
 
 
-    const location = useLocation();
+
 
     
     
 
-    useEffect(() => {
-
-
-        const {editPost} = location.state
-        console.log("Edit :", editPost);
-        if(editPost){
-            setTitle(editPost.title)
-            setCaption(editPost.description)
-
-
-            // setImages(editPost.images)
-            
-        }
-
-    }, []);
+    
 
 
   
@@ -154,7 +140,7 @@ export default function PostPage(){
     const [resistance, setResistance] = useState("");
     const [resMeasure, setResMeasure] = useState("");
     const [duration, setDuration] = useState("");
-    const [calories, setCalories] = useState("");
+    const [calBurn, setCalBurn] = useState("");
     const [submittedWorkoutData, setSubmittedWorkoutData] = useState([]);
     const [workoutId, setWorkoutId] = useState([]);
 
@@ -174,6 +160,7 @@ export default function PostPage(){
             resistance: resistance,
             resMeasure: resMeasure,
             duration: duration,
+            calories: calBurn
         };
 
         setSubmittedWorkoutData([...submittedWorkoutData, newWorkoutData]);
@@ -186,6 +173,7 @@ export default function PostPage(){
         setResistance("");
         setResMeasure("");
         setDuration("");
+        setCalBurn("");
 
         // Close the input fields
         setShowWorkoutInputs(false);
@@ -202,6 +190,7 @@ export default function PostPage(){
         setResistance(submittedWorkoutData[index].resistance);
         setResMeasure(submittedWorkoutData[index].resMeasure);
         setDuration(submittedWorkoutData[index].duration);
+        setCalBurn(submittedWorkoutData[index].calBurn);
 
         // Set the showInputs state to true to display the input fields for editing
         setShowWorkoutInputs(true);
@@ -322,18 +311,19 @@ export default function PostPage(){
                                                         type="text"
                                                         placeholder="Workout Name"
                                                         value={name}
+
                                                         onChange={(e) => setName(e.target.value)}
                                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                                     />
-                                                    <input
+                                                </div>
+                                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                                <input
                                                         type="text"
                                                         placeholder="Reps"
                                                         value={reps}
                                                         onChange={(e) => setReps(e.target.value)}
                                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                                     />
-                                                </div>
-                                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                                     <input
                                                         type="text"
                                                         placeholder="Sets"
@@ -341,6 +331,8 @@ export default function PostPage(){
                                                         onChange={(e) => setSets(e.target.value)}
                                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                                     />
+                                                </div>
+                                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
                                                     <input
                                                         type="text"
                                                         placeholder="Resistance"
@@ -348,20 +340,29 @@ export default function PostPage(){
                                                         onChange={(e) => setResistance(e.target.value)}
                                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                                     />
-                                                </div>
-                                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Resistance Measure (lb/kg)"
+                                                    <select
                                                         value={resMeasure}
                                                         onChange={(e) => setResMeasure(e.target.value)}
-                                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
-                                                    />
-                                                    <input
+                                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:pr-10 md:m-2"
+                                                    >
+                                                        <option value="">Select Measure</option>
+                                                        <option value="lb">lb</option>
+                                                        <option value="kg">kg</option>
+                                                    </select>
+                                                </div>
+                                                <div className="flex md:flex-row flex-col text-sm justify-around w-full">
+                                                <input
                                                         type="text"
                                                         placeholder="Duration (min)"
                                                         value={duration}
                                                         onChange={(e) => setDuration(e.target.value)}
+                                                        className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Cals Burned"
+                                                        value={calBurn}
+                                                        onChange={(e) => setCalBurn(e.target.value)}
                                                         className="border-b-2 border-gray-600 focus:border-purple-500 focus:outline-none m-1 md:m-2"
                                                     />
                                                 </div>
@@ -421,6 +422,11 @@ export default function PostPage(){
                                                             {workout.duration && (
                                                                 <p className="ml-1">  
                                                                     <span className="font-semibold"> {workout.duration}</span> min Duration
+                                                                </p>
+                                                            )}
+                                                            {workout.calBurn && (
+                                                                <p className="ml-1">  
+                                                                    <span className="font-semibold"> {workout.calBurn}</span> Cal Burned
                                                                 </p>
                                                             )}
                                                             {/* Delete Button */}
@@ -650,6 +656,11 @@ export default function PostPage(){
                                                             {workout.duration && (
                                                                 <p className="ml-1">  
                                                                     <span className="font-semibold"> {workout.duration}</span> min Duration
+                                                                </p>
+                                                            )}
+                                                            {workout.calBurn && (
+                                                                <p className="ml-1">  
+                                                                    <span className="font-semibold"> {workout.calBurn}</span> Cals Burned
                                                                 </p>
                                                             )}
                                                             {/* Delete Button */}
