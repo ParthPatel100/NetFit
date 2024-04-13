@@ -17,7 +17,7 @@ export default function Account(){
     const [username,setName]=useState();
     const [gender,setGender]=useState();
     const [age,setAge]=useState();
-    const [experience,setExperience] = useState();
+    const [experience,setexperience] = useState();
     const [confPassword, setCPassword] = useState();
     const [del,setDelete] = useState();
   

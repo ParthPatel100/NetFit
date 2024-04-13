@@ -71,7 +71,8 @@ router.get('/logout', (req, res) => {
 
 router.post('/Register',  async (req, res) => {
     try {
-        const {username, password,email,experienceLevel,gender,age,user_role} = req.body
+        const {username, password,email,experienceLevel,gender,age,role} = req.body
+        console.log(req.body)
         await mongoose.connect("mongodb://admin:password@localhost:27017/app_db?authSource=admin");
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(password, salt);
@@ -79,7 +80,7 @@ router.post('/Register',  async (req, res) => {
             username: username,
             email: email,
             password: hash,
-            user_role: user_role,
+            user_role: role,
             gender: gender,
             age: age,
             experienceLevel: experienceLevel

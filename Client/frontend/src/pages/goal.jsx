@@ -137,7 +137,7 @@ export default function GoalPage(){
                                     <span>{carbsGoals > 0 ? carbsGoals : "-"}</span>
                                 )}
 
-                                <span className={"ml-1"}> %</span>
+                                <span className={"ml-1"}> Cal</span>
                             </div>
                         </div>
                         <div className={"flex justify-center content-center items-center border-b border-gray-600 p-3 "}>
@@ -158,7 +158,7 @@ export default function GoalPage(){
                                     <span>{fatsGoals > 0 ? fatsGoals: "-"}</span>
                                 )}
 
-                                <span className={"ml-1"}> %</span>
+                                <span className={"ml-1"}> Cal</span>
                             </div>
                         </div>
                         <div className={"flex justify-center content-center items-center border-b border-gray-600 p-3 "}>
@@ -179,7 +179,7 @@ export default function GoalPage(){
                                     <span>{proteinGoals > 0 ? proteinGoals: "-"}</span>
                                 )}
 
-                                <span className={"ml-1"}> %</span>
+                                <span className={"ml-1"}> Cal</span>
                             </div>
                         </div>
                         <div className={"flex justify-center content-center items-center p-3 "}>
@@ -200,7 +200,7 @@ export default function GoalPage(){
                                     <span>{sugarGoals > 0 ? sugarGoals: "-"}</span>
                                 )}
 
-                                <span className={"ml-1"}> %</span>
+                                <span className={"ml-1"}> Cal</span>
                             </div>
                         </div>
                     </div>

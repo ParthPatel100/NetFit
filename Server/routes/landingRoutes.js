@@ -35,7 +35,6 @@ router.get('/getComments/:comments', async (req, res) => {
 
 
 router.get('/getFollower', async (req, res) => {
-    console.log(req.user)
     const username = req.user.name
 
    //const username = "john_doe"; 
@@ -45,6 +44,7 @@ router.get('/getFollower', async (req, res) => {
     try {
         const user = await User.findOne({ username: username  });
         if (user) {
+            console.log("User found!", user)
             return res.status(200).json(user);
         } else {
             console.log('No user found for the user with ID:',user);
@@ -122,6 +122,7 @@ router.post('/deleteUser', async (req,res) =>{
 })
 router.post('/deletePost', async (req,res) =>{
     const id = req.body.id
+    console.log("Idhere: ", id)
     try {
         await Post.deleteOne({'_id':id});
     }
@@ -129,7 +130,7 @@ router.post('/deletePost', async (req,res) =>{
         res.status(500).json({ error: "Internal Server Error" });
         console.error('Error deleting user posts', error);
     }
-    res.status(200).json("User Deleted");
+    res.status(200).json("Post Deleted");
 })
 router.put('/updateLikes/:postId', async (req, res) => {
     const { postId } = req.params;
@@ -198,7 +199,10 @@ router.get('/getSavedWorkouts', async (req, res) => {
     await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/app_db?authSource=admin`);
     try {
 
-      const savedWorkouts = await SavedWorkout.findOne({ user: userId });
+      let savedWorkouts = await SavedWorkout.findOne({ user: userId });
+      if(savedWorkouts==null){
+          savedWorkouts = []
+      }
       res.status(200).json(savedWorkouts);
       
     } catch (error) {
@@ -277,7 +281,8 @@ router.get('/getMyPosts', async (req, res) => {
             return res.status(200).json(userPosts);
         } else {
             console.log('No posts found for the user:', username);
-            return res.status(404).json({ error: "No posts found for the user" });
+            return res.status(200).json(userPosts);
+            //return res.status(404).json({ error: "No posts found for the user" });
         }
     } catch (error) {
         console.error('Error finding user:', error);
@@ -365,6 +370,19 @@ router.get('/getDict', async (req, res) => {
          return res.status(500).json({ error: "Internal Server Error" });
      }
  });
+
+ router.delete('/deleteComment/:commentId', async (req, res) => {
+    try {
+      const commentId = req.params.commentId;
+    
+      await Comment.findByIdAndDelete(commentId);
+  
+      res.status(200).json({ message: "Comment deleted successfully" });
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
 
 
 module.exports = router
