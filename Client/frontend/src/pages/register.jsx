@@ -17,7 +17,7 @@ export default function RegisterPage(){
     const [confPassword,setConfPassword] = useState();
     const [age,setAge] = useState();
     const [gender,setGender] = useState();
-    const [experianceLevel,setExperianceLevel] = useState();
+    const [experienceLevel,setExperienceLevel] = useState();
     const [role,setRole] = useState();
 
     const updateUsername = (event) => {
@@ -38,11 +38,15 @@ export default function RegisterPage(){
     const updateGender = (event) => {
         setGender(event.target.value)
     };
-    const updateExperianceLevel = (event) => {
-        setExperianceLevel(event.target.value)
+    const updateExperienceLevel = (event) => {
+        const userLevel = event.target.value.toLowerCase()
+        console.log("Hello", userLevel)
+
+        setExperienceLevel(userLevel)
     }
     const updateRole = (event) => {
-        setRole(event.target.value)
+        const userRole = event.target.value.toLowerCase()
+        setRole(userRole)
     }
     const moveForward = function () {
         document.getElementById('initial').style.display = 'none'
@@ -72,8 +76,8 @@ export default function RegisterPage(){
         else if (gender==undefined||gender==""){
             alert("Please enter a gender")
         }
-        else if (experianceLevel==undefined||experianceLevel==""){
-            alert("Please choose an experiance level")
+        else if (experienceLevel==undefined||experienceLevel==""){
+            alert("Please choose an experience level")
         }
         else if (role==undefined||role==""){
             alert("Please choose a user role")
@@ -84,7 +88,7 @@ export default function RegisterPage(){
                     username,
                     password,
                     email,
-                    experianceLevel,
+                    experienceLevel,
                     gender,
                     age,
                     role
@@ -151,8 +155,8 @@ export default function RegisterPage(){
                            </select>
                     <select
                         className={"w-10/12 border-[1px] bg-neutral-100 border-gray-500 rounded-[5px] p-2 mt-1.5 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"}
-                               onChange={updateExperianceLevel} placeholder={"Experiance Level"}>
-                                <option value="" disabled selected hidden>Please Choose a Experiance Level</option>
+                               onChange={updateExperienceLevel} placeholder={"Experience Level"}>
+                                <option value="" disabled selected hidden>Please Choose a Experience Level</option>
                                 <option value ="beginner">Beginner</option>
                                 <option value ="intermediate">Intermediate</option>
                                 <option value ="advanced">Advanced</option>
