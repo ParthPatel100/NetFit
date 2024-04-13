@@ -368,5 +368,18 @@ router.get('/getDict', async (req, res) => {
      }
  });
 
+ router.delete('/deleteComment/:commentId', async (req, res) => {
+    try {
+      const commentId = req.params.commentId;
+    
+      await Comment.findByIdAndDelete(commentId);
+  
+      res.status(200).json({ message: "Comment deleted successfully" });
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+
 
 module.exports = router

@@ -129,6 +129,17 @@ const FeedCard = ({ post }) => {
     }
   };
 
+  async function deleteComment(commentId) {
+    try {
+      const response = await axios.delete(`/landing/deleteComment/${commentId}`, { withCredentials: true });
+      console.log('Comment deleted successfully:', response.data);
+      window.location.reload()
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
+  }
+
+
   async function getWorkout() {
     try {
       console.log("RESPOSNEW!: ",workout_id);
@@ -516,7 +527,19 @@ async function getDict(){
                   ) : (
                       <div style={{ fontSize: '10px', color: '#3d3d3d', fontWeight: 'bold'}}>{dict[comment.username]}</div>
                   )}
-                  <div style={{ fontSize: '12px' }}>{comment.description}</div>
+                  <div style={{ display: 'flex', justifyContent:'space-between' }}>
+                    <div style={{ fontSize: '12px' }}>{comment.description}</div>
+                    {(comment.username === myID || role === 'admin')  ? (
+                      <button onClick={() => deleteComment(comment._id)}>
+                      <div style={{ fontSize: '17px', marginRight:'2px', color:'#9045d6' }}>x</div>
+                    </button>
+                  ) : (
+                      <div></div>
+                  )}
+                    
+                  </div>
+
+                 
               </div>
             ))}
           </div>
