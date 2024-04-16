@@ -14,3 +14,7 @@ To run the seeding script enter the command:
 `cd Server/MongoDB`
 Followed by:
 `npm start`
+
+https://github.com/ParthPatel100/NetFit/assets/60551469/a23fbe42-3e28-4bca-8633-57d9c293a879
+
+
